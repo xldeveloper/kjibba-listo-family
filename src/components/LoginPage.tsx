@@ -2,24 +2,67 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDHuNYHAJxfusMVpMHSZtJXBqnS8THXOBI",
+  authDomain: "listo-c97cf.firebaseapp.com",
+  projectId: "listo-c97cf",
+  storageBucket: "listo-c97cf.firebasestorage.app",
+  messagingSenderId: "614197092250",
+  appId: "1:614197092250:web:8c4c77c1cfde4a1d7fff1c",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // TODO: Implement Firebase auth
-    // This would redirect to the web app after successful login
-    setTimeout(() => {
+    setError("");
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // Check if there's a redirect URL, otherwise go to web app
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectTo = urlParams.get("redirect") || "https://app.listo.family";
+      
+      if (redirectTo.startsWith("/")) {
+        router.push(redirectTo);
+      } else {
+        window.location.href = redirectTo;
+      }
+    } catch (err: any) {
+      console.error("Login error:", err);
+      
+      switch (err.code) {
+        case "auth/invalid-credential":
+        case "auth/user-not-found":
+        case "auth/wrong-password":
+          setError("Feil e-post eller passord.");
+          break;
+        case "auth/too-many-requests":
+          setError("For mange forsøk. Prøv igjen senere.");
+          break;
+        default:
+          setError("Noe gikk galt. Prøv igjen.");
+      }
+    } finally {
       setIsLoading(false);
-      // Redirect to web app
-      window.location.href = "https://app.listo.family";
-    }, 1500);
+    }
   };
 
   return (
@@ -166,6 +209,13 @@ export default function LoginPage() {
               >
                 {isLoading ? "Logger inn..." : "Logg inn"}
               </button>
+
+              {/* Error message */}
+              {error && (
+                <div className="bg-red-50 text-red-700 px-4 py-3 rounded-squircle-sm text-sm">
+                  {error}
+                </div>
+              )}
             </form>
 
             {/* Divider */}
