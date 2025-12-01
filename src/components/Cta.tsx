@@ -2,6 +2,22 @@
 
 import { useState } from "react";
 import { Sparkles, Check, Users, Zap, Heart } from "lucide-react";
+import { initializeApp, getApps } from "firebase/app";
+import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+
+// Firebase config (same as listo-app)
+const firebaseConfig = {
+  apiKey: "AIzaSyAW6ksZsDokqRAIpczXI030u_esWHOVe0Q",
+  authDomain: "listo-6443c.firebaseapp.com",
+  projectId: "listo-6443c",
+  storageBucket: "listo-6443c.firebasestorage.app",
+  messagingSenderId: "616905600919",
+  appId: "1:616905600919:web:d5e5c9f8a7b6c4d3e2f1a0",
+};
+
+// Initialize Firebase (avoid duplicate initialization)
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const db = getFirestore(app);
 
 const betaPerks = [
   { icon: Zap, text: "Gratis tilgang i hele beta-perioden" },
@@ -16,17 +32,30 @@ export default function Cta() {
   const [familySize, setFamilySize] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
     
-    // TODO: Send til backend/Firebase/Mailchimp
-    // For nå simulerer vi en vellykket innsending
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    setSubmitted(true);
-    setIsLoading(false);
+    try {
+      // Lagre i Firestore
+      await addDoc(collection(db, "beta_interest"), {
+        name,
+        email,
+        familySize,
+        source: "landing_page",
+        createdAt: serverTimestamp(),
+      });
+      
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Error submitting interest:", err);
+      setError("Noe gikk galt. Prøv igjen senere.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -188,6 +217,10 @@ export default function Cta() {
                       </>
                     )}
                   </button>
+
+                  {error && (
+                    <p className="text-red-500 text-sm text-center">{error}</p>
+                  )}
                 </form>
 
                 <p className="text-xs text-charcoal/50 mt-4 text-center">
