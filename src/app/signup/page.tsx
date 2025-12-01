@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft, CheckCircle, User, ShieldX } from "lucide-react";
@@ -23,7 +23,17 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export default function SignupPage() {
+// Loading fallback component
+function SignupLoading() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-cream-50 to-cream-100 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-listo-500" />
+    </div>
+  );
+}
+
+// Main signup content
+function SignupContent() {
   const searchParams = useSearchParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -402,5 +412,14 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Wrap in Suspense for useSearchParams
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<SignupLoading />}>
+      <SignupContent />
+    </Suspense>
   );
 }
