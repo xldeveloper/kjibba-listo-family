@@ -36,7 +36,7 @@ export default function TermsPage() {
               for bruk. Hvis du ikke godtar vilkårene, må du ikke bruke Tjenesten.
             </p>
             <p className="text-charcoal-light leading-relaxed mt-2">
-              Tjenesten leveres av Kjetil Kjibba (&quot;vi&quot;, &quot;oss&quot;, &quot;Listo&quot;).
+              Tjenesten leveres av kjibbaDev (&quot;vi&quot;, &quot;oss&quot;, &quot;Listo&quot;).
             </p>
           </section>
 

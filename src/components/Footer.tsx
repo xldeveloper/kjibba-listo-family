@@ -85,7 +85,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-sm">
-            © {new Date().getFullYear()} Listo. Alle rettigheter reservert.
+            © 2025 Listo. Alle rettigheter reservert.
           </p>
           <p className="flex items-center gap-1.5 text-white/40 text-sm">
             Laget med <Brain className="w-4 h-4" /> i Norge

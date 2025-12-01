@@ -32,7 +32,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold text-charcoal mb-4">1. Hvem er vi?</h2>
             <p className="text-charcoal-light leading-relaxed">
-              Listo er en familieassistent-app utviklet av Kjetil Kjibba (&quot;vi&quot;, &quot;oss&quot;). 
+              Listo er en familieassistent-app utviklet av kjibbaDev (&quot;vi&quot;, &quot;oss&quot;). 
               Vi er behandlingsansvarlig for personopplysningene som samles inn gjennom appen.
             </p>
             <p className="text-charcoal-light leading-relaxed mt-2">
