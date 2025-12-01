@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Mail, Lock, Eye, EyeOff, ArrowLeft, CheckCircle, User } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Mail, Lock, Eye, EyeOff, ArrowLeft, CheckCircle, User, ShieldX } from "lucide-react";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 
 // Firebase config (same as listo-app)
 const firebaseConfig = {
@@ -19,20 +21,83 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 export default function SignupPage() {
+  const searchParams = useSearchParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingInvite, setIsCheckingInvite] = useState(true);
+  const [isInvited, setIsInvited] = useState(false);
+  const [betaInterestId, setBetaInterestId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+
+  // Check if email is invited
+  useEffect(() => {
+    const emailParam = searchParams.get("email");
+    if (emailParam) {
+      setEmail(emailParam);
+      checkInvitation(emailParam);
+    } else {
+      setIsCheckingInvite(false);
+    }
+  }, [searchParams]);
+
+  const checkInvitation = async (emailToCheck: string): Promise<{ invited: boolean; docId?: string }> => {
+    try {
+      const q = query(
+        collection(db, "beta_interest"),
+        where("email", "==", emailToCheck.toLowerCase()),
+        where("status", "==", "invited")
+      );
+      const snapshot = await getDocs(q);
+      
+      if (!snapshot.empty) {
+        const docId = snapshot.docs[0].id;
+        setIsInvited(true);
+        setBetaInterestId(docId);
+        // Pre-fill name if available
+        const data = snapshot.docs[0].data();
+        if (data.name) {
+          setName(data.name);
+        }
+        return { invited: true, docId };
+      }
+      return { invited: false };
+    } catch (error) {
+      console.error("Error checking invitation:", error);
+      return { invited: false };
+    } finally {
+      setIsCheckingInvite(false);
+    }
+  };
+
+  const handleEmailBlur = async () => {
+    if (email && !isInvited) {
+      await checkInvitation(email);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+
+    // Check if invited (use returned value, not state)
+    let inviteDocId: string | null = betaInterestId;
+    if (!isInvited) {
+      const result = await checkInvitation(email);
+      if (!result.invited) {
+        setError("Denne e-posten er ikke invitert til beta ennå. Meld interesse på forsiden først!");
+        setIsLoading(false);
+        return;
+      }
+      inviteDocId = result.docId || null;
+    }
 
     try {
       // Create user in Firebase
@@ -41,6 +106,14 @@ export default function SignupPage() {
       // Update display name
       if (name) {
         await updateProfile(userCredential.user, { displayName: name });
+      }
+
+      // Update beta_interest status to registered
+      if (inviteDocId) {
+        await updateDoc(doc(db, "beta_interest", inviteDocId), {
+          status: "registered",
+          registeredAt: new Date(),
+        });
       }
 
       setSuccess(true);
@@ -65,6 +138,15 @@ export default function SignupPage() {
       setIsLoading(false);
     }
   };
+
+  // Loading state while checking invite
+  if (isCheckingInvite) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-cream-50 to-cream-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-listo-500" />
+      </div>
+    );
+  }
 
   // Success state
   if (success) {
@@ -229,6 +311,9 @@ export default function SignupPage() {
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-charcoal mb-2">
                   E-postadresse
+                  {isInvited && (
+                    <span className="ml-2 text-xs text-green-600 font-normal">✓ Invitert til beta</span>
+                  )}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal/40" />
@@ -237,11 +322,21 @@ export default function SignupPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onBlur={handleEmailBlur}
                     placeholder="din@epost.no"
                     required
-                    className="w-full pl-12 pr-4 py-3 rounded-squircle-sm border border-charcoal/20 focus:border-listo-500 focus:ring-2 focus:ring-listo-500/20 outline-none transition-all"
+                    className={`w-full pl-12 pr-4 py-3 rounded-squircle-sm border focus:ring-2 outline-none transition-all ${
+                      isInvited 
+                        ? "border-green-500 focus:border-green-500 focus:ring-green-500/20 bg-green-50/30" 
+                        : "border-charcoal/20 focus:border-listo-500 focus:ring-listo-500/20"
+                    }`}
                   />
                 </div>
+                {!isInvited && email && (
+                  <p className="mt-1 text-xs text-charcoal-light">
+                    Skriv inn e-posten du meldte interesse med
+                  </p>
+                )}
               </div>
 
               {/* Password */}

@@ -60,12 +60,6 @@ export default function Header() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
             <Link
-              href="/login"
-              className="text-charcoal-light hover:text-charcoal font-medium transition-colors"
-            >
-              Logg inn (beta)
-            </Link>
-            <Link
               href="#beta"
               className="px-5 py-2.5 bg-gradient-to-r from-listo-500 to-magic-500 hover:from-listo-600 hover:to-magic-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
             >
@@ -103,12 +97,6 @@ export default function Header() {
                 </Link>
               ))}
               <hr className="border-charcoal/10" />
-              <Link
-                href="/login"
-                className="text-charcoal-light hover:text-charcoal font-medium transition-colors"
-              >
-                Logg inn (beta)
-              </Link>
               <Link
                 href="#beta"
                 className="px-5 py-2.5 bg-gradient-to-r from-listo-500 to-magic-500 text-white font-semibold rounded-full text-center shadow-lg flex items-center justify-center gap-2"

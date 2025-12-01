@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { getFirestore, collection, query, orderBy, onSnapshot, Timestamp } from "firebase/firestore";
-import { ArrowLeft, Users, Clock, Mail, User as UserIcon, Shield, RefreshCw, Sparkles } from "lucide-react";
+import { getFirestore, collection, query, orderBy, onSnapshot, Timestamp, doc, updateDoc } from "firebase/firestore";
+import { ArrowLeft, Users, Clock, Mail, User as UserIcon, Shield, RefreshCw, Sparkles, Send, Check, UserPlus } from "lucide-react";
 
 // Firebase config (same as listo-app)
 const firebaseConfig = {
@@ -41,6 +41,8 @@ interface BetaInterest {
   familySize: string;
   createdAt: Timestamp;
   source: string;
+  status?: "interested" | "invited" | "registered";
+  invitedAt?: Timestamp;
 }
 
 export default function AdminPage() {
@@ -114,6 +116,67 @@ export default function AdminPage() {
 
     return () => unsubscribe();
   }, [isAdmin]);
+
+  // Send invitation email (opens mailto)
+  const sendInvitation = async (interest: BetaInterest) => {
+    const subject = encodeURIComponent("🎉 Du er invitert til Listo beta!");
+    const body = encodeURIComponent(`Hei ${interest.name}!
+
+Takk for at du vil teste Listo! Du er nå invitert til vår closed beta.
+
+Klikk her for å opprette din konto:
+https://listo.family/signup?email=${encodeURIComponent(interest.email)}
+
+Etter registrering kan du:
+• Bruke web-versjonen på app.listo.family
+• Laste ned Android-appen (kommer snart på Google Play)
+
+Har du spørsmål? Bare svar på denne e-posten!
+
+Velkommen til Listo! 🎉
+
+– Kristoffer`);
+
+    // Open mailto
+    window.open(`mailto:${interest.email}?subject=${subject}&body=${body}`);
+
+    // Update status in Firestore
+    try {
+      await updateDoc(doc(db, "beta_interest", interest.id), {
+        status: "invited",
+        invitedAt: new Date(),
+      });
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
+  // Get status badge
+  const getStatusBadge = (status?: string) => {
+    switch (status) {
+      case "invited":
+        return (
+          <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full flex items-center gap-1">
+            <Send className="w-3 h-3" />
+            Invitert
+          </span>
+        );
+      case "registered":
+        return (
+          <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full flex items-center gap-1">
+            <Check className="w-3 h-3" />
+            Registrert
+          </span>
+        );
+      default:
+        return (
+          <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full flex items-center gap-1">
+            <UserPlus className="w-3 h-3" />
+            Ny
+          </span>
+        );
+    }
+  };
 
   // Format date
   const formatDate = (timestamp: Timestamp | string) => {
@@ -366,15 +429,11 @@ export default function AdminPage() {
                     </div>
                     
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <p className="font-medium text-charcoal truncate">
                           {interest.name}
                         </p>
-                        {index === 0 && (
-                          <span className="px-2 py-0.5 bg-magic-100 text-magic-700 text-xs font-medium rounded-full">
-                            Nyeste
-                          </span>
-                        )}
+                        {getStatusBadge(interest.status)}
                         <span className="px-2 py-0.5 bg-charcoal/5 text-charcoal-light text-xs rounded-full">
                           {interest.familySize} pers
                         </span>
@@ -387,13 +446,30 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    <div className="text-right text-sm">
-                      <p className="text-charcoal">
-                        {timeAgo(interest.createdAt)}
-                      </p>
-                      <p className="text-charcoal-light text-xs">
-                        {formatDate(interest.createdAt)}
-                      </p>
+                    <div className="flex items-center gap-3">
+                      <div className="text-right text-sm">
+                        <p className="text-charcoal">
+                          {timeAgo(interest.createdAt)}
+                        </p>
+                        <p className="text-charcoal-light text-xs">
+                          {formatDate(interest.createdAt)}
+                        </p>
+                      </div>
+                      
+                      {interest.status !== "registered" && (
+                        <button
+                          onClick={() => sendInvitation(interest)}
+                          className={`px-3 py-1.5 rounded-squircle-sm text-sm font-medium flex items-center gap-1.5 transition-colors ${
+                            interest.status === "invited"
+                              ? "bg-charcoal/5 text-charcoal-light hover:bg-charcoal/10"
+                              : "bg-listo-500 text-white hover:bg-listo-600"
+                          }`}
+                          title={interest.status === "invited" ? "Send på nytt" : "Send invitasjon"}
+                        >
+                          <Send className="w-3.5 h-3.5" />
+                          {interest.status === "invited" ? "Send igjen" : "Inviter"}
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
