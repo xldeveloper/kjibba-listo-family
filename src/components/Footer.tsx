@@ -22,10 +22,8 @@ export default function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-squircle-sm bg-gradient-to-br from-listo-500 to-listo-600 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 6L9 17l-5-5" />
-                </svg>
+              <div className="w-10 h-10 rounded-squircle-sm bg-white flex items-center justify-center">
+                <img src="/images/listo-logo.svg" alt="Listo" className="w-full h-full" />
               </div>
               <span className="text-2xl font-bold text-white">Listo</span>
             </Link>
