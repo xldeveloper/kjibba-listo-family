@@ -51,14 +51,14 @@ const features = [
     icon: Bell,
     title: "Smarte påminnelser",
     description:
-      "Morgenbriefing med dagens middag. Søndagsvarsel for ukeplanlegging. Aldri glem noe.",
+      "Morgenbriefing med dagens middag. Søndagsvarsel for ukeplanlegging. Aldri glem noe. (Kommer snart)",
     color: "alert",
   },
   {
     icon: RefreshCw,
     title: "Synk overalt",
     description:
-      "Fungerer på mobil, nettbrett og web. Start på telefonen, fortsett på datamaskinen.",
+      "Web-versjon tilgjengelig nå. Android og iOS kommer snart – alt synkroniserer i sanntid.",
     color: "sky",
   },
   {

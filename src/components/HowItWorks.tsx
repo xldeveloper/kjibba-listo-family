@@ -9,7 +9,7 @@ const steps = [
     icon: UserPlus,
     title: "Opprett familien",
     description:
-      "Last ned appen, opprett en familie og inviter partneren med en QR-kode eller lenke. Legg til barnas preferanser og allergier.",
+      "Åpne web-appen (app.listo.family), opprett en familie og inviter partneren med en lenke. Legg til barnas preferanser og allergier. Android og iOS kommer snart!",
     screenshot: "/screenshots/planner.png",
     color: "listo",
   },

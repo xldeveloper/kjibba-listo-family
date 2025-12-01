@@ -13,6 +13,7 @@ const aiFeatures = [
     description:
       "Med bare ett trykk fyller AI-en ut hele ukeplanen basert på familiens preferanser, hva som er på tilbud, og hva dere ikke har spist på en stund. Den tar hensyn til travle dager og foreslår enkle retter når kalenderen er full.",
     screenshot: "/screenshots/planner.png",
+    comingSoon: true,
   },
   {
     id: "recipe-import",
@@ -22,6 +23,7 @@ const aiFeatures = [
     description:
       "Lim inn en lenke fra hvilken som helst matblogg, og AI-en henter ut kun ingredienser og fremgangsmåte – uten reklame og lange historier. Eller ta bilde av en kokebokside, og se den digitaliseres på sekunder.",
     screenshot: "/screenshots/recipe.png",
+    comingSoon: true,
   },
   {
     id: "chat",
@@ -31,6 +33,7 @@ const aiFeatures = [
     description:
       "Trenger du inspirasjon til fredagskvelden? Vil du gjøre en rett melkefri? Spør AI-assistenten om hva som helst matrelatert. Den kjenner oppskriftene dine og familiens preferanser.",
     screenshot: "/screenshots/ai-chat.png",
+    comingSoon: false,
   },
   {
     id: "learn",
@@ -40,6 +43,7 @@ const aiFeatures = [
     description:
       "Jo mer dere bruker Listo, jo bedre blir den. Den lærer at barna elsker taco på fredager, at dere liker sterk mat i helgene, og at pasta alltid er en vinner på travle hverdager.",
     screenshot: "/screenshots/planner.png",
+    comingSoon: true,
   },
 ];
 
@@ -95,9 +99,16 @@ export default function AiShowcase() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-charcoal">
-                          {feature.title}
-                        </h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold text-charcoal">
+                            {feature.title}
+                          </h3>
+                          {feature.comingSoon && (
+                            <span className="text-xs px-2 py-0.5 bg-magic-100 text-magic-600 rounded-full font-medium">
+                              Kommer snart
+                            </span>
+                          )}
+                        </div>
                         <ChevronRight
                           className={`w-5 h-5 text-charcoal/40 transition-transform ${
                             isActive ? "rotate-90" : ""

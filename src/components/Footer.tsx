@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Brain } from "lucide-react";
 
 const footerLinks = {
   product: [
@@ -8,21 +8,9 @@ const footerLinks = {
     { label: "Priser", href: "#pricing" },
     { label: "Ofte stilte spørsmål", href: "#faq" },
   ],
-  company: [
-    { label: "Om oss", href: "/about" },
-    { label: "Blogg", href: "/blog" },
-    { label: "Karriere", href: "/careers" },
-    { label: "Kontakt", href: "/contact" },
-  ],
   legal: [
     { label: "Personvern", href: "/privacy" },
     { label: "Vilkår", href: "/terms" },
-    { label: "Cookies", href: "/cookies" },
-  ],
-  social: [
-    { label: "Instagram", href: "https://instagram.com/listo.family" },
-    { label: "Facebook", href: "https://facebook.com/listo.family" },
-    { label: "Twitter", href: "https://twitter.com/listo_family" },
   ],
 };
 
@@ -55,7 +43,7 @@ export default function Footer() {
               </a>
               <div className="flex items-center gap-2 text-white/50">
                 <MapPin className="w-4 h-4" />
-                Oslo, Norge
+                Bergen, Norge
               </div>
             </div>
           </div>
@@ -65,22 +53,6 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Produkt</h4>
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-white/50 hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-4">Selskap</h4>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -107,21 +79,6 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            <h4 className="text-white font-semibold mt-6 mb-4">Følg oss</h4>
-            <ul className="space-y-3">
-              {footerLinks.social.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white/50 hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
 
@@ -130,8 +87,8 @@ export default function Footer() {
           <p className="text-white/40 text-sm">
             © {new Date().getFullYear()} Listo. Alle rettigheter reservert.
           </p>
-          <p className="text-white/40 text-sm">
-            Laget med ❤️ i Norge
+          <p className="flex items-center gap-1.5 text-white/40 text-sm">
+            Laget med <Brain className="w-4 h-4" /> i Norge
           </p>
         </div>
       </div>
