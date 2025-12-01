@@ -5,6 +5,7 @@ import AiShowcase from "@/components/AiShowcase";
 import HowItWorks from "@/components/HowItWorks";
 import Pricing from "@/components/Pricing";
 import Testimonials from "@/components/Testimonials";
+import BlogPreview from "@/components/BlogPreview";
 import Faq from "@/components/Faq";
 import Cta from "@/components/Cta";
 import Footer from "@/components/Footer";
@@ -19,6 +20,7 @@ export default function Home() {
       <HowItWorks />
       <Testimonials />
       <Pricing />
+      <BlogPreview />
       <Faq />
       <Cta />
       <Footer />
