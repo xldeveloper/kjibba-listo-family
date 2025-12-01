@@ -193,7 +193,7 @@ export default function TermsPage() {
               Har du spørsmål om disse vilkårene? Ta kontakt:
             </p>
             <p className="text-charcoal-light mt-2">
-              <strong>E-post:</strong> <a href="mailto:kjetil@kjibba.no" className="text-listo-600 underline">kjetil@kjibba.no</a>
+              <strong>E-post:</strong> <a href="mailto:hei@listo.family" className="text-listo-600 underline">hei@listo.family</a>
             </p>
           </section>
 

@@ -23,7 +23,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Admin emails that can access this page
-const ADMIN_EMAILS = ["kjibba@gmail.com", "kjetil@kjibba.no"];
+const ADMIN_EMAILS = ["kjibba@gmail.com"];
 
 interface UserRegistration {
   id: string;

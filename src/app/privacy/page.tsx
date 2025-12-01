@@ -36,7 +36,7 @@ export default function PrivacyPage() {
               Vi er behandlingsansvarlig for personopplysningene som samles inn gjennom appen.
             </p>
             <p className="text-charcoal-light leading-relaxed mt-2">
-              <strong>Kontakt:</strong> kjetil@kjibba.no
+              <strong>Kontakt:</strong> hei@listo.family
             </p>
           </section>
 
@@ -129,7 +129,7 @@ export default function PrivacyPage() {
               <li><strong>Innsigelse:</strong> Du kan protestere mot behandling basert på berettiget interesse.</li>
             </ul>
             <p className="text-charcoal-light leading-relaxed mt-4">
-              For å utøve dine rettigheter, kontakt oss på <a href="mailto:kjetil@kjibba.no" className="text-listo-600 underline">kjetil@kjibba.no</a>.
+              For å utøve dine rettigheter, kontakt oss på <a href="mailto:hei@listo.family" className="text-listo-600 underline">hei@listo.family</a>.
             </p>
           </section>
 
@@ -195,7 +195,7 @@ export default function PrivacyPage() {
               Har du spørsmål om personvern? Ta kontakt:
             </p>
             <p className="text-charcoal-light mt-2">
-              <strong>E-post:</strong> <a href="mailto:kjetil@kjibba.no" className="text-listo-600 underline">kjetil@kjibba.no</a>
+              <strong>E-post:</strong> <a href="mailto:hei@listo.family" className="text-listo-600 underline">hei@listo.family</a>
             </p>
           </section>
 
