@@ -23,7 +23,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Admin emails that can access this page
-const ADMIN_EMAILS = ["kjibba@gmail.com", "kristoffer@kjibba.no"];
+const ADMIN_EMAILS = ["kjibba@gmail.com", "kjetil@kjibba.no"];
 
 interface UserRegistration {
   id: string;
@@ -135,7 +135,7 @@ Har du spørsmål? Bare svar på denne e-posten!
 
 Velkommen til Listo! 🎉
 
-– Kristoffer`);
+– Kjetil`);
 
     // Open mailto
     window.open(`mailto:${interest.email}?subject=${subject}&body=${body}`);
