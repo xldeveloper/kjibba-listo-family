@@ -18,7 +18,7 @@ const steps = [
     icon: CalendarDays,
     title: "Planlegg uka",
     description:
-      "Bruk AI-forslag eller velg selv fra oppskriftsbiblioteket. Legg inn aktiviteter, og la appen tilpasse enkle middager på travle dager.",
+      "Legg inn middager, aktiviteter og oppgaver. Fordel ansvar mellom familiemedlemmer. På travle dager med fotballtrening foreslår appen raske middager.",
     screenshot: "/screenshots/planner.png",
     color: "salmon",
   },

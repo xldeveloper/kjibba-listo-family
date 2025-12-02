@@ -31,15 +31,15 @@ export default function Hero() {
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-charcoal leading-tight mb-6">
-              Si farvel til{" "}
-              <span className="gradient-text-magic">&quot;Hva skal vi ha til middag?&quot;</span>
+              Familiens komplette{" "}
+              <span className="gradient-text-magic">hverdagsassistent</span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-lg sm:text-xl text-charcoal-light mb-8 max-w-xl mx-auto lg:mx-0">
-              Listo er familiens AI-drevne hverdagsassistent som planlegger
-              måltider, organiserer handlelister og inspirerer til nye
-              matopplevelser – helt automatisk.
+              Middagsplanlegging, handlelister, oppgavefordeling og aktivitetskalender 
+              – alt synkronisert i sanntid. Listo tar kontroll på familielogistikken 
+              så dere kan fokusere på det som betyr noe.
             </p>
 
             {/* CTA Buttons */}
@@ -118,10 +118,10 @@ export default function Hero() {
               {/* Floating elements */}
               <div className="absolute -left-4 top-24 bg-white rounded-squircle p-3 shadow-lg animate-float" style={{ animationDelay: "1s" }}>
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl">🍝</span>
+                  <span className="text-2xl">⚽</span>
                   <div>
-                    <p className="text-sm font-medium text-charcoal">Pasta Bolognese</p>
-                    <p className="text-xs text-charcoal-light">Mandag • 30 min</p>
+                    <p className="text-sm font-medium text-charcoal">Fotballtrening</p>
+                    <p className="text-xs text-charcoal-light">Onsdag 17:30</p>
                   </div>
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default function Hero() {
               <div className="absolute -right-4 bottom-32 bg-white rounded-squircle p-3 shadow-lg animate-float" style={{ animationDelay: "2s" }}>
                 <div className="flex items-center gap-2">
                   <span className="text-xl">✅</span>
-                  <p className="text-sm font-medium text-charcoal">Melk lagt til!</p>
+                  <p className="text-sm font-medium text-charcoal">Ta ut søpla – Erik</p>
                 </div>
               </div>
             </div>

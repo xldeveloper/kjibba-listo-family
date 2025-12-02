@@ -2,13 +2,13 @@
 
 import {
   Calendar,
+  CalendarDays,
   ShoppingCart,
   BookOpen,
   Users,
   Sparkles,
   Bell,
-  RefreshCw,
-  Smartphone,
+  CheckSquare,
 } from "lucide-react";
 
 const features = [
@@ -16,15 +16,29 @@ const features = [
     icon: Calendar,
     title: "Ukeplanlegger",
     description:
-      "Planlegg hele ukens måltider på få minutter. Dra og slipp retter, og la AI-en fylle tomme dager.",
+      "Se hele uken i ett blikk: middager, aktiviteter og oppgaver. Dra og slipp for å organisere.",
     color: "salmon",
+  },
+  {
+    icon: CheckSquare,
+    title: "Oppgaveliste",
+    description:
+      "Fordel hverdagsoppgaver mellom familiemedlemmer. \"Ta ut søpla\", \"Vaske klær\" – alltid oversikt over hvem som gjør hva.",
+    color: "listo",
+  },
+  {
+    icon: CalendarDays,
+    title: "Aktivitetskalender",
+    description:
+      "Fotballtrening, foreldremøte, bursdager – hold styr på familiens faste og spontane aktiviteter.",
+    color: "sky",
   },
   {
     icon: ShoppingCart,
     title: "Smart handleliste",
     description:
       "Automatisk sortert etter butikkens layout. Hele familien kan legge til varer i sanntid.",
-    color: "sky",
+    color: "salmon",
   },
   {
     icon: BookOpen,
@@ -37,36 +51,22 @@ const features = [
     icon: Users,
     title: "Familiesynk",
     description:
-      "Alle i familien ser endringer umiddelbart. Tildel ansvar for middager og oppgaver.",
+      "Alle ser endringer umiddelbart. Tildel ansvar for middager, oppgaver og aktiviteter.",
     color: "listo",
   },
   {
     icon: Sparkles,
     title: "AI-forslag",
     description:
-      "Personlige måltidsforslag basert på hva dere liker, har i kjøleskapet, og hvor mye tid dere har.",
+      "Personlige måltidsforslag basert på hva dere liker, aktiviteter den dagen, og hvor mye tid dere har.",
     color: "magic",
   },
   {
     icon: Bell,
     title: "Smarte påminnelser",
     description:
-      "Morgenbriefing med dagens middag. Søndagsvarsel for ukeplanlegging. Aldri glem noe. (Kommer snart)",
+      "Morgenbriefing med dagens program. Påminnelser om oppgaver og aktiviteter. (Kommer snart)",
     color: "alert",
-  },
-  {
-    icon: RefreshCw,
-    title: "Synk overalt",
-    description:
-      "Web-versjon tilgjengelig nå. Android og iOS kommer snart – alt synkroniserer i sanntid.",
-    color: "sky",
-  },
-  {
-    icon: Smartphone,
-    title: "Butikkmodus",
-    description:
-      "Spesialvisning for handleturen med stor tekst, ingen slett-knapper, og skjermen holder seg våken.",
-    color: "salmon",
   },
 ];
 
@@ -108,11 +108,11 @@ export default function Features() {
             Funksjoner
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal mb-6">
-            Alt familien trenger, samlet på ett sted
+            Middager, oppgaver og aktiviteter – alt på ett sted
           </h2>
           <p className="text-lg text-charcoal-light">
-            Fra ukens måltidsplanlegging til handleturen i butikken – Listo
-            gjør hverdagslogistikken til en lek.
+            Fra ukens middagsplanlegging til hvem som tar ut søpla og når fotballtreningen starter – 
+            Listo gir hele familien full oversikt.
           </p>
         </div>
 

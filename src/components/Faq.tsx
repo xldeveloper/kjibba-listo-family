@@ -5,9 +5,14 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
+    question: "Er Listo bare for middagsplanlegging?",
+    answer:
+      "Nei! Listo er en komplett familieorganisator. I tillegg til middager har du aktivitetskalender for fotballtrening og foreldremøter, oppgavelister for \"ta ut søpla\" og \"vaske klær\", handleliste, og oppskriftsbibliotek. Alt synkronisert i sanntid mellom hele familien.",
+  },
+  {
     question: "Er Listo virkelig gratis?",
     answer:
-      "Ja! Grunnleggende funksjoner som ukeplanlegger, handleliste og opptil 20 oppskrifter er helt gratis – for alltid. Premium-funksjoner som AI-forslag og ubegrenset lagring krever abonnement.",
+      "Ja! Grunnleggende funksjoner som ukeplanlegger, handleliste, oppgaver, aktiviteter og opptil 20 oppskrifter er helt gratis – for alltid. Premium-funksjoner som AI-forslag og ubegrenset lagring krever abonnement.",
   },
   {
     question: "Kan hele familien bruke appen?",
@@ -17,7 +22,12 @@ const faqs = [
   {
     question: "Hvordan fungerer sanntidssynkroniseringen?",
     answer:
-      "Når noen i familien legger til en vare på handlelisten eller endrer ukeplanen, ser alle andre det umiddelbart – uten å trenge å oppdatere. Det fungerer på mobil, nettbrett og web.",
+      "Når noen i familien legger til en vare på handlelisten, en oppgave, eller endrer ukeplanen, ser alle andre det umiddelbart – uten å trenge å oppdatere. Det fungerer på mobil, nettbrett og web.",
+  },
+  {
+    question: "Kan jeg fordele oppgaver mellom familiemedlemmer?",
+    answer:
+      "Ja! Du kan tildele hvem som er ansvarlig for middagen, hvem som tar ut søpla, og hvem som skal på foreldremøtet. Alle ser sine oppgaver i sin egen oversikt.",
   },
   {
     question: "Fungerer appen uten internett?",
@@ -28,16 +38,6 @@ const faqs = [
     question: "Hva slags AI bruker dere?",
     answer:
       "Vi bruker Google Gemini, en av verdens mest avanserte AI-modeller. Den er trent på å forstå mat, preferanser og familielogistikk – og blir bedre jo mer du bruker appen.",
-  },
-  {
-    question: "Kan jeg importere oppskrifter fra andre steder?",
-    answer:
-      "Ja! Med Premium kan du lime inn en lenke fra hvilken som helst matblogg, og AI-en henter ut ingredienser og fremgangsmåte. Du kan også ta bilde av en kokebokside.",
-  },
-  {
-    question: "Hvordan avslutter jeg abonnementet?",
-    answer:
-      "Du kan avbestille når som helst direkte i appen eller via App Store/Google Play. Ingen bindingstid, ingen spørsmål. Du beholder tilgang til du har brukt opp perioden du har betalt for.",
   },
   {
     question: "Er dataene mine trygge?",
