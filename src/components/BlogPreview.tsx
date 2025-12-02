@@ -6,34 +6,34 @@ import { ArrowRight, BookOpen } from "lucide-react";
 
 const articles = [
   {
-    slug: "slik-planlegger-du-ukemenyen",
-    title: "Slik planlegger du ukemenyen",
+    slug: "hva-skal-vi-ha-til-middag",
+    title: "Hva skal vi ha til middag? 30 ideer",
     excerpt:
-      "Lær hvordan du planlegger ukens middager på under 15 minutter. Spar tid, penger og stress.",
-    readTime: "5 min",
-    image: "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=600&q=80",
-    category: "Planlegging",
-    categoryColor: "bg-orange-500",
+      "Sliter du med å finne ut hva dere skal ha? Her er 30 enkle middagsforslag.",
+    readTime: "8 min",
+    image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80",
+    category: "Middagsideer",
+    categoryColor: "bg-listo-500",
   },
   {
-    slug: "spar-penger-pa-matbudsjettet",
-    title: "10 tips for å spare penger på mat",
+    slug: "vintermiddager",
+    title: "15 lune vintermiddager",
     excerpt:
-      "Praktiske råd for å kutte matkostnadene uten å gå på kompromiss med kvalitet.",
+      "Oppdag deilige vintermiddager som varmer fra innsiden på kalde dager.",
     readTime: "6 min",
-    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&q=80",
+    category: "Sesong",
+    categoryColor: "bg-blue-500",
+  },
+  {
+    slug: "sunn-mat-pa-budsjett",
+    title: "Sunn mat på budsjett",
+    excerpt:
+      "15 tips for å lage næringsrik mat uten å tømme lommeboka.",
+    readTime: "7 min",
+    image: "https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600&q=80",
     category: "Økonomi",
     categoryColor: "bg-green-500",
-  },
-  {
-    slug: "barnevennlige-middager",
-    title: "Barnevennlige middager",
-    excerpt:
-      "Sliter du med kresne barn? Her er oppskrifter og triks som fungerer.",
-    readTime: "5 min",
-    image: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=600&q=80",
-    category: "Familie",
-    categoryColor: "bg-pink-500",
   },
 ];
 

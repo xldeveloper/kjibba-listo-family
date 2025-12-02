@@ -4,9 +4,14 @@ import { Mail, MapPin, Brain } from "lucide-react";
 const footerLinks = {
   product: [
     { label: "Funksjoner", href: "#features" },
+    { label: "Middagsplanlegger", href: "/middagsplanlegger" },
     { label: "AI-Assistenten", href: "#ai" },
     { label: "Priser", href: "#pricing" },
     { label: "Blogg", href: "/blogg" },
+  ],
+  support: [
+    { label: "FAQ", href: "/faq" },
+    { label: "Kontakt oss", href: "mailto:hei@listo.family" },
   ],
   legal: [
     { label: "Personvern", href: "/privacy" },
@@ -51,6 +56,22 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Produkt</h4>
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-white/50 hover:text-white transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-white font-semibold mb-4">Support</h4>
+            <ul className="space-y-3">
+              {footerLinks.support.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}

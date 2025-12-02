@@ -10,6 +10,39 @@ export const metadata: Metadata = {
 
 const articles = [
   {
+    slug: "hva-skal-vi-ha-til-middag",
+    title: "Hva skal vi ha til middag? 30 enkle middagsideer",
+    excerpt:
+      "Sliter du med å finne ut hva dere skal ha til middag? Her er 30 enkle middagsforslag som hele familien vil elske.",
+    date: "2024-12-02",
+    readTime: "8 min",
+    image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80",
+    category: "Middagsideer",
+    categoryColor: "listo",
+  },
+  {
+    slug: "vintermiddager",
+    title: "Vintermiddager: 15 lune retter for kalde dager",
+    excerpt:
+      "Oppdag 15 deilige vintermiddager som varmer fra innsiden. Fra klassiske gryteretter til moderne favoritter.",
+    date: "2024-12-02",
+    readTime: "6 min",
+    image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&q=80",
+    category: "Sesong",
+    categoryColor: "blue",
+  },
+  {
+    slug: "sunn-mat-pa-budsjett",
+    title: "Sunn mat på budsjett: 15 tips for å spise sunt og billig",
+    excerpt:
+      "Lær hvordan du lager næringsrik, velsmakende mat som familien elsker – uten å tømme lommeboka.",
+    date: "2024-12-02",
+    readTime: "7 min",
+    image: "https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=800&q=80",
+    category: "Økonomi",
+    categoryColor: "green",
+  },
+  {
     slug: "slik-planlegger-du-ukemenyen",
     title: "Slik planlegger du ukemenyen – en komplett guide",
     excerpt:
@@ -72,6 +105,7 @@ const categoryColors: Record<string, string> = {
   pink: "bg-pink-500",
   purple: "bg-purple-500",
   blue: "bg-blue-500",
+  listo: "bg-listo-500",
 };
 
 export default function BlogPage() {
