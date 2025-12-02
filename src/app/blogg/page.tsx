@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,6 +16,9 @@ const articles = [
       "Lær hvordan du planlegger ukens middager på under 15 minutter. Spar tid, penger og stress med disse enkle stegene.",
     date: "2024-12-01",
     readTime: "5 min",
+    image: "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&q=80",
+    category: "Planlegging",
+    categoryColor: "orange",
   },
   {
     slug: "spar-penger-pa-matbudsjettet",
@@ -23,6 +27,9 @@ const articles = [
       "Praktiske råd for å kutte matkostnadene uten å gå på kompromiss med kvalitet eller smak.",
     date: "2024-12-01",
     readTime: "6 min",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80",
+    category: "Økonomi",
+    categoryColor: "green",
   },
   {
     slug: "barnevennlige-middager",
@@ -31,6 +38,9 @@ const articles = [
       "Sliter du med kresne barn? Her er oppskrifter og triks som får selv de mest skeptiske til å spise.",
     date: "2024-12-01",
     readTime: "5 min",
+    image: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&q=80",
+    category: "Familie",
+    categoryColor: "pink",
   },
   {
     slug: "batch-cooking-guide",
@@ -39,6 +49,9 @@ const articles = [
       "Lær kunsten å forberede måltider på forhånd. Perfekt for travle familier som vil spise hjemmelaget mat.",
     date: "2024-12-01",
     readTime: "7 min",
+    image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80",
+    category: "Meal Prep",
+    categoryColor: "purple",
   },
   {
     slug: "den-perfekte-handlelisten",
@@ -47,49 +60,114 @@ const articles = [
       "En god handleliste er nøkkelen til effektiv handling. Lær hvordan du organiserer listen for å spare tid i butikken.",
     date: "2024-12-01",
     readTime: "4 min",
+    image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&q=80",
+    category: "Handling",
+    categoryColor: "blue",
   },
 ];
 
+const categoryColors: Record<string, string> = {
+  orange: "bg-orange-500",
+  green: "bg-green-500",
+  pink: "bg-pink-500",
+  purple: "bg-purple-500",
+  blue: "bg-blue-500",
+};
+
 export default function BlogPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        <Link
-          href="/"
-          className="text-orange-600 hover:text-orange-700 mb-8 inline-block"
-        >
-          ← Tilbake til forsiden
-        </Link>
+    <main className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white py-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <Link
+            href="/"
+            className="text-white/80 hover:text-white mb-6 inline-flex items-center gap-2 text-sm font-medium"
+          >
+            <span>←</span> Tilbake til forsiden
+          </Link>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Blogg</h1>
+          <p className="text-xl md:text-2xl text-orange-100 max-w-2xl">
+            Tips og triks for enklere måltidsplanlegging, smartere handling og mer tid til det som betyr noe.
+          </p>
+        </div>
+      </div>
 
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Blogg</h1>
-        <p className="text-xl text-gray-600 mb-12">
-          Tips og triks for enklere måltidsplanlegging og smartere handling.
-        </p>
-
-        <div className="space-y-8">
-          {articles.map((article) => (
-            <article
-              key={article.slug}
-              className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <Link href={`/blogg/${article.slug}`}>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2 hover:text-orange-600 transition-colors">
-                  {article.title}
-                </h2>
-              </Link>
-              <p className="text-gray-600 mb-4">{article.excerpt}</p>
-              <div className="flex items-center gap-4 text-sm text-gray-500">
-                <span>{article.readTime} lesetid</span>
+      <div className="max-w-5xl mx-auto px-4 py-16">
+        {/* Featured Article */}
+        <Link href={`/blogg/${articles[0].slug}`} className="block group mb-16">
+          <article className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
+              <Image
+                src={articles[0].image}
+                alt={articles[0].title}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute top-4 left-4">
+                <span className={`${categoryColors[articles[0].categoryColor]} text-white px-3 py-1 rounded-full text-xs font-semibold`}>
+                  {articles[0].category}
+                </span>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                <span>{articles[0].readTime} lesetid</span>
                 <span>•</span>
-                <time dateTime={article.date}>
-                  {new Date(article.date).toLocaleDateString("nb-NO", {
+                <time dateTime={articles[0].date}>
+                  {new Date(articles[0].date).toLocaleDateString("nb-NO", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
                 </time>
               </div>
-            </article>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors">
+                {articles[0].title}
+              </h2>
+              <p className="text-lg text-gray-600 mb-6">{articles[0].excerpt}</p>
+              <span className="inline-flex items-center gap-2 text-orange-600 font-semibold group-hover:gap-4 transition-all">
+                Les artikkelen <span>→</span>
+              </span>
+            </div>
+          </article>
+        </Link>
+
+        {/* Article Grid */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {articles.slice(1).map((article) => (
+            <Link href={`/blogg/${article.slug}`} key={article.slug} className="group">
+              <article className="h-full">
+                <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-4">
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className={`${categoryColors[article.categoryColor]} text-white px-3 py-1 rounded-full text-xs font-semibold`}>
+                      {article.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 text-sm text-gray-500 mb-2">
+                  <span>{article.readTime} lesetid</span>
+                  <span>•</span>
+                  <time dateTime={article.date}>
+                    {new Date(article.date).toLocaleDateString("nb-NO", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </div>
+                <h2 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                  {article.title}
+                </h2>
+                <p className="text-gray-600">{article.excerpt}</p>
+              </article>
+            </Link>
           ))}
         </div>
       </div>
