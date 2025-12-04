@@ -81,7 +81,7 @@ export default function Middagsplanlegger() {
                   <div className="bg-cream-50 rounded-[2.5rem] overflow-hidden aspect-[9/19.5]">
                     <Image
                       src="/screenshots/planner.png"
-                      alt="Listo middagsplanlegger app"
+                      alt="listo.family middagsplanlegger app"
                       width={320}
                       height={693}
                       className="w-full h-full object-cover"

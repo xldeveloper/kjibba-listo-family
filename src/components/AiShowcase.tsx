@@ -41,7 +41,7 @@ const aiFeatures = [
     title: "Lærer av deg",
     shortDesc: "Blir smartere over tid",
     description:
-      "Jo mer dere bruker Listo, jo bedre blir forslagene. Appen lærer at barna elsker taco på fredager og at pasta er en vinner på travle hverdager – og bruker dette til å gi AI-en bedre instrukser.",
+      "Jo mer dere bruker listo.family, jo bedre blir forslagene. Appen lærer at barna elsker taco på fredager og at pasta er en vinner på travle hverdager – og bruker dette til å gi AI-en bedre instrukser.",
     screenshot: "/screenshots/planner.png",
     comingSoon: true,
   },
@@ -64,7 +64,7 @@ export default function AiShowcase() {
             <span className="gradient-text-magic">faktisk hjelper</span>
           </h2>
           <p className="text-lg text-charcoal-light">
-            Listo bruker avansert AI for å forstå familiens rytme og gjøre
+            listo.family bruker avansert AI for å forstå familiens rytme og gjøre
             hverdagen enklere – ikke bare litt, men dramatisk enklere.
           </p>
         </div>

@@ -28,9 +28,9 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-6">
               <div className="w-10 h-10 rounded-squircle-sm bg-white flex items-center justify-center">
-                <img src="/images/listo-logo.svg" alt="Listo" className="w-full h-full" />
+                <img src="/images/listo-logo.svg" alt="listo.family" className="w-full h-full" />
               </div>
-              <span className="text-2xl font-bold text-white">Listo</span>
+              <span className="text-2xl font-bold text-white">listo.family</span>
             </Link>
             <p className="text-white/50 mb-6 max-w-sm">
               Familiens smarte hverdagsassistent for måltidsplanlegging,
@@ -104,7 +104,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-sm">
-            © 2025 Listo. Alle rettigheter reservert.
+            © 2025 listo.family. Alle rettigheter reservert.
           </p>
           <p className="flex items-center gap-1.5 text-white/40 text-sm">
             Laget med <Brain className="w-4 h-4" /> i Norge

@@ -112,7 +112,7 @@ export default function Features() {
           </h2>
           <p className="text-lg text-charcoal-light">
             Fra ukens middagsplanlegging til hvem som tar ut søpla og når fotballtreningen starter – 
-            Listo gir hele familien full oversikt.
+            listo.family gir hele familien full oversikt.
           </p>
         </div>
 

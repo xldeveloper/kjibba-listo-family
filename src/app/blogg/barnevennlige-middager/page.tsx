@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Barnevennlige middager hele familien vil elske | Listo",
+  title: "Barnevennlige middager hele familien vil elske | listo.family",
   description:
     "Sliter du med kresne barn? Her er oppskrifter og triks som får selv de mest skeptiske til å spise.",
 };
@@ -184,13 +184,47 @@ export default function Article() {
               Trenger du inspirasjon til barnevennlige middager?
             </h3>
             <p className="text-pink-100 mb-6">
-              Listo kan foreslå retter hele familien vil like.
+              listo.family kan foreslå retter hele familien vil like.
             </p>
             <Link
               href="/"
               className="inline-block bg-white text-pink-600 px-8 py-4 rounded-full font-bold hover:bg-pink-50 transition-colors shadow-lg"
             >
-              Prøv Listo gratis →
+              Prøv listo.family gratis →
+            </Link>
+          </div>
+        </div>
+
+        {/* Author */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
+              <span className="text-pink-600 font-bold">L</span>
+            </div>
+            <div>
+              <p className="font-medium text-charcoal">Listo-teamet</p>
+              <p className="text-sm text-gray-500">
+                Tips og inspirasjon for travle familier
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Related articles */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <h3 className="text-xl font-bold text-charcoal mb-6">Les også</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Link href="/blogg/hva-skal-vi-ha-til-middag" className="group p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+              <p className="font-medium text-charcoal group-hover:text-pink-600">
+                Hva skal vi ha til middag? 30 enkle middagsideer
+              </p>
+              <p className="text-sm text-gray-500">8 min lesetid</p>
+            </Link>
+            <Link href="/blogg/gjoremal-for-barn" className="group p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+              <p className="font-medium text-charcoal group-hover:text-pink-600">
+                Gjøremål for barn: Slik lærer du barna ansvar hjemme
+              </p>
+              <p className="text-sm text-gray-500">5 min lesetid</p>
             </Link>
           </div>
         </div>

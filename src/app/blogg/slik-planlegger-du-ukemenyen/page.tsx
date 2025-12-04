@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Slik planlegger du ukemenyen – en komplett guide | Listo",
+  title: "Slik planlegger du ukemenyen – en komplett guide | listo.family",
   description:
     "Lær hvordan du planlegger ukens middager på under 15 minutter. Spar tid, penger og stress med disse enkle stegene.",
 };
@@ -212,13 +212,47 @@ export default function Article() {
               Klar for enklere måltidsplanlegging?
             </h3>
             <p className="text-orange-100 mb-6">
-              Prøv Listo gratis og se hvor mye tid du kan spare.
+              Prøv listo.family gratis og se hvor mye tid du kan spare.
             </p>
             <Link
               href="/"
               className="inline-block bg-white text-orange-600 px-8 py-4 rounded-full font-bold hover:bg-orange-50 transition-colors shadow-lg hover:shadow-xl"
             >
-              Prøv Listo gratis →
+              Prøv listo.family gratis →
+            </Link>
+          </div>
+        </div>
+
+        {/* Author */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+              <span className="text-orange-600 font-bold">L</span>
+            </div>
+            <div>
+              <p className="font-medium text-charcoal">Listo-teamet</p>
+              <p className="text-sm text-gray-500">
+                Tips og inspirasjon for travle familier
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Related articles */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <h3 className="text-xl font-bold text-charcoal mb-6">Les også</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Link href="/blogg/hva-skal-vi-ha-til-middag" className="group p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+              <p className="font-medium text-charcoal group-hover:text-orange-600">
+                Hva skal vi ha til middag? 30 enkle middagsideer
+              </p>
+              <p className="text-sm text-gray-500">8 min lesetid</p>
+            </Link>
+            <Link href="/blogg/batch-cooking-guide" className="group p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+              <p className="font-medium text-charcoal group-hover:text-orange-600">
+                Batch cooking: Lag mat for en hel uke på én dag
+              </p>
+              <p className="text-sm text-gray-500">7 min lesetid</p>
             </Link>
           </div>
         </div>

@@ -3,12 +3,56 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blogg - Tips for måltidsplanlegging | Listo",
+  title: "Blogg - Tips for måltidsplanlegging | listo.family",
   description:
     "Les våre beste tips om måltidsplanlegging, handlelistetriks og hvordan du sparer tid og penger på matlaging.",
 };
 
 const articles = [
+  {
+    slug: "dele-handleliste-familie",
+    title: "Dele handlelisten med familien: Slik fungerer det",
+    excerpt:
+      "Slutt på dobbelthandling og glemte varer. Lær hvordan en delt handleliste gjør familielivet enklere.",
+    date: "2024-12-06",
+    readTime: "4 min",
+    image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&q=80",
+    category: "Handleliste",
+    categoryColor: "teal",
+  },
+  {
+    slug: "familieorganisering",
+    title: "Fra kaos til kontroll: Familieorganisering i 2025",
+    excerpt:
+      "Hvordan moderne familier holder orden på alt – fra middager til aktiviteter. Praktiske tips for travel hverdag.",
+    date: "2024-12-05",
+    readTime: "7 min",
+    image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
+    category: "Organisering",
+    categoryColor: "blue",
+  },
+  {
+    slug: "gjoremal-for-barn",
+    title: "Gjøremål for barn: Slik lærer du barna ansvar hjemme",
+    excerpt:
+      "Barn som bidrar hjemme lærer viktige ferdigheter. Her er hvordan du fordeler oppgaver og gjør det gøy.",
+    date: "2024-12-04",
+    readTime: "5 min",
+    image: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800&q=80",
+    category: "Familie",
+    categoryColor: "purple",
+  },
+  {
+    slug: "smart-handleliste-app",
+    title: "Smart handleliste: Aldri glem melken igjen",
+    excerpt:
+      "En smart handleliste-app kan spare deg for tid, penger og frustrasjon. Slik velger du riktig app for familien.",
+    date: "2024-12-03",
+    readTime: "5 min",
+    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80",
+    category: "Handleliste",
+    categoryColor: "teal",
+  },
   {
     slug: "hva-skal-vi-ha-til-middag",
     title: "Hva skal vi ha til middag? 30 enkle middagsideer",
@@ -105,6 +149,7 @@ const categoryColors: Record<string, string> = {
   pink: "bg-pink-500",
   purple: "bg-purple-500",
   blue: "bg-blue-500",
+  teal: "bg-teal-500",
   listo: "bg-listo-500",
 };
 

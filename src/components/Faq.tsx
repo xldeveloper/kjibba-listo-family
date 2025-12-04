@@ -5,12 +5,12 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    question: "Er Listo bare for middagsplanlegging?",
+    question: "Er listo.family bare for middagsplanlegging?",
     answer:
-      "Nei! Listo er en komplett familieorganisator. I tillegg til middager har du aktivitetskalender for fotballtrening og foreldremøter, oppgavelister for \"ta ut søpla\" og \"vaske klær\", handleliste, og oppskriftsbibliotek. Alt synkronisert i sanntid mellom hele familien.",
+      "Nei! listo.family er en komplett familieorganisator. I tillegg til middager har du aktivitetskalender for fotballtrening og foreldremøter, oppgavelister for \"ta ut søpla\" og \"vaske klær\", handleliste, og oppskriftsbibliotek. Alt synkronisert i sanntid mellom hele familien.",
   },
   {
-    question: "Er Listo virkelig gratis?",
+    question: "Er listo.family virkelig gratis?",
     answer:
       "Ja! Grunnleggende funksjoner som ukeplanlegger, handleliste, oppgaver, aktiviteter og opptil 20 oppskrifter er helt gratis – for alltid. Premium-funksjoner som AI-forslag og ubegrenset lagring krever abonnement.",
   },
@@ -32,7 +32,7 @@ const faqs = [
   {
     question: "Fungerer appen uten internett?",
     answer:
-      "Ja, Listo er bygget for offline-bruk. Du kan se ukeplanen, krysse av handlelisten og lese oppskrifter uten nett. Endringer synkroniseres automatisk når du er tilbake online.",
+      "Ja, listo.family er bygget for offline-bruk. Du kan se ukeplanen, krysse av handlelisten og lese oppskrifter uten nett. Endringer synkroniseres automatisk når du er tilbake online.",
   },
   {
     question: "Hva slags AI bruker dere?",

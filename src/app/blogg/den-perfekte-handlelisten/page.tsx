@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Den perfekte handlelisten – slik handler du smartere | Listo",
+  title: "Den perfekte handlelisten – slik handler du smartere | listo.family",
   description:
     "En god handleliste er nøkkelen til effektiv handling. Lær hvordan du organiserer listen for å spare tid og penger i butikken.",
 };
@@ -222,13 +222,47 @@ export default function Article() {
               Slipp å skrive handleliste manuelt
             </h3>
             <p className="text-blue-100 mb-6">
-              Listo lager listen automatisk fra ukemenyen din, organisert etter butikkavdeling.
+              listo.family lager listen automatisk fra ukemenyen din, organisert etter butikkavdeling.
             </p>
             <Link
               href="/"
               className="inline-block bg-white text-blue-600 px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition-colors shadow-lg"
             >
-              Prøv Listo gratis →
+              Prøv listo.family gratis →
+            </Link>
+          </div>
+        </div>
+
+        {/* Author */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <span className="text-blue-600 font-bold">L</span>
+            </div>
+            <div>
+              <p className="font-medium text-charcoal">Listo-teamet</p>
+              <p className="text-sm text-gray-500">
+                Tips og inspirasjon for travle familier
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Related articles */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <h3 className="text-xl font-bold text-charcoal mb-6">Les også</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Link href="/blogg/smart-handleliste-app" className="group p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+              <p className="font-medium text-charcoal group-hover:text-blue-600">
+                Smart handleliste: Aldri glem melken igjen
+              </p>
+              <p className="text-sm text-gray-500">5 min lesetid</p>
+            </Link>
+            <Link href="/blogg/dele-handleliste-familie" className="group p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+              <p className="font-medium text-charcoal group-hover:text-blue-600">
+                Dele handlelisten med familien: Slik fungerer det
+              </p>
+              <p className="text-sm text-gray-500">4 min lesetid</p>
             </Link>
           </div>
         </div>

@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sunn mat på budsjett: 15 tips for å spise sunt og billig | Listo",
+  title: "Sunn mat på budsjett: 15 tips for å spise sunt og billig | listo.family",
   description:
     "Lær hvordan du lager sunn mat uten å sprenge budsjettet. 15 konkrete tips for norske familier som vil spise bedre og spare penger.",
   keywords: [
@@ -346,14 +346,14 @@ export default function Article() {
             </h3>
             <p className="text-green-100 mb-6">
               Det første steget til å spare penger og spise sunnere er å 
-              planlegge måltidene. Listo gjør det enkelt med automatiske 
+              planlegge måltidene. listo.family gjør det enkelt med automatiske 
               handlelister og AI-forslag.
             </p>
             <Link
               href="/middagsplanlegger"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white text-green-600 font-semibold rounded-full hover:bg-cream-50 transition-colors"
             >
-              Prøv Listo gratis →
+              Prøv listo.family gratis →
             </Link>
           </div>
         </div>

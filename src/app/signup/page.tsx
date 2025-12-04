@@ -168,7 +168,7 @@ function SignupContent() {
           </div>
           
           <h2 className="text-2xl font-bold text-charcoal mb-2">
-            Velkommen til Listo! 🎉
+            Velkommen til listo.family! 🎉
           </h2>
           
           <p className="text-charcoal-light mb-6">
@@ -200,7 +200,7 @@ function SignupContent() {
               href="https://app.listo.family"
               className="block w-full py-3 px-6 bg-gradient-to-r from-listo-500 to-listo-600 hover:from-listo-600 hover:to-listo-700 text-white font-semibold rounded-squircle-sm shadow-lg hover:shadow-xl transition-all text-center"
             >
-              Åpne Listo Web App
+              Åpne listo.family Web App
             </a>
             
             <Link
@@ -227,9 +227,9 @@ function SignupContent() {
         <div className="relative z-10 flex flex-col justify-center px-16">
           <Link href="/" className="flex items-center gap-3 mb-12">
             <div className="w-12 h-12 rounded-squircle-sm bg-white flex items-center justify-center">
-              <img src="/images/listo-logo.svg" alt="Listo" className="w-full h-full" />
+              <img src="/images/listo-logo.svg" alt="listo.family" className="w-full h-full" />
             </div>
-            <span className="text-3xl font-bold text-white">Listo</span>
+            <span className="text-3xl font-bold text-white">listo.family</span>
           </Link>
 
           <div className="inline-flex items-center gap-2 bg-salmon-500/20 text-salmon-300 px-4 py-2 rounded-full text-sm font-medium mb-6 w-fit">
@@ -241,7 +241,7 @@ function SignupContent() {
             Bli med som beta-tester
           </h1>
           <p className="text-xl text-white/70 mb-8">
-            Få tidlig tilgang til Listo og hjelp oss forme fremtidens familieassistent.
+            Få tidlig tilgang til listo.family og hjelp oss forme fremtidens familieassistent.
           </p>
 
           {/* Benefits */}
@@ -267,9 +267,9 @@ function SignupContent() {
           <div className="lg:hidden flex items-center gap-2 mb-8">
             <Link href="/" className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-squircle-sm bg-white flex items-center justify-center border border-charcoal/10">
-                <img src="/images/listo-logo.svg" alt="Listo" className="w-full h-full" />
+                <img src="/images/listo-logo.svg" alt="listo.family" className="w-full h-full" />
               </div>
-              <span className="text-2xl font-bold text-charcoal">Listo</span>
+              <span className="text-2xl font-bold text-charcoal">listo.family</span>
             </Link>
           </div>
 

@@ -16,7 +16,7 @@ export default function Pricing() {
             Gratis under beta
           </h2>
           <p className="text-lg text-charcoal-light">
-            Listo er helt gratis så lenge vi er i beta. Etter lansering kommer vi til å ha
+            listo.family er helt gratis så lenge vi er i beta. Etter lansering kommer vi til å ha
             en rimelig abonnementsmodell – og beta-testere får eksklusiv rabatt.
           </p>
         </div>

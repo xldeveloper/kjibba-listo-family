@@ -81,7 +81,7 @@ export default function LoginPage() {
                 <path d="M20 6L9 17l-5-5" />
               </svg>
             </div>
-            <span className="text-3xl font-bold text-white">Listo</span>
+            <span className="text-3xl font-bold text-white">listo.family</span>
           </Link>
 
           <h1 className="text-4xl font-bold text-white mb-6">
@@ -118,7 +118,7 @@ export default function LoginPage() {
                   <path d="M20 6L9 17l-5-5" />
                 </svg>
               </div>
-              <span className="text-2xl font-bold text-charcoal">Listo</span>
+              <span className="text-2xl font-bold text-charcoal">listo.family</span>
             </Link>
           </div>
 

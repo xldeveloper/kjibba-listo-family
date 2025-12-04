@@ -37,9 +37,9 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="w-10 h-10 rounded-squircle bg-white flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-              <img src="/images/listo-logo.svg" alt="Listo" className="w-full h-full" />
+              <img src="/images/listo-logo.svg" alt="listo.family" className="w-full h-full" />
             </div>
-            <span className="text-2xl font-bold text-charcoal">Listo</span>
+            <span className="text-2xl font-bold text-charcoal">listo.family</span>
           </Link>
 
           {/* Desktop Navigation */}

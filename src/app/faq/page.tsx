@@ -14,19 +14,19 @@ const faqCategories = [
     color: "listo",
     faqs: [
       {
-        question: "Er Listo gratis?",
+        question: "Er listo.family gratis?",
         answer:
-          "Ja! Under beta-perioden er alle funksjoner i Listo helt gratis – inkludert AI-forslag, ubegrenset antall oppskrifter og familiemedlemmer. Etter lansering vil grunnfunksjoner forbli gratis for alltid, mens avanserte AI-funksjoner vil kreve et Premium-abonnement.",
+          "Ja! Under beta-perioden er alle funksjoner i listo.family helt gratis – inkludert AI-forslag, ubegrenset antall oppskrifter og familiemedlemmer. Etter lansering vil grunnfunksjoner forbli gratis for alltid, mens avanserte AI-funksjoner vil kreve et Premium-abonnement.",
       },
       {
-        question: "Hvilke enheter støtter Listo?",
+        question: "Hvilke enheter støtter listo.family?",
         answer:
-          "Listo fungerer på web (PC, Mac, nettbrett) allerede nå. Native apper for iOS (iPhone/iPad) og Android er under utvikling og kommer snart. Alt synkroniserer automatisk mellom enhetene dine.",
+          "listo.family fungerer på web (PC, Mac, nettbrett) allerede nå. Native apper for iOS (iPhone/iPad) og Android er under utvikling og kommer snart. Alt synkroniserer automatisk mellom enhetene dine.",
       },
       {
-        question: "Fungerer Listo uten internett?",
+        question: "Fungerer listo.family uten internett?",
         answer:
-          "Ja, Listo har offline-støtte. Du kan se ukeplanen, krysse av på handlelisten og lese oppskrifter selv uten internettforbindelse. Endringer du gjør synkroniseres automatisk når du er tilbake online.",
+          "Ja, listo.family har offline-støtte. Du kan se ukeplanen, krysse av på handlelisten og lese oppskrifter selv uten internettforbindelse. Endringer du gjør synkroniseres automatisk når du er tilbake online.",
       },
     ],
   },
@@ -37,9 +37,9 @@ const faqCategories = [
     color: "salmon",
     faqs: [
       {
-        question: "Kan hele familien bruke Listo sammen?",
+        question: "Kan hele familien bruke listo.family sammen?",
         answer:
-          "Absolutt! Familiedelingsfunksjonen er kjernen i Listo. Alle familiemedlemmer kan logge inn og se samme ukeplan, handleliste og oppskrifter. Endringer synkroniseres i sanntid – når noen legger til en vare på handlelisten, ser alle det umiddelbart.",
+          "Absolutt! Familiedelingsfunksjonen er kjernen i listo.family. Alle familiemedlemmer kan logge inn og se samme ukeplan, handleliste og oppskrifter. Endringer synkroniseres i sanntid – når noen legger til en vare på handlelisten, ser alle det umiddelbart.",
       },
       {
         question: "Hvordan inviterer jeg familiemedlemmer?",
@@ -47,7 +47,7 @@ const faqCategories = [
           "I appen finner du en invitasjonskode under familieinnstillinger. Del denne koden med familiemedlemmer, så kan de bli med ved å taste den inn når de registrerer seg eller logger inn.",
       },
       {
-        question: "Kan barn bruke Listo?",
+        question: "Kan barn bruke listo.family?",
         answer:
           "Ja! Barn over 13 år kan opprette egen konto og bli med i familien. For yngre barn anbefaler vi at de bruker en forelders enhet. Tenåringer kan for eksempel se hva som er planlagt til middag og legge til ønsker på handlelisten.",
       },
@@ -62,22 +62,22 @@ const faqCategories = [
       {
         question: "Hvordan fungerer AI-forslagene?",
         answer:
-          "Listo bruker Google Gemini AI til å generere personlige middagsforslag. AI-en kan foreslå ukemenyer basert på hva familien liker, tilgjengelig tid, og hva dere har spist tidligere. Den kan også generere nye oppskrifter og importere oppskrifter fra nettsider automatisk.",
+          "listo.family bruker Google Gemini AI til å generere personlige middagsforslag. AI-en kan foreslå ukemenyer basert på hva familien liker, tilgjengelig tid, og hva dere har spist tidligere. Den kan også generere nye oppskrifter og importere oppskrifter fra nettsider automatisk.",
       },
       {
         question: "Kan jeg importere oppskrifter fra nettsider?",
         answer:
-          "Ja! Med Listo kan du lime inn en lenke fra hvilken som helst matblogg eller oppskriftsside, og AI-en henter automatisk ut ingredienser og fremgangsmåte. Du kan også legge inn oppskrifter manuelt eller ta bilde av en kokebokside.",
+          "Ja! Med listo.family kan du lime inn en lenke fra hvilken som helst matblogg eller oppskriftsside, og AI-en henter automatisk ut ingredienser og fremgangsmåte. Du kan også legge inn oppskrifter manuelt eller ta bilde av en kokebokside.",
       },
       {
-        question: "Hvordan lager Listo handlelisten automatisk?",
+        question: "Hvordan lager listo.family handlelisten automatisk?",
         answer:
-          "Når du legger til middager i ukeplanen, samler Listo automatisk alle ingredienser fra oppskriftene og legger dem til handlelisten. Listen sorteres etter butikkens layout (frukt/grønt, kjøtt, meieri osv.) for enklere handling.",
+          "Når du legger til middager i ukeplanen, samler listo.family automatisk alle ingredienser fra oppskriftene og legger dem til handlelisten. Listen sorteres etter butikkens layout (frukt/grønt, kjøtt, meieri osv.) for enklere handling.",
       },
       {
         question: "Blir forslagene bedre over tid?",
         answer:
-          "Ja! Listo lærer hvilke oppskrifter familien bruker ofte, hva dere liker, og hvilke dager dere foretrekker bestemte retter. Denne innsikten brukes til å gi AI-en bedre instrukser, slik at forslagene blir mer treffsikre over tid. Du kan også gi thumbs up/down på oppskrifter for å finjustere.",
+          "Ja! listo.family lærer hvilke oppskrifter familien bruker ofte, hva dere liker, og hvilke dager dere foretrekker bestemte retter. Denne innsikten brukes til å gi AI-en bedre instrukser, slik at forslagene blir mer treffsikre over tid. Du kan også gi thumbs up/down på oppskrifter for å finjustere.",
       },
     ],
   },
@@ -95,7 +95,7 @@ const faqCategories = [
       {
         question: "Hva brukes dataene mine til?",
         answer:
-          "Dine data brukes kun til å levere Listo-tjenesten til deg og familien din. Vi analyserer aggregert, anonymisert data for å forbedre appen, men individuelle data deles aldri med tredjeparter.",
+          "Dine data brukes kun til å levere listo.family-tjenesten til deg og familien din. Vi analyserer aggregert, anonymisert data for å forbedre appen, men individuelle data deles aldri med tredjeparter.",
       },
       {
         question: "Kan jeg slette kontoen min?",
@@ -116,7 +116,7 @@ const faqCategories = [
           "Gratisversjonen inkluderer ukeplanlegger, handleliste, opptil 20 oppskrifter og 2 familiemedlemmer. Premium gir ubegrenset antall oppskrifter og familiemedlemmer, AI-genererte middagsforslag, oppskriftsimport fra nettsider, og prioritert support.",
       },
       {
-        question: "Når koster Listo penger?",
+        question: "Når koster listo.family penger?",
         answer:
           "Under beta-perioden (nå) er alt gratis. Etter offisiell lansering vil gratisversjonen fortsatt være gratis, mens Premium vil ha en månedlig eller årlig kostnad. Betabrukere vil få spesielle fordeler ved lansering.",
       },

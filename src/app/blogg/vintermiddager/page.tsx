@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Vintermiddager: 15 lune retter for kalde dager | Listo",
+  title: "Vintermiddager: 15 lune retter for kalde dager | listo.family",
   description:
     "Oppdag 15 deilige vintermiddager som varmer fra innsiden. Fra klassiske gryteretter til moderne favoritter – perfekt for mørke vinterkvelder.",
   keywords: [
@@ -306,17 +306,17 @@ export default function Article() {
           {/* CTA */}
           <div className="my-12 p-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl text-white text-center">
             <h3 className="text-2xl font-bold mt-0 text-white">
-              Planlegg vinterens middager med Listo
+              Planlegg vinterens middager med listo.family
             </h3>
             <p className="text-blue-100 mb-6">
-              Sett opp ukemenyen med lune vintermiddager. Listo lager 
+              Sett opp ukemenyen med lune vintermiddager. listo.family lager 
               handlelisten automatisk og hjelper deg holde styr på favorittene.
             </p>
             <Link
               href="/middagsplanlegger"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white text-blue-600 font-semibold rounded-full hover:bg-cream-50 transition-colors"
             >
-              Prøv Listo gratis →
+              Prøv listo.family gratis →
             </Link>
           </div>
 

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Gratis Middagsplanlegger for Familier | Listo",
+  title: "Gratis Middagsplanlegger for Familier | listo.family",
   description:
-    "Planlegg ukens middager på under 5 minutter med Listo. Automatisk handleliste, AI-forslag, og sanntidssynk med hele familien. Gratis i beta!",
+    "Planlegg ukens middager på under 5 minutter med listo.family. Automatisk handleliste, AI-forslag, og sanntidssynk med hele familien. Gratis i beta!",
   keywords: [
     "middagsplanlegger",
     "gratis middagsplanlegger",
@@ -22,11 +22,11 @@ export const metadata: Metadata = {
     canonical: "/middagsplanlegger",
   },
   openGraph: {
-    title: "Gratis Middagsplanlegger for Familier | Listo",
+    title: "Gratis Middagsplanlegger for Familier | listo.family",
     description:
       "Planlegg ukens middager på under 5 minutter. Automatisk handleliste og AI-forslag.",
     url: "https://listo.family/middagsplanlegger",
-    siteName: "Listo",
+    siteName: "listo.family",
     locale: "nb_NO",
     type: "website",
   },

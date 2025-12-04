@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Hva skal vi ha til middag? 30 enkle middagsideer | Listo",
+  title: "Hva skal vi ha til middag? 30 enkle middagsideer | listo.family",
   description:
     "Sliter du med å finne ut hva dere skal ha til middag? Her er 30 enkle middagsforslag som hele familien vil elske – sortert etter tid og vanskelighetsgrad.",
   keywords: [
@@ -219,7 +219,7 @@ export default function Article() {
           {/* CTA */}
           <div className="my-12 p-8 bg-gradient-to-r from-listo-500 to-listo-600 rounded-2xl text-white text-center">
             <h3 className="text-2xl font-bold mt-0 text-white">
-              La Listo hjelpe deg med middagsplanleggingen
+              La listo.family hjelpe deg med middagsplanleggingen
             </h3>
             <p className="text-listo-100 mb-6">
               Vår AI-drevne middagsplanlegger foreslår middager, lager handlelister 
@@ -229,7 +229,7 @@ export default function Article() {
               href="/middagsplanlegger"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white text-listo-600 font-semibold rounded-full hover:bg-cream-50 transition-colors"
             >
-              Prøv Listo gratis →
+              Prøv listo.family gratis →
             </Link>
           </div>
 

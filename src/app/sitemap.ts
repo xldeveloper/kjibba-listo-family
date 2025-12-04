@@ -1,9 +1,27 @@
 import { MetadataRoute } from "next";
+import fs from "fs";
+import path from "path";
+
+// Automatisk hent alle bloggposter fra filsystemet
+function getBlogSlugs(): string[] {
+  const blogDir = path.join(process.cwd(), "src/app/blogg");
+  
+  try {
+    const entries = fs.readdirSync(blogDir, { withFileTypes: true });
+    return entries
+      .filter(entry => entry.isDirectory() && entry.name !== "page.tsx")
+      .map(entry => entry.name);
+  } catch {
+    return [];
+  }
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://listo.family";
+  const blogSlugs = getBlogSlugs();
 
-  return [
+  // Statiske sider
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -29,54 +47,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/blogg/hva-skal-vi-ha-til-middag`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blogg/vintermiddager`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blogg/sunn-mat-pa-budsjett`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blogg/slik-planlegger-du-ukemenyen`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blogg/spar-penger-pa-matbudsjettet`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blogg/barnevennlige-middager`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blogg/batch-cooking-guide`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blogg/den-perfekte-handlelisten`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
       url: `${baseUrl}/terms`,
       lastModified: new Date(),
       changeFrequency: "monthly",
@@ -89,4 +59,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
   ];
+
+  // Dynamiske bloggposter - genereres automatisk fra mapper
+  const blogPages: MetadataRoute.Sitemap = blogSlugs.map(slug => ({
+    url: `${baseUrl}/blogg/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...blogPages];
 }

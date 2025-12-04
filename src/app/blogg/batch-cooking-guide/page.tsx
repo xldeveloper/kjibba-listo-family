@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Batch cooking: Lag mat for en hel uke på én dag | Listo",
+  title: "Batch cooking: Lag mat for en hel uke på én dag | listo.family",
   description:
     "Lær kunsten å forberede måltider på forhånd. Perfekt for travle familier som vil spise hjemmelaget mat hver dag.",
 };
@@ -225,13 +225,47 @@ export default function Article() {
               Klar for enklere middagshverdag?
             </h3>
             <p className="text-purple-100 mb-6">
-              Listo hjelper deg planlegge ukemenyen og genererer handlelisten automatisk.
+              listo.family hjelper deg planlegge ukemenyen og genererer handlelisten automatisk.
             </p>
             <Link
               href="/"
               className="inline-block bg-white text-purple-600 px-8 py-4 rounded-full font-bold hover:bg-purple-50 transition-colors shadow-lg"
             >
-              Prøv Listo gratis →
+              Prøv listo.family gratis →
+            </Link>
+          </div>
+        </div>
+
+        {/* Author */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+              <span className="text-purple-600 font-bold">L</span>
+            </div>
+            <div>
+              <p className="font-medium text-charcoal">Listo-teamet</p>
+              <p className="text-sm text-gray-500">
+                Tips og inspirasjon for travle familier
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Related articles */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <h3 className="text-xl font-bold text-charcoal mb-6">Les også</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Link href="/blogg/slik-planlegger-du-ukemenyen" className="group p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+              <p className="font-medium text-charcoal group-hover:text-purple-600">
+                Slik planlegger du ukemenyen – en komplett guide
+              </p>
+              <p className="text-sm text-gray-500">5 min lesetid</p>
+            </Link>
+            <Link href="/blogg/spar-penger-pa-matbudsjettet" className="group p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+              <p className="font-medium text-charcoal group-hover:text-purple-600">
+                10 tips for å spare penger på matbudsjettet
+              </p>
+              <p className="text-sm text-gray-500">6 min lesetid</p>
             </Link>
           </div>
         </div>

@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Personvernerklæring – Listo",
-  description: "Les om hvordan Listo behandler dine personopplysninger",
+  title: "Personvernerklæring – listo.family",
+  description: "Les om hvordan listo.family behandler dine personopplysninger",
 };
 
 export default function PrivacyPage() {
@@ -32,7 +32,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold text-charcoal mb-4">1. Hvem er vi?</h2>
             <p className="text-charcoal-light leading-relaxed">
-              Listo er en familieassistent-app utviklet av kjibbaDev (&quot;vi&quot;, &quot;oss&quot;). 
+              listo.family er en familieassistent-app utviklet av kjibbaDev (&quot;vi&quot;, &quot;oss&quot;). 
               Vi er behandlingsansvarlig for personopplysningene som samles inn gjennom appen.
             </p>
             <p className="text-charcoal-light leading-relaxed mt-2">
@@ -167,7 +167,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold text-charcoal mb-4">9. Barn</h2>
             <p className="text-charcoal-light leading-relaxed">
-              Listo er ment for familier, og kontoer opprettes av voksne familiemedlemmer. 
+              listo.family er ment for familier, og kontoer opprettes av voksne familiemedlemmer. 
               Vi samler ikke bevisst inn personopplysninger direkte fra barn under 16 år.
             </p>
           </section>
@@ -205,7 +205,7 @@ export default function PrivacyPage() {
       {/* Footer */}
       <footer className="border-t border-charcoal/5 mt-16 py-8">
         <div className="container mx-auto px-6 text-center text-charcoal-light text-sm">
-          <p>© 2025 Listo. Alle rettigheter reservert.</p>
+          <p>© 2025 listo.family. Alle rettigheter reservert.</p>
           <div className="mt-2 space-x-4">
             <Link href="/terms" className="hover:text-charcoal underline">Vilkår for bruk</Link>
             <Link href="/privacy" className="hover:text-charcoal underline">Personvern</Link>

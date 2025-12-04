@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Ofte stilte spørsmål (FAQ) | Listo - Familiens Middagsplanlegger",
+  title: "Ofte stilte spørsmål (FAQ) | listo.family",
   description:
-    "Finn svar på vanlige spørsmål om Listo. Lær om funksjoner, priser, familiesynkronisering, AI-forslag og mer.",
+    "Finn svar på vanlige spørsmål om listo.family. Lær om funksjoner, priser, familiesynkronisering, AI-forslag og mer.",
   keywords: [
     "listo faq",
     "listo spørsmål",
@@ -17,11 +17,11 @@ export const metadata: Metadata = {
     canonical: "/faq",
   },
   openGraph: {
-    title: "Ofte stilte spørsmål (FAQ) | Listo",
+    title: "Ofte stilte spørsmål (FAQ) | listo.family",
     description:
-      "Finn svar på vanlige spørsmål om Listo middagsplanlegger.",
+      "Finn svar på vanlige spørsmål om listo.family.",
     url: "https://listo.family/faq",
-    siteName: "Listo",
+    siteName: "listo.family",
     locale: "nb_NO",
     type: "website",
   },
@@ -34,42 +34,42 @@ const faqSchema = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "Er Listo gratis?",
+      name: "Er listo.family gratis?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Ja! Under beta-perioden er alle funksjoner i Listo helt gratis – inkludert AI-forslag, ubegrenset antall oppskrifter og familiemedlemmer. Etter lansering vil grunnfunksjoner forbli gratis for alltid, mens avanserte AI-funksjoner vil kreve et Premium-abonnement.",
+        text: "Ja! Under beta-perioden er alle funksjoner i listo.family helt gratis – inkludert AI-forslag, ubegrenset antall oppskrifter og familiemedlemmer. Etter lansering vil grunnfunksjoner forbli gratis for alltid, mens avanserte AI-funksjoner vil kreve et Premium-abonnement.",
       },
     },
     {
       "@type": "Question",
-      name: "Kan hele familien bruke Listo sammen?",
+      name: "Kan hele familien bruke listo.family sammen?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Absolutt! Familiedelingsfunksjonen er kjernen i Listo. Alle familiemedlemmer kan logge inn og se samme ukeplan, handleliste og oppskrifter. Endringer synkroniseres i sanntid – når noen legger til en vare på handlelisten, ser alle det umiddelbart.",
+        text: "Absolutt! Familiedelingsfunksjonen er kjernen i listo.family. Alle familiemedlemmer kan logge inn og se samme ukeplan, handleliste og oppskrifter. Endringer synkroniseres i sanntid – når noen legger til en vare på handlelisten, ser alle det umiddelbart.",
       },
     },
     {
       "@type": "Question",
-      name: "Hvordan fungerer AI-forslagene i Listo?",
+      name: "Hvordan fungerer AI-forslagene i listo.family?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Listo bruker Google Gemini AI til å generere personlige middagsforslag. AI-en kan foreslå ukemenyer basert på hva familien liker, tilgjengelig tid, og hva dere har spist tidligere. Den kan også generere nye oppskrifter og importere oppskrifter fra nettsider automatisk.",
+        text: "listo.family bruker Google Gemini AI til å generere personlige middagsforslag. AI-en kan foreslå ukemenyer basert på hva familien liker, tilgjengelig tid, og hva dere har spist tidligere. Den kan også generere nye oppskrifter og importere oppskrifter fra nettsider automatisk.",
       },
     },
     {
       "@type": "Question",
-      name: "Fungerer Listo uten internett?",
+      name: "Fungerer listo.family uten internett?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Ja, Listo har offline-støtte. Du kan se ukeplanen, krysse av på handlelisten og lese oppskrifter selv uten internettforbindelse. Endringer du gjør synkroniseres automatisk når du er tilbake online.",
+        text: "Ja, listo.family har offline-støtte. Du kan se ukeplanen, krysse av på handlelisten og lese oppskrifter selv uten internettforbindelse. Endringer du gjør synkroniseres automatisk når du er tilbake online.",
       },
     },
     {
       "@type": "Question",
-      name: "Hvilke enheter støtter Listo?",
+      name: "Hvilke enheter støtter listo.family?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Listo fungerer på web (PC, Mac, nettbrett) allerede nå. Native apper for iOS (iPhone/iPad) og Android er under utvikling og kommer snart. Alt synkroniserer automatisk mellom enhetene dine.",
+        text: "listo.family fungerer på web (PC, Mac, nettbrett) allerede nå. Native apper for iOS (iPhone/iPad) og Android er under utvikling og kommer snart. Alt synkroniserer automatisk mellom enhetene dine.",
       },
     },
     {
@@ -77,20 +77,20 @@ const faqSchema = {
       name: "Kan jeg importere oppskrifter fra andre nettsider?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Ja! Med Listo kan du lime inn en lenke fra hvilken som helst matblogg eller oppskriftsside, og AI-en henter automatisk ut ingredienser og fremgangsmåte. Du kan også legge inn oppskrifter manuelt eller ta bilde av en kokebokside.",
+        text: "Ja! Med listo.family kan du lime inn en lenke fra hvilken som helst matblogg eller oppskriftsside, og AI-en henter automatisk ut ingredienser og fremgangsmåte. Du kan også legge inn oppskrifter manuelt eller ta bilde av en kokebokside.",
       },
     },
     {
       "@type": "Question",
-      name: "Hvordan lager Listo handlelisten automatisk?",
+      name: "Hvordan lager listo.family handlelisten automatisk?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Når du legger til middager i ukeplanen, samler Listo automatisk alle ingredienser fra oppskriftene og legger dem til handlelisten. Listen sorteres etter butikkens layout (frukt/grønt, kjøtt, meieri osv.) for enklere handling.",
+        text: "Når du legger til middager i ukeplanen, samler listo.family automatisk alle ingredienser fra oppskriftene og legger dem til handlelisten. Listen sorteres etter butikkens layout (frukt/grønt, kjøtt, meieri osv.) for enklere handling.",
       },
     },
     {
       "@type": "Question",
-      name: "Er mine data trygge i Listo?",
+      name: "Er mine data trygge i listo.family?",
       acceptedAnswer: {
         "@type": "Answer",
         text: "Ja, vi tar personvern på alvor. All data lagres sikkert i Firebase (Google Cloud), kryptert både under overføring og lagring. Vi selger aldri data til tredjeparter. Du kan når som helst slette all din data fra appen.",

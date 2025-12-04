@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Vilkår for bruk – Listo",
-  description: "Les vilkårene for bruk av Listo familieassistent",
+  title: "Vilkår for bruk – listo.family",
+  description: "Les vilkårene for bruk av listo.family familieassistent",
 };
 
 export default function TermsPage() {
@@ -32,18 +32,18 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold text-charcoal mb-4">1. Aksept av vilkår</h2>
             <p className="text-charcoal-light leading-relaxed">
-              Ved å opprette en konto eller bruke Listo (&quot;Tjenesten&quot;), godtar du disse vilkårene 
+              Ved å opprette en konto eller bruke listo.family (&quot;Tjenesten&quot;), godtar du disse vilkårene 
               for bruk. Hvis du ikke godtar vilkårene, må du ikke bruke Tjenesten.
             </p>
             <p className="text-charcoal-light leading-relaxed mt-2">
-              Tjenesten leveres av kjibbaDev (&quot;vi&quot;, &quot;oss&quot;, &quot;Listo&quot;).
+              Tjenesten leveres av kjibbaDev (&quot;vi&quot;, &quot;oss&quot;, &quot;listo.family&quot;).
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-charcoal mb-4">2. Beskrivelse av tjenesten</h2>
             <p className="text-charcoal-light leading-relaxed">
-              Listo er en familieassistent-app som hjelper med:
+              listo.family er en familieassistent-app som hjelper med:
             </p>
             <ul className="list-disc pl-6 text-charcoal-light space-y-1 mt-2">
               <li>Handlelister og handleplanlegging</li>
@@ -116,7 +116,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold text-charcoal mb-4">7. AI-funksjoner</h2>
             <p className="text-charcoal-light leading-relaxed">
-              Listo bruker kunstig intelligens (Google Gemini) for å generere forslag til ukesmenyer 
+              listo.family bruker kunstig intelligens (Google Gemini) for å generere forslag til ukesmenyer 
               og oppskrifter. Du forstår at:
             </p>
             <ul className="list-disc pl-6 text-charcoal-light space-y-2 mt-2">

@@ -38,7 +38,7 @@ export default function Hero() {
             {/* Subheadline */}
             <p className="text-lg sm:text-xl text-charcoal-light mb-8 max-w-xl mx-auto lg:mx-0">
               Middagsplanlegging, handlelister, oppgavefordeling og aktivitetskalender 
-              – alt synkronisert i sanntid. Listo tar kontroll på familielogistikken 
+              – alt synkronisert i sanntid. listo.family tar kontroll på familielogistikken 
               så dere kan fokusere på det som betyr noe.
             </p>
 
@@ -91,7 +91,7 @@ export default function Hero() {
                   <div className="bg-cream-50 rounded-[2.5rem] overflow-hidden aspect-[9/19.5]">
                     <Image
                       src="/screenshots/planner.png"
-                      alt="Listo ukeplanlegger"
+                      alt="listo.family ukeplanlegger"
                       width={320}
                       height={693}
                       className="w-full h-full object-cover"
@@ -106,7 +106,7 @@ export default function Hero() {
                   <div className="bg-cream-50 rounded-[2.5rem] overflow-hidden aspect-[9/19.5]">
                     <Image
                       src="/screenshots/shopping.png"
-                      alt="Listo handleliste"
+                      alt="listo.family handleliste"
                       width={288}
                       height={624}
                       className="w-full h-full object-cover"

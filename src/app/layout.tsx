@@ -8,9 +8,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Listo - Familiens smarte hverdagsassistent",
+  title: "listo.family – Familiens smarte hverdagsassistent",
   description:
-    "Listo er AI-drevet app for måltidsplanlegging, handlelister og oppskrifter. Gjør hverdagen enklere for hele familien.",
+    "listo.family er en AI-drevet app for måltidsplanlegging, handlelister og familieorganisering. Gjør hverdagen enklere for hele familien.",
   keywords: [
     "måltidsplanlegging",
     "handleliste",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "ukemeny",
     "matplanlegging",
   ],
-  authors: [{ name: "Listo" }],
+  authors: [{ name: "listo.family" }],
   metadataBase: new URL("https://listo.family"),
   alternates: {
     canonical: "/",
@@ -33,19 +33,19 @@ export const metadata: Metadata = {
     apple: "/images/listo-logo.svg",
   },
   openGraph: {
-    title: "Listo - Familiens smarte hverdagsassistent",
+    title: "listo.family – Familiens smarte hverdagsassistent",
     description:
-      "Aldri lur på hva dere skal ha til middag igjen. Listo planlegger, handler og inspirerer.",
+      "Aldri lur på hva dere skal ha til middag igjen. listo.family planlegger, handler og inspirerer.",
     url: "https://listo.family",
-    siteName: "Listo",
+    siteName: "listo.family",
     locale: "nb_NO",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Listo - Familiens smarte hverdagsassistent",
+    title: "listo.family – Familiens smarte hverdagsassistent",
     description:
-      "Aldri lur på hva dere skal ha til middag igjen. Listo planlegger, handler og inspirerer.",
+      "Aldri lur på hva dere skal ha til middag igjen. listo.family planlegger, handler og inspirerer.",
   },
   robots: {
     index: true,
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Listo.family",
+  name: "listo.family",
   applicationCategory: "LifestyleApplication",
   operatingSystem: "iOS, Android",
   description:
@@ -65,7 +65,7 @@ const jsonLd = {
   url: "https://listo.family",
   author: {
     "@type": "Organization",
-    name: "Listo",
+    name: "listo.family",
     url: "https://listo.family",
   },
   offers: {

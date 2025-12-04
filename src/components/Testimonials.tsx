@@ -8,7 +8,7 @@ const values = [
     icon: Heart,
     title: "Bygget med kjærlighet",
     description:
-      "Listo er laget av en familie, for familier. Vi bruker appen selv hver eneste dag og vet hvor frustrerende middagsplanlegging kan være.",
+      "listo.family er laget av en familie, for familier. Vi bruker appen selv hver eneste dag og vet hvor frustrerende middagsplanlegging kan være.",
     color: "salmon",
   },
   {
@@ -29,7 +29,7 @@ const values = [
     icon: MessageSquare,
     title: "Vi lytter",
     description:
-      "Send oss en melding, og du får svar fra teamet – ikke en bot. Dine forslag former direkte hvordan Listo utvikler seg.",
+      "Send oss en melding, og du får svar fra teamet – ikke en bot. Dine forslag former direkte hvordan listo.family utvikler seg.",
     color: "magic",
   },
 ];
@@ -93,7 +93,7 @@ export default function Testimonials() {
             <p className="text-charcoal-light mb-6 max-w-lg">
               Vi åpner snart for et begrenset antall familier. Som beta-tester 
               får du gratis tilgang, direkte kontakt med teamet, og dine 
-              tilbakemeldinger vil forme fremtiden til Listo.
+              tilbakemeldinger vil forme fremtiden til listo.family.
             </p>
             <Link
               href="#beta"
