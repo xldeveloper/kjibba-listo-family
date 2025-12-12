@@ -2,42 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, BookOpen } from "lucide-react";
-
-const articles = [
-  {
-    slug: "hva-skal-vi-ha-til-middag",
-    title: "Hva skal vi ha til middag? 30 ideer",
-    excerpt:
-      "Sliter du med å finne ut hva dere skal ha? Her er 30 enkle middagsforslag.",
-    readTime: "8 min",
-    image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80",
-    category: "Middagsideer",
-    categoryColor: "bg-listo-500",
-  },
-  {
-    slug: "vintermiddager",
-    title: "15 lune vintermiddager",
-    excerpt:
-      "Oppdag deilige vintermiddager som varmer fra innsiden på kalde dager.",
-    readTime: "6 min",
-    image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&q=80",
-    category: "Sesong",
-    categoryColor: "bg-blue-500",
-  },
-  {
-    slug: "sunn-mat-pa-budsjett",
-    title: "Sunn mat på budsjett",
-    excerpt:
-      "15 tips for å lage næringsrik mat uten å tømme lommeboka.",
-    readTime: "7 min",
-    image: "https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600&q=80",
-    category: "Økonomi",
-    categoryColor: "bg-green-500",
-  },
-];
+import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
+import { getFrontPageArticles, categoryColors } from "@/lib/blogData";
 
 export default function BlogPreview() {
+  // Get prioritized articles for front page (new/featured first)
+  const articles = getFrontPageArticles(3);
+
   return (
     <section className="py-20 bg-gradient-to-b from-white to-cream-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,8 +33,16 @@ export default function BlogPreview() {
             <Link
               key={article.slug}
               href={`/blogg/${article.slug}`}
-              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative"
             >
+              {article.isNew && (
+                <div className="absolute top-3 right-3 z-10">
+                  <span className="bg-gradient-to-r from-listo-500 to-listo-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md">
+                    <Sparkles className="w-3 h-3" />
+                    NY
+                  </span>
+                </div>
+              )}
               <div className="relative aspect-[16/10] overflow-hidden">
                 <Image
                   src={article.image}
@@ -72,7 +51,7 @@ export default function BlogPreview() {
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-3 left-3">
-                  <span className={`${article.categoryColor} text-white px-3 py-1 rounded-full text-xs font-semibold`}>
+                  <span className={`${categoryColors[article.categoryColor] || 'bg-gray-500'} text-white px-3 py-1 rounded-full text-xs font-semibold`}>
                     {article.category}
                   </span>
                 </div>

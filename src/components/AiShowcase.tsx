@@ -9,21 +9,21 @@ const aiFeatures = [
     id: "magic-fill",
     icon: Wand2,
     title: "Magic Fill",
-    shortDesc: "Ett klikk for full ukeplan",
+    shortDesc: "Generer hele ukeplanen",
     description:
-      "Med bare ett trykk fyller AI-en ut hele ukeplanen basert på familiens preferanser og hva dere ikke har spist på en stund. Den tar hensyn til travle dager og foreslår enkle retter når kalenderen er full.",
+      "Med ett klikk fyller AI-en ut hele ukeplanen basert på familiens preferanser, tidligere valg, og travle dager. Den foreslår enkle retter når kalenderen er full.",
     screenshot: "/screenshots/planner.png",
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     id: "recipe-import",
     icon: Camera,
     title: "Smart import",
-    shortDesc: "Digitalisér kokeboken din",
+    shortDesc: "Fra nett og kokebok",
     description:
-      "Ta bilde av en oppskrift fra kokeboken eller et blad, og AI-en digitaliserer den på sekunder. Du kan også skrive inn oppskrifter manuelt – AI-en hjelper deg å strukturere ingredienser og fremgangsmåte.",
+      "Ta bilde av en oppskrift fra kokeboken, eller importer direkte fra matprat.no, tine.no og andre oppskriftssider. AI-en strukturerer ingredienser og fremgangsmåte automatisk.",
     screenshot: "/screenshots/recipe.png",
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     id: "chat",
@@ -39,11 +39,11 @@ const aiFeatures = [
     id: "learn",
     icon: Brain,
     title: "Lærer av deg",
-    shortDesc: "Blir smartere over tid",
+    shortDesc: "Husker preferansene",
     description:
-      "Jo mer dere bruker listo.family, jo bedre blir forslagene. Appen lærer at barna elsker taco på fredager og at pasta er en vinner på travle hverdager – og bruker dette til å gi AI-en bedre instrukser.",
+      "Rate oppskrifter med 1-5 stjerner, og AI-en lærer hva familien liker. Den husker at barna elsker taco på fredager og at pasta er en vinner på travle hverdager.",
     screenshot: "/screenshots/planner.png",
-    comingSoon: true,
+    comingSoon: false,
   },
 ];
 
@@ -81,19 +81,17 @@ export default function AiShowcase() {
                 <button
                   key={feature.id}
                   onClick={() => setActiveFeature(feature)}
-                  className={`w-full text-left p-5 rounded-squircle border transition-all ${
-                    isActive
+                  className={`w-full text-left p-5 rounded-squircle border transition-all ${isActive
                       ? "bg-white border-magic-300 shadow-lg"
                       : "bg-transparent border-transparent hover:bg-white/50 hover:border-charcoal/10"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start gap-4">
                     <div
-                      className={`w-12 h-12 rounded-squircle-sm flex items-center justify-center flex-shrink-0 ${
-                        isActive
+                      className={`w-12 h-12 rounded-squircle-sm flex items-center justify-center flex-shrink-0 ${isActive
                           ? "bg-gradient-to-br from-magic-500 to-magic-600 text-white"
                           : "bg-magic-100 text-magic-600"
-                      }`}
+                        }`}
                     >
                       <Icon className="w-6 h-6" />
                     </div>
@@ -110,9 +108,8 @@ export default function AiShowcase() {
                           )}
                         </div>
                         <ChevronRight
-                          className={`w-5 h-5 text-charcoal/40 transition-transform ${
-                            isActive ? "rotate-90" : ""
-                          }`}
+                          className={`w-5 h-5 text-charcoal/40 transition-transform ${isActive ? "rotate-90" : ""
+                            }`}
                         />
                       </div>
                       <p className="text-sm text-charcoal-light mt-0.5">

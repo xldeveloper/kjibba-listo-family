@@ -1,703 +1,249 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { getFirestore, collection, query, orderBy, onSnapshot, Timestamp, doc, updateDoc } from "firebase/firestore";
-import { ArrowLeft, Users, Clock, Mail, User as UserIcon, Shield, RefreshCw, Sparkles, Send, Check, UserPlus, Bug, MessageSquare } from "lucide-react";
+import { useMemo } from "react";
+import { Users, Sparkles, Bug, Clock, TrendingUp, UserCheck, Send } from "lucide-react";
+import { Timestamp } from "firebase/firestore";
+import { useAdminData } from "./layout";
+import MetricCard from "@/components/admin/MetricCard";
+import SimpleChart from "@/components/admin/SimpleChart";
 
-// Firebase config (same as listo-app)
-const firebaseConfig = {
-  apiKey: "AIzaSyAW6ksZsDokqRAIpczXI030u_esWHOVe0Q",
-  authDomain: "listo-6443c.firebaseapp.com",
-  projectId: "listo-6443c",
-  storageBucket: "listo-6443c.firebasestorage.app",
-  messagingSenderId: "616905600919",
-  appId: "1:616905600919:web:d5e5c9f8a7b6c4d3e2f1a0",
-};
+export default function AdminDashboard() {
+  const { users, betaInterests, bugReports } = useAdminData();
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  // Calculate metrics
+  const metrics = useMemo(() => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const twoWeeksAgo = new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000);
 
-// Admin emails that can access this page
-const ADMIN_EMAILS = ["kjibba@gmail.com"];
+    const getDate = (timestamp: Timestamp | string) => {
+      if (!timestamp) return new Date(0);
+      return timestamp instanceof Timestamp ? timestamp.toDate() : new Date(timestamp);
+    };
 
-interface UserRegistration {
-  id: string;
-  email: string;
-  displayName: string;
-  createdAt: string;
-  registeredAt: Timestamp;
-  source: string;
-}
+    // Today's new items
+    const newToday = betaInterests.filter(b => getDate(b.createdAt) >= today).length +
+      users.filter(u => getDate(u.registeredAt) >= today).length;
 
-interface BetaInterest {
-  id: string;
-  name: string;
-  email: string;
-  familySize: string;
-  createdAt: Timestamp;
-  source: string;
-  status?: "interested" | "invited" | "registered";
-  invitedAt?: Timestamp;
-}
+    // This week's items
+    const thisWeekBeta = betaInterests.filter(b => getDate(b.createdAt) >= weekAgo).length;
+    const lastWeekBeta = betaInterests.filter(b => {
+      const d = getDate(b.createdAt);
+      return d >= twoWeeksAgo && d < weekAgo;
+    }).length;
 
-interface BugReport {
-  id: string;
-  title: string;
-  description: string;
-  userId: string;
-  userEmail: string;
-  userName: string;
-  familyId?: string;
-  deviceInfo: {
-    platform: 'ios' | 'android' | 'web';
-    appVersion: string;
-  };
-  status: 'new' | 'in-progress' | 'resolved' | 'closed';
-  createdAt: Timestamp;
-  resolvedAt?: Timestamp;
-  adminNotes?: string;
-}
+    const thisWeekUsers = users.filter(u => getDate(u.registeredAt) >= weekAgo).length;
+    const lastWeekUsers = users.filter(u => {
+      const d = getDate(u.registeredAt);
+      return d >= twoWeeksAgo && d < weekAgo;
+    }).length;
 
-export default function AdminPage() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<UserRegistration[]>([]);
-  const [betaInterests, setBetaInterests] = useState<BetaInterest[]>([]);
-  const [bugReports, setBugReports] = useState<BugReport[]>([]);
-  const [activeTab, setActiveTab] = useState<"users" | "beta" | "bugs">("beta");
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+    // Bug status
+    const newBugs = bugReports.filter(b => b.status === 'new').length;
+    const inProgressBugs = bugReports.filter(b => b.status === 'in-progress').length;
 
-  // Check auth state
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      if (user && ADMIN_EMAILS.includes(user.email || "")) {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
-      setLoading(false);
-    });
+    // Conversion rates
+    const invited = betaInterests.filter(b => b.status === 'invited').length;
+    const registered = betaInterests.filter(b => b.status === 'registered').length;
 
-    return () => unsubscribe();
-  }, []);
+    return {
+      newToday,
+      betaTotal: betaInterests.length,
+      betaTrend: thisWeekBeta - lastWeekBeta,
+      usersTotal: users.length,
+      usersTrend: thisWeekUsers - lastWeekUsers,
+      bugsNew: newBugs,
+      bugsInProgress: inProgressBugs,
+      bugsTotal: bugReports.length,
+      invited,
+      registered,
+    };
+  }, [users, betaInterests, bugReports]);
 
-  // Subscribe to user registrations
-  useEffect(() => {
-    if (!isAdmin) return;
+  // Generate chart data for last 7 days
+  const chartData = useMemo(() => {
+    const days = 7;
+    const data = [];
+    const now = new Date();
 
-    const q = query(
-      collection(db, "user_registrations"),
-      orderBy("registeredAt", "desc")
-    );
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+      const nextDate = new Date(date.getTime() + 24 * 60 * 60 * 1000);
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const userList: UserRegistration[] = [];
-      snapshot.forEach((doc) => {
-        userList.push({
-          id: doc.id,
-          ...doc.data(),
-        } as UserRegistration);
+      const getDate = (timestamp: Timestamp | string) => {
+        if (!timestamp) return new Date(0);
+        return timestamp instanceof Timestamp ? timestamp.toDate() : new Date(timestamp);
+      };
+
+      const count = betaInterests.filter(b => {
+        const d = getDate(b.createdAt);
+        return d >= date && d < nextDate;
+      }).length + users.filter(u => {
+        const d = getDate(u.registeredAt);
+        return d >= date && d < nextDate;
+      }).length;
+
+      data.push({
+        label: date.toLocaleDateString('nb-NO', { weekday: 'short' }),
+        value: count,
       });
-      setUsers(userList);
-      setLastRefresh(new Date());
-    });
-
-    return () => unsubscribe();
-  }, [isAdmin]);
-
-  // Subscribe to beta interests
-  useEffect(() => {
-    if (!isAdmin) return;
-
-    const q = query(
-      collection(db, "beta_interest"),
-      orderBy("createdAt", "desc")
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const interests: BetaInterest[] = [];
-      snapshot.forEach((doc) => {
-        interests.push({
-          id: doc.id,
-          ...doc.data(),
-        } as BetaInterest);
-      });
-      setBetaInterests(interests);
-      setLastRefresh(new Date());
-    });
-
-    return () => unsubscribe();
-  }, [isAdmin]);
-
-  // Subscribe to bug reports
-  useEffect(() => {
-    if (!isAdmin) return;
-
-    const q = query(
-      collection(db, "bugReports"),
-      orderBy("createdAt", "desc")
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const reports: BugReport[] = [];
-      snapshot.forEach((doc) => {
-        reports.push({
-          id: doc.id,
-          ...doc.data(),
-        } as BugReport);
-      });
-      setBugReports(reports);
-      setLastRefresh(new Date());
-    });
-
-    return () => unsubscribe();
-  }, [isAdmin]);
-
-  // Send invitation email (opens mailto)
-  const sendInvitation = async (interest: BetaInterest) => {
-    const subject = encodeURIComponent("🎉 Du er invitert til Listo beta!");
-    const body = encodeURIComponent(`Hei ${interest.name}!
-
-Takk for at du vil teste Listo! Du er nå invitert til vår closed beta.
-
-Klikk her for å opprette din konto:
-https://listo.family/signup?email=${encodeURIComponent(interest.email)}
-
-Etter registrering kan du:
-• Bruke web-versjonen på app.listo.family
-• Laste ned Android-appen (kommer snart på Google Play)
-
-Har du spørsmål? Bare svar på denne e-posten!
-
-Velkommen til Listo! 🎉
-
-– Kjetil`);
-
-    // Open mailto
-    window.open(`mailto:${interest.email}?subject=${subject}&body=${body}`);
-
-    // Update status in Firestore
-    try {
-      await updateDoc(doc(db, "beta_interest", interest.id), {
-        status: "invited",
-        invitedAt: new Date(),
-      });
-    } catch (error) {
-      console.error("Error updating status:", error);
     }
-  };
 
-  // Get status badge
-  const getStatusBadge = (status?: string) => {
-    switch (status) {
-      case "invited":
-        return (
-          <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full flex items-center gap-1">
-            <Send className="w-3 h-3" />
-            Invitert
-          </span>
-        );
-      case "registered":
-        return (
-          <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full flex items-center gap-1">
-            <Check className="w-3 h-3" />
-            Registrert
-          </span>
-        );
-      default:
-        return (
-          <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full flex items-center gap-1">
-            <UserPlus className="w-3 h-3" />
-            Ny
-          </span>
-        );
-    }
-  };
+    return data;
+  }, [betaInterests, users]);
 
-  // Format date
-  const formatDate = (timestamp: Timestamp | string) => {
-    if (!timestamp) return "Ukjent";
+  // Calculate conversion funnel
+  const funnel = useMemo(() => {
+    const interested = betaInterests.filter(b => !b.status || b.status === 'interested').length;
+    const invited = betaInterests.filter(b => b.status === 'invited').length;
+    const registered = betaInterests.filter(b => b.status === 'registered').length;
+    const total = betaInterests.length || 1;
 
-    const date = timestamp instanceof Timestamp
-      ? timestamp.toDate()
-      : new Date(timestamp);
+    return {
+      interested: { count: interested, percent: Math.round((interested / total) * 100) },
+      invited: { count: invited, percent: Math.round((invited / total) * 100) },
+      registered: { count: registered, percent: Math.round((registered / total) * 100) },
+    };
+  }, [betaInterests]);
 
-    return new Intl.DateTimeFormat("nb-NO", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(date);
-  };
-
-  // Time ago
-  const timeAgo = (timestamp: Timestamp | string) => {
-    if (!timestamp) return "";
-
-    const date = timestamp instanceof Timestamp
-      ? timestamp.toDate()
-      : new Date(timestamp);
-
-    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-
-    if (seconds < 60) return "akkurat nå";
-    if (seconds < 3600) return `${Math.floor(seconds / 60)} min siden`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)} timer siden`;
-    if (seconds < 604800) return `${Math.floor(seconds / 86400)} dager siden`;
-    return formatDate(timestamp);
-  };
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-cream-50 to-cream-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-listo-500" />
-      </div>
-    );
-  }
-
-  // Not logged in
-  if (!currentUser) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-cream-50 to-cream-100 flex items-center justify-center p-8">
-        <div className="w-full max-w-md bg-white rounded-squircle shadow-xl p-8 border border-charcoal/5 text-center">
-          <Shield className="w-16 h-16 text-charcoal/20 mx-auto mb-6" />
-          <h2 className="text-2xl font-bold text-charcoal mb-2">
-            Admin-tilgang kreves
-          </h2>
-          <p className="text-charcoal-light mb-6">
-            Du må logge inn med en admin-konto for å se denne siden.
-          </p>
-          <Link
-            href="/login"
-            className="block w-full py-3 px-6 bg-gradient-to-r from-listo-500 to-listo-600 hover:from-listo-600 hover:to-listo-700 text-white font-semibold rounded-squircle-sm shadow-lg hover:shadow-xl transition-all text-center"
-          >
-            Logg inn
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  // Not admin
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-cream-50 to-cream-100 flex items-center justify-center p-8">
-        <div className="w-full max-w-md bg-white rounded-squircle shadow-xl p-8 border border-charcoal/5 text-center">
-          <Shield className="w-16 h-16 text-red-300 mx-auto mb-6" />
-          <h2 className="text-2xl font-bold text-charcoal mb-2">
-            Ingen tilgang
-          </h2>
-          <p className="text-charcoal-light mb-6">
-            Kontoen din ({currentUser.email}) har ikke admin-tilgang.
-          </p>
-          <Link
-            href="/"
-            className="block w-full py-3 px-6 border border-charcoal/10 text-charcoal font-medium rounded-squircle-sm hover:bg-cream-50 transition-colors text-center"
-          >
-            Tilbake til forsiden
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  // Admin dashboard
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream-50 to-cream-100">
-      {/* Header */}
-      <header className="bg-white border-b border-charcoal/10 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-charcoal-light hover:text-charcoal transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Tilbake
-            </Link>
-            <div className="h-6 w-px bg-charcoal/10" />
-            <h1 className="text-xl font-bold text-charcoal flex items-center gap-2">
-              <Shield className="w-5 h-5 text-listo-500" />
-              Admin Dashboard
-            </h1>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-charcoal-light">
-            <span>{currentUser.email}</span>
-            <button
-              onClick={() => auth.signOut()}
-              className="text-red-500 hover:text-red-600 font-medium"
-            >
-              Logg ut
-            </button>
-          </div>
-        </div>
-      </header>
+    <div className="space-y-8">
+      {/* Quick stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MetricCard
+          title="Beta-interesserte"
+          value={metrics.betaTotal}
+          icon={Sparkles}
+          iconBgColor="bg-magic-100"
+          iconColor="text-magic-600"
+          trend={metrics.betaTrend}
+          trendLabel="denne uken"
+          href="/admin/beta"
+        />
+        <MetricCard
+          title="Registrerte brukere"
+          value={metrics.usersTotal}
+          icon={Users}
+          iconBgColor="bg-listo-100"
+          iconColor="text-listo-600"
+          trend={metrics.usersTrend}
+          trendLabel="denne uken"
+          href="/admin/users"
+        />
+        <MetricCard
+          title="Nye bugs"
+          value={metrics.bugsNew}
+          icon={Bug}
+          iconBgColor="bg-red-100"
+          iconColor="text-red-600"
+          trendLabel={`${metrics.bugsInProgress} under arbeid`}
+          href="/admin/bugs"
+        />
+        <MetricCard
+          title="Nye i dag"
+          value={metrics.newToday}
+          icon={Clock}
+          iconBgColor="bg-salmon-100"
+          iconColor="text-salmon-600"
+        />
+      </div>
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-squircle shadow-lg p-6 border border-charcoal/5">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-magic-100 flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-magic-600" />
-              </div>
-              <div>
-                <p className="text-sm text-charcoal-light">Beta-interesserte</p>
-                <p className="text-3xl font-bold text-charcoal">{betaInterests.length}</p>
-              </div>
-            </div>
+      {/* Charts row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Activity chart */}
+        <div className="bg-white rounded-squircle shadow-lg p-6 border border-charcoal/5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-charcoal flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-listo-500" />
+              Aktivitet siste 7 dager
+            </h3>
+            <span className="text-sm text-charcoal-light">
+              {chartData.reduce((sum, d) => sum + d.value, 0)} totalt
+            </span>
           </div>
-
-          <div className="bg-white rounded-squircle shadow-lg p-6 border border-charcoal/5">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-listo-100 flex items-center justify-center">
-                <Users className="w-6 h-6 text-listo-600" />
-              </div>
-              <div>
-                <p className="text-sm text-charcoal-light">Registrerte brukere</p>
-                <p className="text-3xl font-bold text-charcoal">{users.length}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-squircle shadow-lg p-6 border border-charcoal/5">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-salmon-100 flex items-center justify-center">
-                <Clock className="w-6 h-6 text-salmon-600" />
-              </div>
-              <div>
-                <p className="text-sm text-charcoal-light">Nye i dag</p>
-                <p className="text-3xl font-bold text-charcoal">
-                  {betaInterests.filter(b => {
-                    if (!b.createdAt) return false;
-                    const date = b.createdAt instanceof Timestamp
-                      ? b.createdAt.toDate()
-                      : new Date(b.createdAt);
-                    return (new Date().getTime() - date.getTime()) < 86400000;
-                  }).length + users.filter(u => {
-                    if (!u.registeredAt) return false;
-                    const date = u.registeredAt instanceof Timestamp
-                      ? u.registeredAt.toDate()
-                      : new Date(u.registeredAt);
-                    return (new Date().getTime() - date.getTime()) < 86400000;
-                  }).length}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-squircle shadow-lg p-6 border border-charcoal/5">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                <RefreshCw className="w-6 h-6 text-green-600" />
-              </div>
-              <div>
-                <p className="text-sm text-charcoal-light">Sist oppdatert</p>
-                <p className="text-lg font-medium text-charcoal">
-                  {lastRefresh.toLocaleTimeString("nb-NO")}
-                </p>
-              </div>
-            </div>
-          </div>
+          <SimpleChart data={chartData} height={160} color="#22c55e" />
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6">
-          <button
-            onClick={() => setActiveTab("beta")}
-            className={`px-4 py-2 rounded-squircle-sm font-medium transition-colors ${activeTab === "beta"
-              ? "bg-magic-500 text-white"
-              : "bg-white text-charcoal hover:bg-cream-50 border border-charcoal/10"
-              }`}
-          >
-            <Sparkles className="w-4 h-4 inline mr-2" />
-            Beta-interesserte ({betaInterests.length})
-          </button>
-          <button
-            onClick={() => setActiveTab("users")}
-            className={`px-4 py-2 rounded-squircle-sm font-medium transition-colors ${activeTab === "users"
-              ? "bg-listo-500 text-white"
-              : "bg-white text-charcoal hover:bg-cream-50 border border-charcoal/10"
-              }`}
-          >
-            <Users className="w-4 h-4 inline mr-2" />
-            Registrerte brukere ({users.length})
-          </button>
-          <button
-            onClick={() => setActiveTab("bugs")}
-            className={`px-4 py-2 rounded-squircle-sm font-medium transition-colors ${activeTab === "bugs"
-              ? "bg-red-500 text-white"
-              : "bg-white text-charcoal hover:bg-cream-50 border border-charcoal/10"
-              }`}
-          >
-            <Bug className="w-4 h-4 inline mr-2" />
-            Bugreports ({bugReports.filter(b => b.status === 'new').length} nye)
-          </button>
+        {/* Conversion funnel */}
+        <div className="bg-white rounded-squircle shadow-lg p-6 border border-charcoal/5">
+          <h3 className="font-semibold text-charcoal flex items-center gap-2 mb-4">
+            <UserCheck className="w-5 h-5 text-magic-500" />
+            Beta-konvertering
+          </h3>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="w-24 text-sm text-charcoal-light">Interessert</div>
+              <div className="flex-1 bg-cream-100 rounded-full h-8 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 flex items-center justify-end pr-3 text-sm font-medium text-white"
+                  style={{ width: `${Math.max(funnel.interested.percent, 10)}%` }}
+                >
+                  {funnel.interested.count}
+                </div>
+              </div>
+              <div className="w-12 text-right text-sm text-charcoal-light">
+                {funnel.interested.percent}%
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-24 text-sm text-charcoal-light flex items-center gap-1">
+                <Send className="w-3 h-3" /> Invitert
+              </div>
+              <div className="flex-1 bg-cream-100 rounded-full h-8 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-blue-400 to-blue-500 flex items-center justify-end pr-3 text-sm font-medium text-white"
+                  style={{ width: `${Math.max(funnel.invited.percent, 10)}%` }}
+                >
+                  {funnel.invited.count}
+                </div>
+              </div>
+              <div className="w-12 text-right text-sm text-charcoal-light">
+                {funnel.invited.percent}%
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-24 text-sm text-charcoal-light flex items-center gap-1">
+                <UserCheck className="w-3 h-3" /> Registrert
+              </div>
+              <div className="flex-1 bg-cream-100 rounded-full h-8 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-green-400 to-green-500 flex items-center justify-end pr-3 text-sm font-medium text-white"
+                  style={{ width: `${Math.max(funnel.registered.percent, 10)}%` }}
+                >
+                  {funnel.registered.count}
+                </div>
+              </div>
+              <div className="w-12 text-right text-sm text-charcoal-light">
+                {funnel.registered.percent}%
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Beta interests list */}
-        {activeTab === "beta" && (
-          <div className="bg-white rounded-squircle shadow-lg border border-charcoal/5 overflow-hidden">
-            <div className="px-6 py-4 border-b border-charcoal/10 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-charcoal">
-                Beta-interesserte
-              </h2>
-              <span className="text-sm text-charcoal-light">
-                Fra interesseskjemaet på forsiden
-              </span>
-            </div>
-
-            {betaInterests.length === 0 ? (
-              <div className="p-12 text-center text-charcoal-light">
-                <Sparkles className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                <p>Ingen beta-interesserte ennå.</p>
-                <p className="text-sm mt-2">
-                  Folk vil vises her når de fyller ut skjemaet på{" "}
-                  <Link href="/#beta" className="text-listo-600 underline">
-                    forsiden
-                  </Link>
-                  .
-                </p>
-              </div>
-            ) : (
-              <div className="divide-y divide-charcoal/5">
-                {betaInterests.map((interest, index) => (
-                  <div
-                    key={interest.id}
-                    className="px-6 py-4 hover:bg-cream-50 transition-colors flex items-center gap-4"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-magic-400 to-magic-600 flex items-center justify-center text-white font-bold">
-                      {interest.name?.[0]?.toUpperCase() || "?"}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="font-medium text-charcoal truncate">
-                          {interest.name}
-                        </p>
-                        {getStatusBadge(interest.status)}
-                        <span className="px-2 py-0.5 bg-charcoal/5 text-charcoal-light text-xs rounded-full">
-                          {interest.familySize} pers
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4 text-sm text-charcoal-light">
-                        <span className="flex items-center gap-1 truncate">
-                          <Mail className="w-3 h-3" />
-                          {interest.email}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="text-right text-sm">
-                        <p className="text-charcoal">
-                          {timeAgo(interest.createdAt)}
-                        </p>
-                        <p className="text-charcoal-light text-xs">
-                          {formatDate(interest.createdAt)}
-                        </p>
-                      </div>
-
-                      {interest.status !== "registered" && (
-                        <button
-                          onClick={() => sendInvitation(interest)}
-                          className={`px-3 py-1.5 rounded-squircle-sm text-sm font-medium flex items-center gap-1.5 transition-colors ${interest.status === "invited"
-                            ? "bg-charcoal/5 text-charcoal-light hover:bg-charcoal/10"
-                            : "bg-listo-500 text-white hover:bg-listo-600"
-                            }`}
-                          title={interest.status === "invited" ? "Send på nytt" : "Send invitasjon"}
-                        >
-                          <Send className="w-3.5 h-3.5" />
-                          {interest.status === "invited" ? "Send igjen" : "Inviter"}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+      {/* Platform distribution from bugs */}
+      {bugReports.length > 0 && (
+        <div className="bg-white rounded-squircle shadow-lg p-6 border border-charcoal/5">
+          <h3 className="font-semibold text-charcoal flex items-center gap-2 mb-4">
+            <Bug className="w-5 h-5 text-red-500" />
+            Bug-fordeling per platform
+          </h3>
+          <div className="grid grid-cols-3 gap-4">
+            {(['ios', 'android', 'web'] as const).map(platform => {
+              const count = bugReports.filter(b => b.deviceInfo?.platform === platform).length;
+              const percent = Math.round((count / bugReports.length) * 100);
+              return (
+                <div key={platform} className="text-center p-4 bg-cream-50 rounded-squircle-sm">
+                  <p className="text-2xl font-bold text-charcoal">{count}</p>
+                  <p className="text-sm text-charcoal-light capitalize">{platform}</p>
+                  <p className="text-xs text-charcoal/50">{percent}%</p>
+                </div>
+              );
+            })}
           </div>
-        )}
-
-        {/* User list */}
-        {activeTab === "users" && (
-          <div className="bg-white rounded-squircle shadow-lg border border-charcoal/5 overflow-hidden">
-            <div className="px-6 py-4 border-b border-charcoal/10 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-charcoal">
-                Registrerte brukere
-              </h2>
-              <span className="text-sm text-charcoal-light">
-                Fra signup-siden (har opprettet konto)
-              </span>
-            </div>
-
-            {users.length === 0 ? (
-              <div className="p-12 text-center text-charcoal-light">
-                <Users className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                <p>Ingen registrerte brukere ennå.</p>
-                <p className="text-sm mt-2">
-                  Brukere vil vises her når de registrerer seg via{" "}
-                  <Link href="/signup" className="text-listo-600 underline">
-                    signup-siden
-                  </Link>
-                  .
-                </p>
-              </div>
-            ) : (
-              <div className="divide-y divide-charcoal/5">
-                {users.map((user, index) => (
-                  <div
-                    key={user.id}
-                    className="px-6 py-4 hover:bg-cream-50 transition-colors flex items-center gap-4"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-listo-400 to-listo-600 flex items-center justify-center text-white font-bold">
-                      {user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || "?"}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="font-medium text-charcoal truncate">
-                          {user.displayName || "Uten navn"}
-                        </p>
-                        {index === 0 && (
-                          <span className="px-2 py-0.5 bg-listo-100 text-listo-700 text-xs font-medium rounded-full">
-                            Nyeste
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-4 text-sm text-charcoal-light">
-                        <span className="flex items-center gap-1 truncate">
-                          <Mail className="w-3 h-3" />
-                          {user.email}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="text-right text-sm">
-                      <p className="text-charcoal">
-                        {timeAgo(user.registeredAt)}
-                      </p>
-                      <p className="text-charcoal-light text-xs">
-                        {formatDate(user.registeredAt)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Bug reports list */}
-        {activeTab === "bugs" && (
-          <div className="bg-white rounded-squircle shadow-lg border border-charcoal/5 overflow-hidden">
-            <div className="px-6 py-4 border-b border-charcoal/10 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-charcoal">
-                Bugreports
-              </h2>
-              <span className="text-sm text-charcoal-light">
-                Rapportert fra appen
-              </span>
-            </div>
-
-            {bugReports.length === 0 ? (
-              <div className="p-12 text-center text-charcoal-light">
-                <Bug className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                <p>Ingen bugreports mottatt ennå.</p>
-                <p className="text-sm mt-2">
-                  Bugs vil vises her når brukere rapporterer dem fra appen.
-                </p>
-              </div>
-            ) : (
-              <div className="divide-y divide-charcoal/5">
-                {bugReports.map((bug) => (
-                  <div
-                    key={bug.id}
-                    className="px-6 py-4 hover:bg-cream-50 transition-colors"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <p className="font-medium text-charcoal">
-                            {bug.title}
-                          </p>
-                          <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${bug.status === 'new' ? 'bg-red-100 text-red-700' :
-                              bug.status === 'in-progress' ? 'bg-yellow-100 text-yellow-700' :
-                                bug.status === 'resolved' ? 'bg-green-100 text-green-700' :
-                                  'bg-gray-100 text-gray-700'
-                            }`}>
-                            {bug.status === 'new' ? 'Ny' :
-                              bug.status === 'in-progress' ? 'Under arbeid' :
-                                bug.status === 'resolved' ? 'Løst' : 'Lukket'}
-                          </span>
-                          <span className="px-2 py-0.5 bg-charcoal/5 text-charcoal-light text-xs rounded-full">
-                            {bug.deviceInfo?.platform} v{bug.deviceInfo?.appVersion}
-                          </span>
-                        </div>
-                        <p className="text-sm text-charcoal-light line-clamp-2 mb-2">
-                          {bug.description}
-                        </p>
-                        <div className="flex items-center gap-4 text-xs text-charcoal-light">
-                          <span className="flex items-center gap-1">
-                            <Mail className="w-3 h-3" />
-                            {bug.userEmail}
-                          </span>
-                          <span>{bug.userName}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        <div className="text-right text-sm">
-                          <p className="text-charcoal">
-                            {timeAgo(bug.createdAt)}
-                          </p>
-                          <p className="text-charcoal-light text-xs">
-                            {formatDate(bug.createdAt)}
-                          </p>
-                        </div>
-
-                        <select
-                          value={bug.status}
-                          onChange={async (e) => {
-                            try {
-                              await updateDoc(doc(db, "bugReports", bug.id), {
-                                status: e.target.value,
-                                ...(e.target.value === 'resolved' ? { resolvedAt: new Date() } : {})
-                              });
-                            } catch (error) {
-                              console.error("Error updating status:", error);
-                            }
-                          }}
-                          className="px-2 py-1 text-xs border border-charcoal/10 rounded-md bg-white"
-                        >
-                          <option value="new">Ny</option>
-                          <option value="in-progress">Under arbeid</option>
-                          <option value="resolved">Løst</option>
-                          <option value="closed">Lukket</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Note */}
-        <p className="text-center text-sm text-charcoal/50 mt-8">
-          💡 Data hentes fra Firestore collections
-        </p>
-      </main>
+        </div>
+      )}
     </div>
   );
 }

@@ -7,8 +7,8 @@ import {
   BookOpen,
   Users,
   Sparkles,
-  Bell,
   CheckSquare,
+  MapPin,
 } from "lucide-react";
 
 const features = [
@@ -16,57 +16,60 @@ const features = [
     icon: Calendar,
     title: "Ukeplanlegger",
     description:
-      "Se hele uken i ett blikk: middager, aktiviteter og oppgaver. Dra og slipp for å organisere.",
+      "Se hele uken i ett blikk med planlagte middager. Konfetti-feiring når hele uken er planlagt! 🎉",
     color: "salmon",
-  },
-  {
-    icon: CheckSquare,
-    title: "Oppgaveliste",
-    description:
-      "Fordel hverdagsoppgaver mellom familiemedlemmer. \"Ta ut søpla\", \"Vaske klær\" – alltid oversikt over hvem som gjør hva.",
-    color: "listo",
-  },
-  {
-    icon: CalendarDays,
-    title: "Aktivitetskalender",
-    description:
-      "Fotballtrening, foreldremøte, bursdager – hold styr på familiens faste og spontane aktiviteter.",
-    color: "sky",
   },
   {
     icon: ShoppingCart,
     title: "Smart handleliste",
     description:
-      "Automatisk sortert etter butikkens layout. Hele familien kan legge til varer i sanntid.",
+      "AI-sortert etter butikkens layout. Porsjoner beregnes automatisk basert på hvem som spiser hjemme.",
     color: "salmon",
+  },
+  {
+    icon: Users,
+    title: "Hvem spiser hjemme?",
+    description:
+      "Perfekt for delt omsorg. Samværsplan for barn, gjester til middag, og bortreiser – alt håndteres automatisk.",
+    color: "listo",
+    isNew: true,
+  },
+  {
+    icon: CheckSquare,
+    title: "Familieoppgaver",
+    description:
+      "Fordel hverdagsoppgaver med fleksibel gjentakelse. \"Fresh Start\" fjerner backlog-skam med ett klikk.",
+    color: "listo",
   },
   {
     icon: BookOpen,
     title: "Oppskriftsbibliotek",
     description:
-      "Importer fra hvilken som helst nettside eller ta bilde av kokeboken. AI-en digitaliserer alt.",
+      "Importer fra nett, ta bilde av kokeboken, eller skriv inn manuelt. Rate oppskrifter så AI-en lærer hva familien liker.",
     color: "magic",
-  },
-  {
-    icon: Users,
-    title: "Familiesynk",
-    description:
-      "Alle ser endringer umiddelbart. Tildel ansvar for middager, oppgaver og aktiviteter.",
-    color: "listo",
   },
   {
     icon: Sparkles,
-    title: "AI-forslag",
+    title: "AI-assistent",
     description:
-      "Personlige måltidsforslag basert på hva dere liker, aktiviteter den dagen, og hvor mye tid dere har.",
+      "Chat om middagsforslag, generer ukeplaner, og få hjelp tilpasset familiens preferanser og travle dager.",
     color: "magic",
   },
   {
-    icon: Bell,
-    title: "Smarte påminnelser",
+    icon: CalendarDays,
+    title: "Familiekalender",
     description:
-      "Morgenbriefing med dagens program. Påminnelser om oppgaver og aktiviteter. (Kommer snart)",
+      "Ferier, hytteturer, jobbreiser og gjester. Påvirker porsjonsberegning og hvem som spiser hjemme automatisk.",
+    color: "sky",
+    isNew: true,
+  },
+  {
+    icon: MapPin,
+    title: "Steder & huskelister",
+    description:
+      "Hytte-pakkelister, båt-inventar, vedlikeholdslister. Aldri glem hva du skal ta med til Kvamskogen igjen!",
     color: "alert",
+    isNew: true,
   },
 ];
 
@@ -111,7 +114,7 @@ export default function Features() {
             Middager, oppgaver og aktiviteter – alt på ett sted
           </h2>
           <p className="text-lg text-charcoal-light">
-            Fra ukens middagsplanlegging til hvem som tar ut søpla og når fotballtreningen starter – 
+            Fra ukens middagsplanlegging til hvem som tar ut søpla og når fotballtreningen starter –
             listo.family gir hele familien full oversikt.
           </p>
         </div>
@@ -125,8 +128,13 @@ export default function Features() {
             return (
               <div
                 key={index}
-                className={`group p-6 rounded-squircle border ${colors.border} bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}
+                className={`group p-6 rounded-squircle border ${colors.border} bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative`}
               >
+                {(feature as { isNew?: boolean }).isNew && (
+                  <span className="absolute -top-2 -right-2 px-2 py-0.5 bg-gradient-to-r from-listo-500 to-listo-600 text-white text-xs font-bold rounded-full shadow-md">
+                    NY
+                  </span>
+                )}
                 <div
                   className={`w-12 h-12 ${colors.bg} rounded-squircle-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
                 >
