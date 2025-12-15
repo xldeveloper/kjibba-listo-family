@@ -27,21 +27,23 @@ npm run dev
 
 ## Deployment
 
-Siden deployes automatisk til Hetzner-serveren.
+### Standard deploy-prosess
 
-### Manuell deploy
-
-Fra `NyeListo`-mappen:
-
-```powershell
-# PowerShell
-.\update-server.ps1 -LandingOnly
+1. **Push endringer lokalt:**
+```bash
+git add -A
+git commit -m "beskrivelse av endring"
+git push
 ```
 
-Eller oppdater alt (landing + web app):
-
-```powershell
-.\update-server.ps1
+2. **SSH til server og bygg:**
+```bash
+ssh root@49.13.146.99
+cd /opt/listo/landing
+git pull
+cd /opt/listo/docker
+docker compose build --no-cache landing
+docker compose up -d landing
 ```
 
 ### Hva skjer ved deploy

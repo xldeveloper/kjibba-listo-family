@@ -21,7 +21,7 @@ export default function Middagsplanlegger() {
   return (
     <main className="min-h-screen">
       <Header />
-      
+
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-cream-50 via-white to-listo-50">
         <div className="absolute inset-0 overflow-hidden">
@@ -36,15 +36,15 @@ export default function Middagsplanlegger() {
                 <Calendar className="w-4 h-4" />
                 Gratis middagsplanlegger
               </span>
-              
+
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-charcoal leading-tight mb-6">
                 Planlegg ukens middager på{" "}
                 <span className="gradient-text-magic">under 5 minutter</span>
               </h1>
-              
+
               <p className="text-xl text-charcoal-light mb-8 leading-relaxed">
-                Listo er den smarte middagsplanleggeren som hjelper norske familier 
-                med å planlegge ukemenyen, lage handlelister automatisk, og aldri 
+                Listo er den smarte middagsplanleggeren som hjelper norske familier
+                med å planlegge ukemenyen, lage handlelister automatisk, og aldri
                 mer lure på &quot;hva skal vi ha til middag?&quot;
               </p>
 
@@ -88,7 +88,7 @@ export default function Middagsplanlegger() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="absolute -left-8 top-20 bg-white rounded-squircle p-4 shadow-xl animate-float" style={{ animationDelay: "1s" }}>
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">📅</span>
@@ -278,7 +278,7 @@ export default function Middagsplanlegger() {
             Klar til å gjøre middagsplanleggingen enklere?
           </h2>
           <p className="text-xl text-listo-100 mb-8">
-            Bli med tusenvis av norske familier som allerede har sagt farvel til &quot;hva skal vi ha til middag?&quot;
+            Meld deg på beta og bli blant de første som opplever en enklere hverdag. Si farvel til &quot;hva skal vi ha til middag?&quot;
           </p>
           <Link
             href="/#beta"
