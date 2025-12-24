@@ -113,11 +113,14 @@ export default function AIStatsPage() {
     }, [days]);
 
     const formatCurrency = (amount: number) => {
+        // Convert USD to NOK (approximate rate)
+        const nokAmount = amount * 11.5;
         return new Intl.NumberFormat('nb-NO', { 
             style: 'currency', 
-            currency: 'USD',
-            minimumFractionDigits: 2 
-        }).format(amount);
+            currency: 'NOK',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(nokAmount);
     };
 
     return (
