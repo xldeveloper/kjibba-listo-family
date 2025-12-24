@@ -293,7 +293,7 @@ export default function BetaPage() {
                                                 </code>
                                             </td>
                                             <td className="px-6 py-4 text-sm text-charcoal-light">
-                                                {formatDate(user.createdAt)}
+                                                {user.createdAt ? formatDate(user.createdAt) : "Ukjent"}
                                             </td>
                                             <td className="px-6 py-4">
                                                 {hasAccess ? (

@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Sparkles, Bug, Server } from "lucide-react";
+import { LayoutDashboard, Users, Sparkles, Bug, Server, Zap } from "lucide-react";
 
 const navItems = [
     { href: "/admin", label: "Oversikt", icon: LayoutDashboard },
     { href: "/admin/server", label: "Server", icon: Server },
+    { href: "/admin/ai", label: "AI", icon: Zap },
     { href: "/admin/beta", label: "Beta", icon: Sparkles },
     { href: "/admin/users", label: "Brukere", icon: Users },
     { href: "/admin/bugs", label: "Bugs", icon: Bug },
