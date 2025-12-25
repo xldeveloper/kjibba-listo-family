@@ -35,8 +35,12 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: "/images/listo-logo.svg",
-    apple: "/images/listo-logo.svg",
+    icon: [
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/images/listo-logo.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
   openGraph: {
     title: "listo.family – Operativsystemet for moderne familier",
