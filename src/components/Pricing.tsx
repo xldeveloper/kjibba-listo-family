@@ -30,7 +30,7 @@ export default function Pricing() {
             <div className="mb-6">
               <h3 className="text-lg font-bold text-charcoal">Månedlig</h3>
               <div className="flex items-baseline gap-1 mt-2">
-                <span className="text-4xl font-bold text-charcoal">59,-</span>
+                <span className="text-4xl font-bold text-charcoal">69,-</span>
                 <span className="text-charcoal-light">/mnd</span>
               </div>
             </div>
@@ -68,10 +68,10 @@ export default function Pricing() {
             <div className="mb-6">
               <h3 className="text-lg font-bold text-white">Årlig</h3>
               <div className="flex items-baseline gap-1 mt-2">
-                <span className="text-4xl font-bold text-white">589,-</span>
+                <span className="text-4xl font-bold text-white">689,-</span>
                 <span className="text-white/70">/år</span>
               </div>
-              <p className="text-xs text-salmon-200 mt-1">Svarer til kun 49,- per måned</p>
+              <p className="text-xs text-salmon-200 mt-1">Svarer til kun 57,- per måned</p>
             </div>
 
             <ul className="space-y-3 mb-8">
