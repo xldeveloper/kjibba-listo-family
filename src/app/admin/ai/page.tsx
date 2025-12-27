@@ -53,16 +53,16 @@ function ProgressBar({ value, color = "bg-listo-500" }: { value: number; color?:
     );
 }
 
-function StatCard({ 
-    title, 
-    value, 
-    subtitle, 
-    icon: Icon, 
+function StatCard({
+    title,
+    value,
+    subtitle,
+    icon: Icon,
     iconColor = "text-listo-500",
     iconBg = "bg-listo-100"
-}: { 
-    title: string; 
-    value: string | number; 
+}: {
+    title: string;
+    value: string | number;
     subtitle?: string;
     icon: typeof Sparkles;
     iconColor?: string;
@@ -92,6 +92,7 @@ export default function AIStatsPage() {
     const [error, setError] = useState<string | null>(null);
     const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
     const [days, setDays] = useState(7);
+    const [autoRefresh, setAutoRefresh] = useState(true);
 
     const fetchStats = async () => {
         try {
@@ -118,22 +119,28 @@ export default function AIStatsPage() {
 
     useEffect(() => {
         fetchStats();
-    }, [days]);
+
+        // Auto-refresh every 30 seconds
+        if (autoRefresh) {
+            const interval = setInterval(fetchStats, 30000);
+            return () => clearInterval(interval);
+        }
+    }, [days, autoRefresh]);
 
     const formatCurrency = (usdString: string) => {
         // Parse USD string like "$0.01" to number
         const amount = parseFloat(usdString.replace('$', '')) || 0;
         // Convert USD to NOK (approximate rate)
         const nokAmount = amount * 11.5;
-        return new Intl.NumberFormat('nb-NO', { 
-            style: 'currency', 
+        return new Intl.NumberFormat('nb-NO', {
+            style: 'currency',
             currency: 'NOK',
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         }).format(nokAmount);
     };
 
-    const totalErrors = stats?.breakdown?.errors 
+    const totalErrors = stats?.breakdown?.errors
         ? Object.values(stats.breakdown.errors).reduce((sum, count) => sum + count, 0)
         : 0;
 
@@ -149,6 +156,15 @@ export default function AIStatsPage() {
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
+                    <label className="flex items-center gap-2 text-sm text-charcoal-light">
+                        <input
+                            type="checkbox"
+                            checked={autoRefresh}
+                            onChange={(e) => setAutoRefresh(e.target.checked)}
+                            className="rounded border-gray-300 text-charcoal focus:ring-listo-500"
+                        />
+                        Auto-oppdater
+                    </label>
                     <select
                         value={days}
                         onChange={(e) => setDays(Number(e.target.value))}
@@ -268,8 +284,8 @@ export default function AIStatsPage() {
                                                 {count} ({percent}%)
                                             </span>
                                         </div>
-                                        <ProgressBar 
-                                            value={percent} 
+                                        <ProgressBar
+                                            value={percent}
                                             color="bg-magic-500"
                                         />
                                     </div>
@@ -298,7 +314,7 @@ export default function AIStatsPage() {
                                     };
                                     const explanation = errorExplanations[errorType] || 'Ukjent feiltype';
                                     const percent = Math.round((count / totalErrors) * 100);
-                                    
+
                                     return (
                                         <div key={errorType} className="bg-white/50 rounded-lg p-3">
                                             <div className="flex items-center justify-between mb-1">
@@ -338,10 +354,10 @@ export default function AIStatsPage() {
                                         {stats.dailySummaries.map((day) => (
                                             <tr key={day.date} className="border-b border-gray-50">
                                                 <td className="py-3 font-medium text-charcoal">
-                                                    {new Date(day.date).toLocaleDateString('nb-NO', { 
-                                                        weekday: 'short', 
-                                                        day: 'numeric', 
-                                                        month: 'short' 
+                                                    {new Date(day.date).toLocaleDateString('nb-NO', {
+                                                        weekday: 'short',
+                                                        day: 'numeric',
+                                                        month: 'short'
                                                     })}
                                                 </td>
                                                 <td className="py-3 text-right text-charcoal-light">
@@ -354,8 +370,8 @@ export default function AIStatsPage() {
                                                     {day.cacheMissCount || 0}
                                                 </td>
                                                 <td className="py-3 text-right text-charcoal-light">
-                                                    {day.totalGeminiCallTimeMs 
-                                                        ? `${(day.totalGeminiCallTimeMs / 1000).toFixed(1)}s` 
+                                                    {day.totalGeminiCallTimeMs
+                                                        ? `${(day.totalGeminiCallTimeMs / 1000).toFixed(1)}s`
                                                         : '-'}
                                                 </td>
                                             </tr>
