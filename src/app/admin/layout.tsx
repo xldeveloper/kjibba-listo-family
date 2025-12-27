@@ -156,6 +156,8 @@ export interface BetaInterest {
     createdAt: Timestamp;
     source: string;
     status?: "interested" | "invited" | "registered";
+    userType?: "free_beta" | "trial" | "founders_pass";
+    position?: number;
     invitedAt?: Timestamp;
 }
 

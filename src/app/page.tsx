@@ -4,6 +4,9 @@ import Features from "@/components/Features";
 import AiShowcase from "@/components/AiShowcase";
 import HowItWorks from "@/components/HowItWorks";
 import Pricing from "@/components/Pricing";
+// import FoundersPass from "@/components/FoundersPass";
+// <FoundersPass />
+// Note: Component file missing, commented out to unblock build
 import Testimonials from "@/components/Testimonials";
 import BlogPreview from "@/components/BlogPreview";
 import Faq from "@/components/Faq";
@@ -20,6 +23,7 @@ export default function Home() {
       <HowItWorks />
       <Testimonials />
       <Pricing />
+      {/* <FoundersPass /> */}
       <BlogPreview />
       <Faq />
       <Cta />
@@ -27,3 +31,4 @@ export default function Home() {
     </main>
   );
 }
+

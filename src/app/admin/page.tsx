@@ -1,14 +1,51 @@
 "use client";
 
-import { useMemo } from "react";
-import { Users, Sparkles, Bug, Clock, TrendingUp, UserCheck, Send } from "lucide-react";
-import { Timestamp } from "firebase/firestore";
+import { useMemo, useState, useEffect } from "react";
+import { Users, Sparkles, Bug, Clock, TrendingUp, UserCheck, Send, Crown, Gift, Zap } from "lucide-react";
+import { Timestamp, doc, getDoc } from "firebase/firestore";
 import { useAdminData } from "./layout";
 import MetricCard from "@/components/admin/MetricCard";
 import SimpleChart from "@/components/admin/SimpleChart";
 
+interface OnboardingQuotas {
+  betaSpots: { total: number; claimed: number };
+  foundersPass: { total: number; sold: number; price: number };
+}
+
 export default function AdminDashboard() {
-  const { users, betaInterests, bugReports } = useAdminData();
+  const { users, betaInterests, bugReports, db } = useAdminData();
+  const [quotas, setQuotas] = useState<OnboardingQuotas | null>(null);
+
+  // Fetch onboarding quotas
+  useEffect(() => {
+    const fetchQuotas = async () => {
+      try {
+        const quotaRef = doc(db, "onboarding_config", "quotas");
+        const quotaDoc = await getDoc(quotaRef);
+        if (quotaDoc.exists()) {
+          const data = quotaDoc.data();
+          setQuotas({
+            betaSpots: data.betaSpots || { total: 30, claimed: 0 },
+            foundersPass: data.foundersPass || { total: 300, sold: 0, price: 990 },
+          });
+        } else {
+          // Use defaults if document doesn't exist
+          setQuotas({
+            betaSpots: { total: 30, claimed: 0 },
+            foundersPass: { total: 300, sold: 0, price: 990 },
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching quotas:", err);
+      }
+    };
+    fetchQuotas();
+  }, [db]);
+
+  // Calculate trial users
+  const trialUsers = useMemo(() => {
+    return betaInterests.filter(b => b.userType === "trial").length;
+  }, [betaInterests]);
 
   // Calculate metrics
   const metrics = useMemo(() => {
@@ -109,6 +146,74 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8">
+      {/* Onboarding Status */}
+      {quotas && (
+        <div className="bg-gradient-to-r from-charcoal to-charcoal-dark rounded-squircle p-6 text-white">
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <Crown className="w-5 h-5 text-salmon-300" />
+            Onboarding Status
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Free Beta */}
+            <div className="bg-white/10 rounded-squircle-sm p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Gift className="w-4 h-4 text-listo-300" />
+                <span className="text-sm font-medium text-white/80">Free Beta</span>
+              </div>
+              <div className="flex items-baseline gap-2 mb-2">
+                <span className="text-2xl font-bold">{quotas.betaSpots.claimed}</span>
+                <span className="text-white/60">/ {quotas.betaSpots.total}</span>
+              </div>
+              <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-listo-400 rounded-full"
+                  style={{ width: `${(quotas.betaSpots.claimed / quotas.betaSpots.total) * 100}%` }}
+                />
+              </div>
+              <p className="text-xs text-white/50 mt-2">
+                {quotas.betaSpots.total - quotas.betaSpots.claimed} plasser igjen
+              </p>
+            </div>
+
+            {/* Founders Pass */}
+            <div className="bg-white/10 rounded-squircle-sm p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Crown className="w-4 h-4 text-salmon-300" />
+                <span className="text-sm font-medium text-white/80">Founders Pass</span>
+              </div>
+              <div className="flex items-baseline gap-2 mb-2">
+                <span className="text-2xl font-bold">{quotas.foundersPass.sold}</span>
+                <span className="text-white/60">/ {quotas.foundersPass.total}</span>
+              </div>
+              <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-salmon-400 rounded-full"
+                  style={{ width: `${(quotas.foundersPass.sold / quotas.foundersPass.total) * 100}%` }}
+                />
+              </div>
+              <p className="text-xs text-white/50 mt-2">
+                💰 {(quotas.foundersPass.sold * quotas.foundersPass.price).toLocaleString("no-NO")} NOK omsetning
+              </p>
+            </div>
+
+            {/* Trial Users */}
+            <div className="bg-white/10 rounded-squircle-sm p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="w-4 h-4 text-magic-300" />
+                <span className="text-sm font-medium text-white/80">Prøveperioder</span>
+              </div>
+              <div className="flex items-baseline gap-2 mb-2">
+                <span className="text-2xl font-bold">{trialUsers}</span>
+                <span className="text-white/60">aktive</span>
+              </div>
+              <p className="text-xs text-white/50 mt-4">
+                14-dagers prøveperiode
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Quick stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard
@@ -247,3 +352,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

@@ -31,6 +31,9 @@ interface ServerStats {
         memPercent: string;
         netIO: string;
         blockIO: string;
+        status?: string;
+        image?: string;
+        state?: string;
     }>;
     uptime: string;
     warnings: {
@@ -215,6 +218,7 @@ export default function ServerPage() {
                                 <thead>
                                     <tr className="text-left text-charcoal-light border-b">
                                         <th className="pb-2 font-medium">Container</th>
+                                        <th className="pb-2 font-medium">Status</th>
                                         <th className="pb-2 font-medium">CPU</th>
                                         <th className="pb-2 font-medium">Memory</th>
                                         <th className="pb-2 font-medium">Net I/O</th>
@@ -225,9 +229,18 @@ export default function ServerPage() {
                                         <tr key={container.name} className="border-b border-gray-50">
                                             <td className="py-3 font-medium text-charcoal">
                                                 <div className="flex items-center gap-2">
-                                                    <CheckCircle className="w-4 h-4 text-green-500" />
-                                                    {container.name}
+                                                    <CheckCircle className={`w-4 h-4 ${container.state === 'running' ? 'text-green-500' : 'text-yellow-500'}`} />
+                                                    <div>
+                                                        <div>{container.name}</div>
+                                                        <div className="text-xs text-charcoal-light font-normal">{container.image}</div>
+                                                    </div>
                                                 </div>
+                                            </td>
+                                            <td className="py-3 text-charcoal-light">
+                                                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${container.status?.startsWith('Up') ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                                    }`}>
+                                                    {container.status || 'Unknown'}
+                                                </span>
                                             </td>
                                             <td className="py-3 text-charcoal-light">{container.cpu}</td>
                                             <td className="py-3 text-charcoal-light">{container.memory}</td>
