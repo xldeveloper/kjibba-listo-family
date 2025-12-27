@@ -16,6 +16,31 @@ export interface BlogArticle {
 export const articles: BlogArticle[] = [
     // === NEW ARTICLES (will be prioritized on front page) ===
     {
+        slug: "familieapp-alle-plattformer",
+        title: "Familieapp på tvers av plattformer: Slik synkroniserer dere hverdagen",
+        excerpt:
+            "Mor bruker iPhone, far har Android, og barna sitter på iPad. Med Listo synkroniserer hele familien på tvers av alle enheter.",
+        date: "2025-12-27",
+        readTime: "4 min",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80",
+        category: "Plattformer",
+        categoryColor: "blue",
+        isNew: true,
+        isFeatured: true,
+    },
+    {
+        slug: "prov-listo-gratis",
+        title: "Prøv Listo gratis i 14 dager – ingen kredittkort kreves",
+        excerpt:
+            "Start med full tilgang til alle Listo-funksjoner helt gratis. Ingen kredittkort, ingen risiko.",
+        date: "2025-12-27",
+        readTime: "3 min",
+        image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
+        category: "Kom i gang",
+        categoryColor: "listo",
+        isNew: true,
+    },
+    {
         slug: "ai-middagsplanlegger",
         title: "AI som middagsassistent: Slik foreslår appen perfekte middager",
         excerpt:
@@ -26,7 +51,6 @@ export const articles: BlogArticle[] = [
         category: "AI & Teknologi",
         categoryColor: "purple",
         isNew: true,
-        isFeatured: true,
     },
     {
         slug: "delt-omsorg-middagsplanlegging",

@@ -1,9 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { Sparkles, Check, Users, Zap, Heart } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Sparkles, Check, Users, Zap, Heart, Gift, Crown } from "lucide-react";
 import { initializeApp, getApps } from "firebase/app";
-import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  runTransaction,
+  serverTimestamp
+} from "firebase/firestore";
 
 // Firebase config (same as listo-app)
 const firebaseConfig = {
@@ -19,11 +27,28 @@ const firebaseConfig = {
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 const db = getFirestore(app);
 
-const betaPerks = [
-  { icon: Zap, text: "Gratis tilgang i hele beta-perioden" },
+// Quota configuration
+const BETA_SPOTS_TOTAL = 30;
+
+interface QuotaState {
+  betaClaimed: number;
+  foundersPassSold: number;
+  foundersPassTotal: number;
+  loading: boolean;
+}
+
+const earlyAdopterPerks = [
+  { icon: Gift, text: "Gratis tilgang ut 2026" },
   { icon: Users, text: "Direkte dialog med utviklerteamet" },
   { icon: Heart, text: "Påvirk hvilke funksjoner vi bygger" },
-  { icon: Sparkles, text: "Rabatt når vi lanserer" },
+  { icon: Sparkles, text: "Eksklusiv \"Early Adopter\"-status" },
+];
+
+const trialPerks = [
+  { icon: Zap, text: "14 dagers full Premium-tilgang" },
+  { icon: Users, text: "Hele familien inkludert" },
+  { icon: Heart, text: "Ingen kredittkort kreves" },
+  { icon: Sparkles, text: "Avbryt når som helst" },
 ];
 
 export default function Cta() {
@@ -34,21 +59,106 @@ export default function Cta() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [quota, setQuota] = useState<QuotaState>({
+    betaClaimed: 0,
+    foundersPassSold: 0,
+    foundersPassTotal: 300,
+    loading: true,
+  });
+
+  // Fetch quotas on mount
+  useEffect(() => {
+    const fetchQuotas = async () => {
+      try {
+        const quotaRef = doc(db, "onboarding_config", "quotas");
+        const quotaDoc = await getDoc(quotaRef);
+
+        if (quotaDoc.exists()) {
+          const data = quotaDoc.data();
+          setQuota({
+            betaClaimed: data.betaSpots?.claimed || 0,
+            foundersPassSold: data.foundersPass?.sold || 0,
+            foundersPassTotal: data.foundersPass?.total || 300,
+            loading: false,
+          });
+        } else {
+          // Document doesn't exist yet, use defaults
+          setQuota(prev => ({ ...prev, loading: false }));
+        }
+      } catch (err) {
+        console.error("Error fetching quotas:", err);
+        setQuota(prev => ({ ...prev, loading: false }));
+      }
+    };
+
+    fetchQuotas();
+  }, []);
+
+  const spotsRemaining = BETA_SPOTS_TOTAL - quota.betaClaimed;
+  const hasFreeBetaSpots = spotsRemaining > 0;
+  const perks = hasFreeBetaSpots ? earlyAdopterPerks : trialPerks;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    
+
     try {
-      // Lagre i Firestore
-      await addDoc(collection(db, "beta_interest"), {
-        name,
-        email,
-        familySize,
-        source: "landing_page",
-        createdAt: serverTimestamp(),
+      const userType = hasFreeBetaSpots ? "free_beta" : "trial";
+
+      // Use transaction to atomically increment counter and add user
+      await runTransaction(db, async (transaction) => {
+        const quotaRef = doc(db, "onboarding_config", "quotas");
+        const quotaDoc = await transaction.get(quotaRef);
+
+        let currentClaimed = 0;
+
+        if (quotaDoc.exists()) {
+          currentClaimed = quotaDoc.data().betaSpots?.claimed || 0;
+        }
+
+        // Double-check that spot is still available
+        const stillHasSpots = currentClaimed < BETA_SPOTS_TOTAL;
+        const finalUserType = stillHasSpots ? "free_beta" : "trial";
+
+        // Calculate trial expiration (14 days from now) for trial users
+        const now = new Date();
+        const trialExpiresAt = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+        // Add to beta_interest collection
+        const betaInterestRef = doc(collection(db, "beta_interest"));
+        transaction.set(betaInterestRef, {
+          name,
+          email: email.toLowerCase().trim(),
+          familySize,
+          source: "landing_page",
+          userType: finalUserType,
+          position: stillHasSpots ? currentClaimed + 1 : null,
+          createdAt: serverTimestamp(),
+          // Trial expiration tracking
+          ...(finalUserType === "trial" && {
+            trialStartDate: now,
+            trialExpiresAt: trialExpiresAt,
+          }),
+        });
+
+        // Increment counter if this is a free beta user
+        if (stillHasSpots) {
+          transaction.set(quotaRef, {
+            betaSpots: {
+              total: BETA_SPOTS_TOTAL,
+              claimed: currentClaimed + 1,
+            },
+            foundersPass: quotaDoc.exists() ? quotaDoc.data().foundersPass : {
+              total: 300,
+              sold: 0,
+              price: 990,
+              yearsAccess: 5,
+            },
+          }, { merge: true });
+        }
       });
-      
+
       setSubmitted(true);
     } catch (err) {
       console.error("Error submitting interest:", err);
@@ -57,6 +167,9 @@ export default function Cta() {
       setIsLoading(false);
     }
   };
+
+  // Calculate progress percentage for visual indicator
+  const progressPercent = Math.min((quota.betaClaimed / BETA_SPOTS_TOTAL) * 100, 100);
 
   return (
     <section
@@ -71,35 +184,74 @@ export default function Cta() {
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          {/* Beta badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur rounded-full mb-6 border border-white/20">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-listo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-listo-400"></span>
-            </span>
-            <span className="text-sm font-medium text-white">
-              Lukket beta starter snart
-            </span>
-          </div>
+          {/* Dynamic badge based on availability */}
+          {hasFreeBetaSpots ? (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-listo-500/20 to-magic-500/20 backdrop-blur rounded-full mb-6 border border-listo-400/30">
+              <Crown className="w-4 h-4 text-listo-400" />
+              <span className="text-sm font-medium text-white">
+                🎉 Kun <span className="font-bold text-listo-300">{spotsRemaining}</span> av {BETA_SPOTS_TOTAL} gratis plasser igjen!
+              </span>
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur rounded-full mb-6 border border-white/20">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-listo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-listo-400"></span>
+              </span>
+              <span className="text-sm font-medium text-white">
+                Start din 14 dagers gratis prøveperiode
+              </span>
+            </div>
+          )}
 
           {/* Headline */}
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Bli en av de første
+            {hasFreeBetaSpots ? (
+              <>Bli en av de <span className="gradient-text-magic">{BETA_SPOTS_TOTAL} første</span></>
+            ) : (
+              <>Prøv Listo <span className="gradient-text-magic">helt gratis</span></>
+            )}
           </h2>
           <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto">
-            Vi åpner snart for et begrenset antall familier som vil teste Listo
-            og forme fremtiden til appen sammen med oss.
+            {hasFreeBetaSpots ? (
+              <>De første {BETA_SPOTS_TOTAL} familiene får <strong className="text-white">gratis tilgang ut 2026</strong>. Meld deg på nå og bli en del av Listo-familien fra starten!</>
+            ) : (
+              <>Start med 14 dagers full Premium-tilgang. Ingen kredittkort kreves – bare opprett en konto og kom i gang.</>
+            )}
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Left: Beta perks */}
+          {/* Left: Progress and perks */}
           <div>
+            {/* Progress indicator for beta spots */}
+            {hasFreeBetaSpots && !quota.loading && (
+              <div className="mb-8 p-5 bg-gradient-to-br from-listo-500/10 to-magic-500/10 rounded-squircle border border-listo-400/20">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-white/80">Gratis plasser tatt</span>
+                  <span className="text-listo-300 font-semibold">{quota.betaClaimed} av {BETA_SPOTS_TOTAL}</span>
+                </div>
+                <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-listo-400 to-magic-400 rounded-full transition-all duration-500"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+                <p className="text-white/60 text-xs mt-2">
+                  {spotsRemaining <= 5 ? (
+                    <span className="text-salmon-300">⚡ Nesten fullt! Sikre deg plass nå.</span>
+                  ) : (
+                    <>Plassene fylles opp raskt – ikke gå glipp av dette!</>
+                  )}
+                </p>
+              </div>
+            )}
+
             <h3 className="text-xl font-semibold text-white mb-6">
-              Som beta-tester får du:
+              {hasFreeBetaSpots ? "Som Early Adopter får du:" : "Prøveperioden inkluderer:"}
             </h3>
             <ul className="space-y-4">
-              {betaPerks.map((perk, index) => {
+              {perks.map((perk, index) => {
                 const Icon = perk.icon;
                 return (
                   <li key={index} className="flex items-center gap-4">
@@ -114,9 +266,17 @@ export default function Cta() {
 
             <div className="mt-8 p-4 bg-white/5 rounded-squircle-sm border border-white/10">
               <p className="text-white/60 text-sm">
-                <strong className="text-white">Begrenset antall plasser.</strong>{" "}
-                Vi starter med et lite antall familier for å sikre god oppfølging
-                og kvalitet. Meld interesse i dag for å sikre din plass i køen.
+                {hasFreeBetaSpots ? (
+                  <>
+                    <strong className="text-white">Begrenset antall plasser.</strong>{" "}
+                    Når de {BETA_SPOTS_TOTAL} plassene er fylt, går vi over til 14 dagers prøveperiode for nye brukere.
+                  </>
+                ) : (
+                  <>
+                    <strong className="text-white">Ingen binding.</strong>{" "}
+                    Du kan når som helst velge å ikke fortsette etter prøveperioden.
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -129,20 +289,27 @@ export default function Cta() {
                   <Check className="w-8 h-8 text-listo-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-charcoal mb-3">
-                  Takk for interessen!
+                  {hasFreeBetaSpots ? "Du er med! 🎉" : "Takk for interessen!"}
                 </h3>
                 <p className="text-charcoal-light">
-                  Vi har mottatt din påmelding og kontakter deg så snart vi har
-                  en plass ledig i betaen. Sjekk e-posten din for bekreftelse.
+                  {hasFreeBetaSpots ? (
+                    <>Gratulerer! Du har sikret deg en av de {BETA_SPOTS_TOTAL} gratis plassene. Sjekk e-posten din for videre instruksjoner.</>
+                  ) : (
+                    <>Vi har mottatt din påmelding. Sjekk e-posten din for å starte din 14-dagers prøveperiode.</>
+                  )}
                 </p>
               </div>
             ) : (
               <>
                 <h3 className="text-xl font-bold text-charcoal mb-2">
-                  Meld interesse for beta
+                  {hasFreeBetaSpots ? "Sikre din gratis plass" : "Start din gratis prøve"}
                 </h3>
                 <p className="text-charcoal-light mb-6">
-                  Fyll ut skjemaet, så kontakter vi deg når det er din tur.
+                  {hasFreeBetaSpots ? (
+                    <>Fyll ut skjemaet for å bli en av de {BETA_SPOTS_TOTAL} første.</>
+                  ) : (
+                    <>Fyll ut skjemaet for å starte din 14-dagers prøveperiode.</>
+                  )}
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -213,7 +380,7 @@ export default function Cta() {
                     ) : (
                       <>
                         <Sparkles className="w-5 h-5" />
-                        Meld interesse
+                        {hasFreeBetaSpots ? "Sikre min plass" : "Start gratis prøve"}
                       </>
                     )}
                   </button>
