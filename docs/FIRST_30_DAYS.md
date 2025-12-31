@@ -1,6 +1,21 @@
 # 🎯 Listo: De Første 30 Dagene
 
-**Sprint-fokus:** Gå fra "app som gjør alt" til "app som er best på én ting"
+**Sprint-fokus:** Vis verdien av automatisering og synkronisering fra dag 1
+
+---
+
+## Kjerneinnsikt
+
+**Listo sin styrke er IKKE "AI-magi" - det er AUTOMATISERING + SYNKRONISERING:**
+
+| Konkret verdi | Hvordan det fungerer |
+|---------------|---------------------|
+| **Butikkmodus** | To handler samtidig, ser hverandres avkryssinger live |
+| **Auto-handleliste** | Planlegg middag → ingredienser legges til automatisk |
+| **Porsjonsberegning** | Samværsplan sier hvem som spiser → oppskrift skaleres |
+| **Alt på ett sted** | Én app i stedet for 5 (kalender, handleliste, oppgaver, middager, samvær) |
+
+**AI er en støttefunksjon**, ikke hovedattraksjonen. Den hjelper når du trenger inspirasjon, men automatiseringen er det som sparer tid daglig.
 
 ---
 
@@ -12,16 +27,22 @@
 
 1. **Hva er Listo?**
    - Nåværende: "Familieassistent for måltidsplanlegging, handleliste, oppgaver, kalender..."
-   - **Forslag:** "AI-drevet middagsplanlegger for travle familier"
+   - **Revidert:** "Familiens operativsystem - automatisert synkronisering av middager, handlelister og logistikk"
 
 2. **Hvem er Listo for?**
-   - **Primær persona:** "Prosjektleder-mamma" (32-45, to inntekter, 2-3 barn)
-   - **Sekundær:** Samværs-foreldre
+   - **Primær persona:** "Samkjørings-familien" - to foreldre som begge jobber, trenger å holde oversikt sammen
+   - **Sekundær:** Samværs-foreldre som trenger porsjonsberegning
 
 3. **Hva gjør Listo bedre enn alt annet?**
-   - **Forslag:** AI som lærer hva familien liker + auto-handleliste
+   - **Automatisering:** Planlegg middag → handleliste fylles automatisk
+   - **Live-sync:** Butikkmodus der to handler samtidig
+   - **Alt-i-ett:** Slipper 5 separate apper
 
-**Leveranse:** Oppdater landing page hero-tekst til å reflektere dette.
+4. **Hva er AI sin rolle?**
+   - **Støttefunksjon:** "Trenger inspirasjon? Prøv AI-forslag"
+   - **Ikke hovedattraksjon:** Automatiseringen er det som sparer tid daglig
+
+**Leveranse:** Oppdater landing page hero-tekst til å reflektere automatisering + synkronisering.
 
 ---
 
@@ -55,42 +76,32 @@
 
 ---
 
-### Dag 5-7: AI Feedback Loop
+### Dag 5-7: Showcase automatisering i onboarding
 
-**Problem:** AI-forslag uten feedback = forslag blir ikke bedre over tid.
+**Problem:** Nye brukere ser ikke verdien av automatisering før de har brukt appen en stund.
 
-**Oppgave:** Legg til thumbs up/down på alle AI-genererte elementer:
+**Løsning:** Vis automatisering I PRAKSIS under onboarding.
 
-```tsx
-// Ny komponent: AIFeedback.tsx
-<View className="flex-row gap-2 mt-2">
-    <Pressable onPress={() => handleFeedback('positive')}>
-        <ThumbsUp size={20} color={feedback === 'positive' ? COLORS.success : COLORS.textLight} />
-    </Pressable>
-    <Pressable onPress={() => handleFeedback('negative')}>
-        <ThumbsDown size={20} color={feedback === 'negative' ? COLORS.error : COLORS.textLight} />
-    </Pressable>
-</View>
+**Oppgave:** Legg til "wow-moment" i onboarding:
+
 ```
+Steg: "Se hvordan automatisering fungerer"
 
-**Lagre feedback til Firestore:**
-```typescript
-// AIService.ts
-async function recordFeedback(familyId: string, type: 'meal' | 'recipe', content: string, feedback: 'positive' | 'negative') {
-    await addDoc(collection(db, 'ai_feedback'), {
-        familyId,
-        type,
-        content,
-        feedback,
-        timestamp: serverTimestamp()
-    });
-}
+1. Bruker velger "Taco" som middag for fredag
+2. App viser: "Ingredienser lagt til handlelisten automatisk:"
+   - Tacokjøtt
+   - Tacokrydder
+   - Rømme
+   - Salat
+   - ...
+3. Bruker ser live hvordan det fungerer
+
+"Dette skjer hver gang du legger til en middag med oppskrift!"
 ```
 
 **Leveranse:**
-- [ ] AIFeedback-komponent laget
-- [ ] Feedback lagres i Firestore
-- [ ] Feedback vises på: DayView middag, Brain chat, RecipeCard (AI-generert)
+- [ ] Onboarding-steg som demonstrerer auto-handleliste
+- [ ] Visuell "aha-moment" når ingredienser dukker opp
 
 ---
 

@@ -48,15 +48,16 @@ Listo er en ambisiøs familieapp som kombinerer måltidsplanlegging, handleliste
 ### Listo sin posisjon
 
 **Unique Value Proposition (UVP):**
-> "Den første AI-drevne familieappen som kombinerer måltidsplanlegging, handleliste og delt omsorg – uten å føles som et regneark eller en rettssal."
+> "Familiens operativsystem: Middager, handlelister og logistikk som synkroniseres automatisk – så dere slipper å lure på hva den andre har gjort."
 
 **Nøkkel-differensiatorer:**
-1. ✨ AI-først (Brain-assistent, Magic Fill)
-2. 👨‍👩‍👧 Samværsplan som feature, ikke produkt
-3. 🍽️ Måltider + logistikk kombinert
-4. 📍 Steder (hytte/båt) med lagerstyring
-5. 🎨 Varm UX ("Friendly Softness")
-6. 💰 Fair pris: 689 NOK/år (~$65) underkutter OFW massivt
+1. 🔄 **Live-synkronisering** - Butikkmodus der to handler samtidig
+2. ⚡ **Automatisering** - Handleliste genereres fra ukeplanen
+3. 👨‍👩‍👧 **Samværsplan integrert** - Porsjoner justeres etter hvem som er hjemme
+4. 📍 **Steder** (hytte/båt) med egne lister
+5. 🎨 **Varm UX** ("Friendly Softness")
+6. 💰 **Fair pris:** 689 NOK/år (~$65) underkutter OFW massivt
+7. ✨ **AI-hjelp** (støttende, ikke hovedfokus)
 
 ---
 
@@ -94,30 +95,45 @@ Vi bygger 10 produkter i ett:
 
 ---
 
-### 🔴 Utfordring 2: AI som upålitelig kjerneverdi
+### � Utfordring 2: AI-robusthet (støttefunksjon, ikke kjerne)
 
-**Problemet:**
-Visjonen lover at AI "lærer familiens rytme". Men:
+**Oppdatert perspektiv:**
+AI er en støttefunksjon, ikke hovedattraksjonen. Men den må likevel fungere godt når den brukes.
+
+**Nåværende problemer:**
 - AI-genererte oppskrifter kan bomme på preferanser
 - OCR av kokebøker feiler uten god feilhåndtering
-- "Magic Fill" gir middager ingen faktisk vil ha
-- Feilende AI → tapt tillit → brukeren slutter å bruke det
+- Ingen feedback loop for å forbedre forslag over tid
+- Feilmeldinger er tekniske, ikke brukervennlige
 
-**Symptomer i koden:**
-```typescript
-// Fallback: just save the meal name without recipe
-const meal = { name: suggestion.title, recipeId: undefined };
-// Bruker får "Kylling med ris" uten oppskrift = frustrasjon
-```
+**Mål:** AI som "hjelper når du trenger det" - ikke AI som "styrer appen".
 
-**Tiltak:**
+**Tiltak for robusthet:**
 | Prioritet | Handling | Frist |
 |-----------|----------|-------|
-| 🔴 Kritisk | Implementer "Thumbs up/down" på alle AI-forslag | Uke 2 |
-| 🔴 Kritisk | Aldri vis AI-forslag uten fallback/alternativ | Uke 3 |
-| 🟡 Høy | Bygg feedback loop til AI-trening (ratings → preferences) | Uke 6 |
-| 🟡 Høy | Sett forventninger: "AI lærer over tid" i onboarding | Uke 4 |
-| 🟢 Normal | A/B-test AI-forslag vs. manuelle valg | Uke 10 |
+| 🔴 Kritisk | Aldri vis AI-forslag uten fallback-alternativ | Uke 2 |
+| 🔴 Kritisk | Brukervennlige feilmeldinger når AI feiler | Uke 2 |
+| 🟡 Høy | Implementer thumbs up/down feedback på AI-forslag | Uke 3 |
+| 🟡 Høy | Lagre feedback → bruk til å forbedre fremtidige forslag | Uke 6 |
+| 🟡 Høy | Reduser forventninger i UI: "Forslag" ikke "Anbefaling" | Uke 3 |
+| 🟢 Normal | A/B-test AI-forslag vs. populære oppskrifter | Uke 10 |
+
+**UI-endringer for å sette riktige forventninger:**
+```
+Før: "✨ Magic Fill - La AI planlegge uken"
+Etter: "💡 Trenger inspirasjon? Se forslag"
+
+Før: "AI genererer oppskrift..."
+Etter: "Henter forslag basert på dine preferanser..."
+
+Før: (AI feiler) "Error: Could not generate"
+Etter: "Hmm, fant ingen gode forslag nå. Prøv å søke manuelt?"
+```
+
+**Graceful degradation:**
+- Hvis AI feiler → vis manuelle alternativer umiddelbart
+- Hvis OCR feiler → la bruker skrive inn manuelt med forhåndsutfylt struktur
+- Hvis forslag ikke liker → "Ikke helt riktig? Fortell oss hva du ser etter"
 
 ---
 
@@ -334,23 +350,68 @@ Fra copilot-instructions: "This project does not currently have automated tests.
 
 ## Produkt-fokus Strategi
 
-### Anbefalt Hero Feature: **AI Middagsplanlegger**
+### Revidert posisjonering: Familie-operativsystem med automatisering
 
-**Hvorfor:**
-1. Unikt i markedet (Cozi har ikke AI, Mealime har ikke familielogistikk)
-2. Daglig bruksverdi ("Hva skal vi ha til middag?")
-3. Naturlig gateway til andre features (handleliste, oppgaver)
-4. Lett å markedsføre visuelt
+**Hvorfor IKKE "AI middagsplanlegger":**
+- AI kan skuffe når forslag ikke treffer
+- "AI-magi" er et løfte som er vanskelig å innfri
+- Konkurrenter kan kopiere AI-features raskt
 
-**Sekundære features (tilgjengelig, men ikke hovedfokus i markedsføring):**
-- Handleliste (støtter hero feature)
+**Hvorfor AUTOMATISERING + SYNKRONISERING er styrken:**
+1. **Konkret og bevisbar** - enten fungerer det eller ikke
+2. **Daglig tidsbesparelse** - målbart i minutter
+3. **Vanskelig å kopiere** - krever gjennomtenkt datamodell
+4. **Skalerbar verdi** - jo mer du bruker, jo mer automatiseres
+
+### Anbefalt Hero Features (prioritert rekkefølge):
+
+**1. Live-synkronisert butikkmodus 🛒**
+- To handler i butikken samtidig
+- Sanntidsoppdatering når varer krysses av
+- Sortert etter butikkens layout
+- *Bevisbar verdi: "Vi handler på 15 min i stedet for 30"*
+
+**2. Auto-handleliste fra ukeplan 📋**
+- Planlegg middag → ingredienser legges til automatisk
+- Sjekker hva du allerede har (pantry-integrasjon fremtidig)
+- Kategorisert og deduplisert
+- *Bevisbar verdi: "Aldri glemme ingredienser"*
+
+**3. Porsjonsberegning etter hvem som er hjemme 👨‍👩‍👧**
+- Samværsplan definerer hvem som bor hjemme når
+- Oppskrifter skaleres automatisk
+- Handleliste justeres
+- *Bevisbar verdi: "Riktig mengde mat, mindre svinn"*
+
+**4. Alt-i-ett familieoversikt 🏠**
+- Kalender, oppgaver, middager, handleliste - ett sted
+- Slipper å hoppe mellom 5 apper
+- Partner ser samme informasjon i sanntid
+- *Bevisbar verdi: "Én app i stedet for fem"*
+
+### AI sin rolle (støttende, ikke hovedattraksjon):
+
+| Før | Nå |
+|-----|-----|
+| "AI-drevet middagsplanlegger" | "Smart familieapp med AI-hjelp" |
+| AI som hero feature | AI som hjelpende hånd i bakgrunnen |
+| "Magic Fill" som hovedfunksjon | "Trenger du inspirasjon? Prøv AI-forslag" |
+
+**AI-features beholdes, men posisjoneres som:**
+- "Stuck? La AI foreslå" (ikke "AI planlegger for deg")
+- "Importer oppskrift med ett klikk" (OCR er AI, men markedsføres som "import")
+- "Brain-assistenten svarer på matspørsmål" (tilleggsfunksjon, ikke kjerne)
+
+### Sekundære features (tilgjengelig, men ikke hovedfokus i markedsføring):
+- AI-chat (Brain)
+- Oppskriftsgenerering
+- Magic Fill
+
+### Features å beholde synlige (beviser "operativsystem"-verdien):
+- Kalender med aktiviteter
 - Oppgavefordeling
 - Samværsplan
-
-**Features å skjule/forenkle:**
-- Steder/lokasjoner → avansert innstilling
-- Butikkprofiler → skjult til bruker søker
-- Recurring task overrides → automatiser mer
+- Steder (hytte/båt)
 
 ---
 
