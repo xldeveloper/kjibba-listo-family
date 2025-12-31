@@ -153,24 +153,35 @@ Gratisversjon virker ganske komplett. Premium gir:
 
 ---
 
-### 🔴 Utfordring 4: iOS fraværende
+### � Utfordring 4: iOS fraværende (ressursbegrensning)
 
 **Problemet:**
 Landing page sier "iOS kommer 2026". Det ekskluderer ~50% av norske mobilbrukere.
 
-**Symptomer:**
-- Expo-appen er cross-platform, men bygger kun til Android
-- Play Store-listing finnes, App Store nei
+**Realitet:**
+- Ingen Mac tilgjengelig for utvikling (planlagt: Mac mini M4, januar 2026)
+- Ingen iPhone for testing (planlagt: brukt iPhone, februar 2026)
+- Apple Developer Program koster $99/år (budsjett-utfordring)
 
 **Risiko:** Familier der én forelder har iPhone kan ikke bruke appen sammen.
 
-**Tiltak:**
+**Midlertidig løsning:**
+- Web-app (app.listo.family) fungerer på iPhone Safari som PWA
+- Markedsfør som "Android-app + webapp for alle enheter"
+- Samle iOS-interessenter med "Varsle meg når iOS kommer"-skjema
+
+**Tiltak (justert for ressurser):**
 | Prioritet | Handling | Frist |
 |-----------|----------|-------|
-| 🔴 Kritisk | Verifiser at Expo iOS build fungerer lokalt | Uke 1 |
-| 🔴 Kritisk | Opprett Apple Developer konto | Uke 2 |
-| 🟡 Høy | Submit til TestFlight for beta-testing | Uke 4 |
-| 🟡 Høy | Submit til App Store | Uke 8 |
+| 🟢 Normal | Optimaliser webapp for iPhone Safari | Uke 4 |
+| 🟢 Normal | Legg til "iOS kommer snart"-registrering på landing | Uke 2 |
+| 🟡 Høy | Skaff Mac mini M4 | Januar 2026 |
+| 🟡 Høy | Skaff brukt iPhone for testing | Februar 2026 |
+| 🟡 Høy | Registrer Apple Developer Program | Februar 2026 |
+| 🟡 Høy | iOS TestFlight-build | Mars 2026 |
+| 🟡 Høy | App Store-submit | April 2026 |
+
+**Viktig innsikt:** Android har ~50% markedsandel i Norge. Du kan validere produkt-market fit med Android + Web først, og bruke lærdommen til å lage en bedre iOS-app.
 
 ---
 

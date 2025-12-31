@@ -25,24 +25,33 @@
 
 ---
 
-### Dag 3-4: iOS Build & Apple Developer
+### Dag 3-4: Web-optimalisering for iPhone
 
-**Oppgave:** Fjern iOS-blokkeringen
+**Situasjon:** iOS native app kommer ikke før mars/april 2026 (avhengig av Mac-innkjøp).
 
+**Midlertidig løsning:** Gjør webapp bedre på iPhone Safari.
+
+**Oppgave:**
 ```bash
-# Verifiser iOS build lokalt
-cd listo-app
-npx expo prebuild --platform ios
-npx expo run:ios  # Krever Mac
-
-# Alternativt: EAS Build
-eas build --platform ios --profile preview
+# Test webapp på iPhone (bruk BrowserStack eller be en venn teste)
+# Sjekk: https://app.listo.family på iPhone Safari
 ```
 
+**Forbedringer å gjøre:**
+1. Legg til PWA manifest for "Add to Home Screen"
+2. Optimaliser touch-targets (min 44px)
+3. Test at alle modaler fungerer på Safari
+4. Fiks eventuelle Safari-spesifikke CSS-bugs
+
+**iOS venteliste på landing page:**
+- Legg til "Varsle meg når iOS-app kommer" seksjon
+- Samler e-poster for iOS-lansering
+- Viser etterspørsel
+
 **Leveranse:**
-- [ ] Apple Developer Program registrert ($99/år)
-- [ ] iOS build kjører i simulator
-- [ ] TestFlight-klar innen uke 2
+- [ ] PWA manifest oppdatert
+- [ ] Webapp testet på iPhone (via BrowserStack/venn)
+- [ ] iOS-venteliste på listo.family
 
 ---
 
@@ -214,7 +223,8 @@ export function usePremiumLimit(feature: 'ai_suggestions' | 'recipes' | 'locatio
 | Minst 1 middag planlagt | 60% | Firestore query |
 | Partner invitert | 30% | Family members > 1 |
 | Premium-konvertering | 5% | RevenueCat |
-| iOS TestFlight-brukere | 20 | TestFlight |
+| iOS-venteliste signups | 30 | Firestore/form |
+| Webapp brukt på iPhone | 10 | Analytics user-agent |
 
 ---
 
