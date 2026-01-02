@@ -43,11 +43,11 @@ export default function SamvaersplanPage() {
                         <div className="relative">
                             <div className="bg-white p-4 rounded-[2rem] shadow-2xl rotate-2">
                                 <Image
-                                    src="/images/samvaersplan-hero.png"
-                                    alt="Delt omsorg i Listo"
-                                    width={600}
-                                    height={400}
-                                    className="rounded-[1.5rem]"
+                                    src="/screenshots/planner.png"
+                                    alt="Samværsplan i Listo"
+                                    width={320}
+                                    height={693}
+                                    className="rounded-[1.5rem] w-full h-auto"
                                 />
                             </div>
                         </div>
@@ -106,11 +106,11 @@ export default function SamvaersplanPage() {
                     <div className="flex flex-col lg:flex-row items-center gap-16">
                         <div className="lg:w-1/2">
                             <Image
-                                src="/images/samvaersplan-detail.png"
-                                alt="Detaljer om samværsplan"
-                                width={500}
-                                height={600}
-                                className="rounded-squircle shadow-xl"
+                                src="/screenshots/shopping.png"
+                                alt="Handleliste med porsjoner"
+                                width={320}
+                                height={693}
+                                className="rounded-squircle shadow-xl w-full h-auto max-w-[320px] mx-auto"
                             />
                         </div>
                         <div className="lg:w-1/2">

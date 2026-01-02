@@ -44,11 +44,11 @@ export default function AiLogistikkPage() {
                         <div className="relative">
                             <div className="bg-white p-4 rounded-[2rem] shadow-2xl skew-y-1">
                                 <Image
-                                    src="/images/ai-logistikk-hero.png"
+                                    src="/screenshots/planner.png"
                                     alt="AI Logistikk i Listo"
-                                    width={600}
-                                    height={400}
-                                    className="rounded-[1.5rem]"
+                                    width={320}
+                                    height={693}
+                                    className="rounded-[1.5rem] w-full h-auto"
                                 />
                             </div>
                         </div>

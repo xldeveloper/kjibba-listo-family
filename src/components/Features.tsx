@@ -22,7 +22,6 @@ const features = [
       "Handle sammen i sanntid. Se hva partneren din plukker mens du er i en annen gang. Aldri kjøp melk dobbelt igjen.",
     color: "listo",
     isNew: true,
-    link: "/butikkmodus",
   },
   {
     icon: Calendar,
@@ -30,7 +29,6 @@ const features = [
     description:
       "Velg oppskrifter for uken, så lager handlelisten seg selv. Ingrediensene sorteres etter butikkens oppsett.",
     color: "listo",
-    link: "/ai-logistikk",
   },
   {
     icon: Users,
@@ -46,7 +44,7 @@ const features = [
     description:
       "Se hele uken i ett blikk. Travle ettermiddager? Listo foreslår retter som tar under 20 minutter.",
     color: "salmon",
-    link: "/ai-logistikk",
+    link: "/middagsplanlegger",
   },
   {
     icon: CheckSquare,
@@ -68,6 +66,7 @@ const features = [
     description:
       "Spør om middagstips, porsjonsjusteringer eller hva du kan lage med det du har i kjøleskapet.",
     color: "sky",
+    link: "/ai-logistikk",
   },
   {
     icon: MapPin,
@@ -75,7 +74,6 @@ const features = [
     description:
       "Egne lister for hytta, båten eller ferieleiligheten. Aldri mer glem dopapir til hytta! 🏔️",
     color: "alert",
-    link: "/familie-hub",
   },
 ];
 
