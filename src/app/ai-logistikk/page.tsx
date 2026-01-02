@@ -34,7 +34,7 @@ export default function AiLogistikkPage() {
                             </p>
                             <div className="flex flex-wrap gap-4">
                                 <Link
-                                    href="#prøv"
+                                    href="#beta"
                                     className="px-8 py-4 bg-gradient-to-r from-magic-500 to-magic-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all"
                                 >
                                     Begynn din prøveperiode

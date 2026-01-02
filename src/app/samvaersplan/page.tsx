@@ -33,7 +33,7 @@ export default function SamvaersplanPage() {
                             </p>
                             <div className="flex flex-wrap gap-4">
                                 <Link
-                                    href="#prøv"
+                                    href="#beta"
                                     className="px-8 py-4 bg-listo-500 text-white font-semibold rounded-full shadow-lg hover:bg-listo-600 transition-all"
                                 >
                                     Start din Gullbillett
