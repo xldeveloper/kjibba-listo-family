@@ -5,7 +5,7 @@ import path from "path";
 // Automatisk hent alle bloggposter fra filsystemet
 function getBlogSlugs(): string[] {
   const blogDir = path.join(process.cwd(), "src/app/blogg");
-  
+
   try {
     const entries = fs.readdirSync(blogDir, { withFileTypes: true });
     return entries
@@ -33,6 +33,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/handleliste`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/familieapp`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/oppskrifter`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/ukemeny`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.85,
     },
     {
       url: `${baseUrl}/faq`,
