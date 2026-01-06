@@ -16,6 +16,19 @@ export interface BlogArticle {
 export const articles: BlogArticle[] = [
     // === NEW ARTICLES (will be prioritized on front page) ===
     {
+        slug: "organisere-familien-tips",
+        title: "7 tips for å organisere familien i 2026",
+        excerpt:
+            "Sliter du med hverdagslogistikken? Her er 7 konkrete tips som faktisk fungerer for å få orden på familien.",
+        date: "2026-01-06",
+        readTime: "6 min",
+        image: "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=800&q=80",
+        category: "Organisering",
+        categoryColor: "green",
+        isNew: true,
+        isFeatured: true,
+    },
+    {
         slug: "familieapp-alle-plattformer",
         title: "Familieapp på tvers av plattformer: Slik synkroniserer dere hverdagen",
         excerpt:
@@ -26,7 +39,6 @@ export const articles: BlogArticle[] = [
         category: "Plattformer",
         categoryColor: "blue",
         isNew: true,
-        isFeatured: true,
     },
     {
         slug: "prov-listo-gratis",
