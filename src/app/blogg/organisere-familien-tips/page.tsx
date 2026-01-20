@@ -136,7 +136,7 @@ export default function Article() {
                         </h2>
                         <p className="text-gray-700 mb-0">
                             Barn som har egne gjøremål føler seg inkludert og lærer ansvar.
-                            Start enkelt: Rydde rommet, dekke bordet, mata kjæledyret.
+                            Start enkelt: Rydde rommet, dekke bordet, mate kjæledyret.
                             Når oppgavene er tydelig fordelt, slipper du å mase – og barna
                             vet hva de skal gjøre.
                             <Link href="/blogg/gjoremal-for-barn" className="text-purple-600 hover:underline"> Les guiden om gjøremål for barn →</Link>
@@ -166,7 +166,7 @@ export default function Article() {
                             alltid følger samme rekkefølge (kle på seg → frokost → pakke
                             sekk → sko), går alt raskere og med mindre konflikter. Det
                             samme gjelder kvelden: Lekser → middag → aktivitet →
-                            leggeruting.
+                            leggerutine.
                         </p>
                     </div>
 
