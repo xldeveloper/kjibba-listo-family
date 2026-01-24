@@ -54,7 +54,6 @@ const trialPerks = [
 export default function Cta() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [familySize, setFamilySize] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -104,8 +103,6 @@ export default function Cta() {
     setError("");
 
     try {
-      const userType = hasFreeBetaSpots ? "free_beta" : "trial";
-
       // Use transaction to atomically increment counter and add user
       await runTransaction(db, async (transaction) => {
         const quotaRef = doc(db, "onboarding_config", "quotas");
@@ -130,7 +127,6 @@ export default function Cta() {
         transaction.set(betaInterestRef, {
           name,
           email: email.toLowerCase().trim(),
-          familySize,
           source: "landing_page",
           userType: finalUserType,
           position: stillHasSpots ? currentClaimed + 1 : null,
@@ -291,13 +287,27 @@ export default function Cta() {
                 <h3 className="text-2xl font-bold text-charcoal mb-3">
                   {hasFreeBetaSpots ? "Du er med! 🎉" : "Takk for interessen!"}
                 </h3>
-                <p className="text-charcoal-light">
-                  {hasFreeBetaSpots ? (
-                    <>Gratulerer! Du har sikret deg en av de {BETA_SPOTS_TOTAL} gratis plassene. Sjekk e-posten din for videre instruksjoner.</>
-                  ) : (
-                    <>Vi har mottatt din påmelding. Sjekk e-posten din for å starte din 14-dagers prøveperiode.</>
-                  )}
-                </p>
+                <div className="text-charcoal-light space-y-4">
+                  <p>
+                    {hasFreeBetaSpots ? (
+                      <>Gratulerer! Du har sikret deg en av de {BETA_SPOTS_TOTAL} gratis plassene.</>
+                    ) : (
+                      <>Vi har mottatt din påmelding.</>
+                    )}
+                  </p>
+
+                  <div className="bg-blue-50 p-4 rounded-lg text-sm text-blue-800">
+                    <p className="font-semibold mb-1">📩 Sjekk innboksen din</p>
+                    <p>Du vil motta en e-post med lenke for å fullføre registreringen <strong>innen 2 minutter</strong>.</p>
+                  </div>
+
+                  <p className="text-sm text-charcoal/60 mt-4">
+                    Fikk du ikke e-posten? <br />
+                    <a href={`/signup?email=${encodeURIComponent(email)}`} className="text-listo-600 font-medium underline hover:text-listo-700">
+                      Klikk her for å gå direkte til registrering
+                    </a>
+                  </p>
+                </div>
               </div>
             ) : (
               <>
@@ -347,27 +357,6 @@ export default function Cta() {
                       required
                       className="w-full px-4 py-3 rounded-squircle-sm border border-charcoal/20 focus:border-listo-500 focus:ring-2 focus:ring-listo-500/20 outline-none transition-all"
                     />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="familySize"
-                      className="block text-sm font-medium text-charcoal mb-1.5"
-                    >
-                      Hvor mange er dere i familien?
-                    </label>
-                    <select
-                      id="familySize"
-                      value={familySize}
-                      onChange={(e) => setFamilySize(e.target.value)}
-                      required
-                      className="w-full px-4 py-3 rounded-squircle-sm border border-charcoal/20 focus:border-listo-500 focus:ring-2 focus:ring-listo-500/20 outline-none transition-all bg-white"
-                    >
-                      <option value="">Velg...</option>
-                      <option value="1-2">1-2 personer</option>
-                      <option value="3-4">3-4 personer</option>
-                      <option value="5+">5 eller flere</option>
-                    </select>
                   </div>
 
                   <button
