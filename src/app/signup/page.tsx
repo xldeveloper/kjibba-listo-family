@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft, CheckCircle, User, ShieldX } from "lucide-react";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
+import { getFirestore, collection, query, where, getDocs, doc, updateDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 // Firebase config (same as listo-app)
 const firebaseConfig = {
@@ -22,6 +22,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Generate a random 6-character invite code
+const generateInviteCode = () => {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Removed ambiguous chars like I, 1, O, 0
+  let code = "";
+  for (let i = 0; i < 6; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+};
 
 // Loading fallback component
 function SignupLoading() {
@@ -57,23 +67,29 @@ function SignupContent() {
     }
   }, [searchParams]);
 
-  const checkInvitation = async (emailToCheck: string): Promise<{ invited: boolean; docId?: string }> => {
+  const checkInvitation = async (emailToCheck: string): Promise<{ invited: boolean; docId?: string; isRegistered?: boolean }> => {
     try {
+      // Allow any email that exists in beta_interest
       const q = query(
         collection(db, "beta_interest"),
-        where("email", "==", emailToCheck.toLowerCase()),
-        where("status", "==", "invited")
+        where("email", "==", emailToCheck.toLowerCase())
       );
       const snapshot = await getDocs(q);
-      
+
       if (!snapshot.empty) {
+        const docData = snapshot.docs[0].data();
         const docId = snapshot.docs[0].id;
+
+        // If already registered, flag it
+        if (docData.status === "registered") {
+          return { invited: true, docId, isRegistered: true };
+        }
+
         setIsInvited(true);
         setBetaInterestId(docId);
         // Pre-fill name if available
-        const data = snapshot.docs[0].data();
-        if (data.name) {
-          setName(data.name);
+        if (docData.name) {
+          setName(docData.name);
         }
         return { invited: true, docId };
       }
@@ -97,12 +113,17 @@ function SignupContent() {
     setIsLoading(true);
     setError("");
 
-    // Check if invited (use returned value, not state)
+    // Check availability
     let inviteDocId: string | null = betaInterestId;
     if (!isInvited) {
       const result = await checkInvitation(email);
+      if (result.isRegistered) {
+        setError("Denne e-posten er allerede registrert. Logg inn i stedet.");
+        setIsLoading(false);
+        return;
+      }
       if (!result.invited) {
-        setError("Denne e-posten er ikke invitert til beta ennå. Meld interesse på forsiden først!");
+        setError("Denne e-posten er ikke registrert for beta. Meld interesse på forsiden først!");
         setIsLoading(false);
         return;
       }
@@ -110,30 +131,60 @@ function SignupContent() {
     }
 
     try {
-      // Create user in Firebase
+      // 1. Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
-      // Update display name
+      const user = userCredential.user;
+
+      // 2. Update Auth display name
       if (name) {
-        await updateProfile(userCredential.user, { displayName: name });
+        await updateProfile(user, { displayName: name });
       }
 
-      // Update beta_interest status to registered
+      // 3. Create Family Document
+      const familyRef = doc(collection(db, "families"));
+      const familyId = familyRef.id;
+      const inviteCode = generateInviteCode();
+
+      await setDoc(familyRef, {
+        name: `${name.split(' ')[0]}s Familie`,
+        createdAt: serverTimestamp(),
+        createdBy: user.uid,
+        inviteCode: inviteCode,
+        adminIds: [user.uid],
+        memberIds: [user.uid],
+      });
+
+      // 4. Create User Document in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        email: email.toLowerCase(),
+        displayName: name,
+        photoURL: user.photoURL || null,
+        familyId: familyId,
+        role: "admin", // Creator is always admin
+        createdAt: serverTimestamp(),
+        settings: {
+          notifications: true,
+          theme: "system"
+        }
+      });
+
+      // 5. Update beta_interest status to registered
       if (inviteDocId) {
         await updateDoc(doc(db, "beta_interest", inviteDocId), {
           status: "registered",
-          registeredAt: new Date(),
+          registeredAt: serverTimestamp(),
+          userId: user.uid, // Link to the new user
         });
       }
 
       setSuccess(true);
     } catch (err: any) {
       console.error("Signup error:", err);
-      
+
       // Translate Firebase errors to Norwegian
       switch (err.code) {
         case "auth/email-already-in-use":
-          setError("Denne e-postadressen er allerede registrert. Prøv å logge inn i stedet.");
+          setError("Denne e-postadressen er allerede i bruk av en annen konto.");
           break;
         case "auth/weak-password":
           setError("Passordet må være minst 6 tegn.");
@@ -142,7 +193,7 @@ function SignupContent() {
           setError("Ugyldig e-postadresse.");
           break;
         default:
-          setError("Noe gikk galt. Prøv igjen senere.");
+          setError("Noe gikk galt under registreringen. Prøv igjen.");
       }
     } finally {
       setIsLoading(false);
@@ -166,11 +217,11 @@ function SignupContent() {
           <div className="w-16 h-16 rounded-full bg-listo-100 flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-8 h-8 text-listo-600" />
           </div>
-          
+
           <h2 className="text-2xl font-bold text-charcoal mb-2">
             Velkommen til listo.family! 🎉
           </h2>
-          
+
           <p className="text-charcoal-light mb-6">
             Kontoen din er opprettet. Du er nå registrert som beta-tester!
           </p>
@@ -202,7 +253,7 @@ function SignupContent() {
             >
               Åpne listo.family Web App
             </a>
-            
+
             <Link
               href="/"
               className="block w-full py-3 px-6 border border-charcoal/10 text-charcoal font-medium rounded-squircle-sm hover:bg-cream-50 transition-colors text-center"
@@ -331,11 +382,10 @@ function SignupContent() {
                     onBlur={handleEmailBlur}
                     placeholder="din@epost.no"
                     required
-                    className={`w-full pl-12 pr-4 py-3 rounded-squircle-sm border focus:ring-2 outline-none transition-all ${
-                      isInvited 
-                        ? "border-green-500 focus:border-green-500 focus:ring-green-500/20 bg-green-50/30" 
-                        : "border-charcoal/20 focus:border-listo-500 focus:ring-listo-500/20"
-                    }`}
+                    className={`w-full pl-12 pr-4 py-3 rounded-squircle-sm border focus:ring-2 outline-none transition-all ${isInvited
+                      ? "border-green-500 focus:border-green-500 focus:ring-green-500/20 bg-green-50/30"
+                      : "border-charcoal/20 focus:border-listo-500 focus:ring-listo-500/20"
+                      }`}
                   />
                 </div>
                 {!isInvited && email && (
