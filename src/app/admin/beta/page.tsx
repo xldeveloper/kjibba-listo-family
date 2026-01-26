@@ -22,24 +22,18 @@ interface BetaInterest {
     trialExpiresAt?: Timestamp;
 }
 
-interface BetaUser {
-    email: string;
-    approved: boolean;
-    addedDate: Timestamp;
-    invitedBy: string;
-    note?: string;
-}
-
 interface AppUser {
+    id: string;
     email: string;
     displayName?: string;
     familyId?: string;
     createdAt?: Timestamp;
+    foundersPass?: boolean;
+    foundersPassExpiresAt?: Timestamp;
 }
 
 export default function BetaPage() {
     const { db } = useAdminData();
-    const [betaUsers, setBetaUsers] = useState<BetaUser[]>([]);
     const [betaInterest, setBetaInterest] = useState<BetaInterest[]>([]);
     const [appUsers, setAppUsers] = useState<AppUser[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -69,21 +63,6 @@ export default function BetaPage() {
         return () => unsubscribe();
     }, [db]);
 
-    // Subscribe to beta users
-    useEffect(() => {
-        const q = query(collection(db, "betaUsers"));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const users: BetaUser[] = [];
-            snapshot.forEach((doc) => {
-                users.push({ email: doc.id, ...doc.data() } as BetaUser);
-            });
-            setBetaUsers(users);
-        }, (error) => {
-            console.error("Error loading betaUsers:", error);
-        });
-        return () => unsubscribe();
-    }, [db]);
-
     // Subscribe to app users
     useEffect(() => {
         const q = query(collection(db, "users"));
@@ -92,10 +71,13 @@ export default function BetaPage() {
             snapshot.forEach((doc) => {
                 const data = doc.data();
                 users.push({
+                    id: doc.id,
                     email: data.email || "",
                     displayName: data.displayName,
                     familyId: data.familyId,
                     createdAt: data.createdAt,
+                    foundersPass: data.foundersPass,
+                    foundersPassExpiresAt: data.foundersPassExpiresAt,
                 });
             });
             setAppUsers(users.sort((a, b) => {
@@ -106,48 +88,6 @@ export default function BetaPage() {
         });
         return () => unsubscribe();
     }, [db]);
-
-    const approveUser = async (email: string) => {
-        setActionLoading(email);
-        try {
-            const betaUserRef = doc(db, "betaUsers", email.toLowerCase());
-            await setDoc(betaUserRef, {
-                email: email.toLowerCase(),
-                approved: true,
-                addedDate: Timestamp.now(),
-                invitedBy: "admin",
-                note: "Godkjent via admin panel",
-            });
-            alert(`✅ ${email} er nå godkjent for beta!`);
-        } catch (error) {
-            console.error("Error approving user:", error);
-            alert("Feil ved godkjenning");
-        } finally {
-            setActionLoading(null);
-        }
-    };
-
-    const revokeAccess = async (email: string) => {
-        if (!confirm(`Er du sikker på at du vil fjerne beta-tilgang for ${email}?`)) return;
-
-        setActionLoading(email);
-        try {
-            const betaUserRef = doc(db, "betaUsers", email.toLowerCase());
-            await setDoc(betaUserRef, {
-                email: email.toLowerCase(),
-                approved: false,
-                addedDate: Timestamp.now(),
-                invitedBy: "admin",
-                note: "Tilgang fjernet via admin panel",
-            });
-            alert(`❌ Beta-tilgang fjernet for ${email}`);
-        } catch (error) {
-            console.error("Error revoking access:", error);
-            alert("Feil ved fjerning av tilgang");
-        } finally {
-            setActionLoading(null);
-        }
-    };
 
     const sendAndroidBetaInvite = async (interest: BetaInterest) => {
         if (!confirm(`Send Android beta-invitasjon til ${interest.email}?\n\nDu må først ha lagt til ${interest.email} i Play Console som beta-tester.`)) return;
@@ -186,11 +126,6 @@ export default function BetaPage() {
         }
     };
 
-    const isBetaApproved = (email: string) => {
-        const found = betaUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
-        return found?.approved === true;
-    };
-
     const deleteTestUser = async (email: string) => {
         if (!confirm(`⚠️ ADVARSEL: Dette vil permanent slette:\n\n- Bruker fra Firebase Auth\n- Brukerdata fra Firestore\n- Beta-påmelding\n\nEr du sikker på at du vil slette ${email}?`)) return;
 
@@ -227,6 +162,13 @@ export default function BetaPage() {
         } finally {
             setActionLoading(null);
         }
+    };
+
+    const getUserAccessType = (user: AppUser): string => {
+        if (user.foundersPass && user.foundersPassExpiresAt && user.foundersPassExpiresAt.toDate() > new Date()) {
+            return "founders_pass";
+        }
+        return "free_beta";
     };
 
     const filteredAppUsers = appUsers.filter(user =>
@@ -466,7 +408,7 @@ export default function BetaPage() {
                             Alle registrerte brukere ({filteredAppUsers.length})
                         </h2>
                         <p className="text-sm text-charcoal-light mt-1">
-                            Brukere som har opprettet konto i appen
+                            Brukere som har opprettet konto i appen. Alle har automatisk beta-tilgang.
                         </p>
                     </div>
                     <div className="overflow-x-auto">
@@ -483,7 +425,7 @@ export default function BetaPage() {
                                         Registrert
                                     </th>
                                     <th className="text-left px-6 py-3 text-xs font-semibold text-charcoal-light uppercase tracking-wider">
-                                        Beta-status
+                                        Tilgang
                                     </th>
                                     <th className="text-right px-6 py-3 text-xs font-semibold text-charcoal-light uppercase tracking-wider">
                                         Handling
@@ -492,9 +434,9 @@ export default function BetaPage() {
                             </thead>
                             <tbody className="divide-y divide-charcoal/5">
                                 {filteredAppUsers.map((user) => {
-                                    const hasAccess = isBetaApproved(user.email);
+                                    const accessType = getUserAccessType(user);
                                     return (
-                                        <tr key={user.email} className="hover:bg-cream-50 transition-colors">
+                                        <tr key={user.id} className="hover:bg-cream-50 transition-colors">
                                             <td className="px-6 py-4">
                                                 <div>
                                                     <div className="font-medium text-charcoal">
@@ -512,46 +454,27 @@ export default function BetaPage() {
                                                 {user.createdAt ? formatDate(user.createdAt) : "Ukjent"}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {hasAccess ? (
-                                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-listo-100 text-listo-700 rounded-full text-xs font-semibold">
-                                                        <CheckCircle className="w-3 h-3" />
-                                                        Godkjent
+                                                {accessType === "founders_pass" ? (
+                                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-magic-100 text-magic-700 rounded-full text-xs font-semibold">
+                                                        <Sparkles className="w-3 h-3" />
+                                                        Founders Pass
                                                     </span>
                                                 ) : (
-                                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
-                                                        <Clock className="w-3 h-3" />
-                                                        Ikke godkjent
+                                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-listo-100 text-listo-700 rounded-full text-xs font-semibold">
+                                                        <CheckCircle className="w-3 h-3" />
+                                                        Gratis Beta
                                                     </span>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <div className="flex items-center gap-2 justify-end">
-                                                    {hasAccess ? (
-                                                        <button
-                                                            onClick={() => revokeAccess(user.email)}
-                                                            disabled={actionLoading === user.email}
-                                                            className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium rounded-squircle-sm transition-colors disabled:opacity-50"
-                                                        >
-                                                            {actionLoading === user.email ? "⏳" : "Fjern tilgang"}
-                                                        </button>
-                                                    ) : (
-                                                        <button
-                                                            onClick={() => approveUser(user.email)}
-                                                            disabled={actionLoading === user.email}
-                                                            className="px-4 py-2 bg-listo-100 hover:bg-listo-200 text-listo-700 text-sm font-medium rounded-squircle-sm transition-colors disabled:opacity-50"
-                                                        >
-                                                            {actionLoading === user.email ? "⏳" : "✓ Godkjenn"}
-                                                        </button>
-                                                    )}
-                                                    <button
-                                                        onClick={() => deleteTestUser(user.email)}
-                                                        disabled={actionLoading === user.email}
-                                                        className="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium rounded-squircle-sm transition-colors disabled:opacity-50"
-                                                        title="Slett testbruker"
-                                                    >
-                                                        {actionLoading === user.email ? "⏳" : "🗑️"}
-                                                    </button>
-                                                </div>
+                                                <button
+                                                    onClick={() => deleteTestUser(user.email)}
+                                                    disabled={actionLoading === user.email}
+                                                    className="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium rounded-squircle-sm transition-colors disabled:opacity-50"
+                                                    title="Slett testbruker"
+                                                >
+                                                    {actionLoading === user.email ? "⏳" : "🗑️"}
+                                                </button>
                                             </td>
                                         </tr>
                                     );

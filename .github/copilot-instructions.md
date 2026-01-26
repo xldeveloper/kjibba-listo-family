@@ -5,6 +5,24 @@ Norwegian (nb) landing page for listo.family - a family assistant app for meal p
 
 **Live site:** https://listo.family
 
+**🤖 Agents & Skills (MANDATORY)**
+Before starting ANY task, ALWAYS:
+1. **Check for relevant agents** in `.github/agents/` (e.g., `seo-specialist`, `frontend-developer`)
+2. **Check for relevant skills** in `.github/skills/` (e.g., `nextjs-best-practices`, `seo-fundamentals`, `tailwind-patterns`)
+3. **Read and apply** the skill file using `read_file` before proceeding
+4. **Announce to user** which agents/skills are being used at the start of work:
+   - Example: "📋 **Using skills:** `nextjs-best-practices`, `seo-fundamentals` | **Suggested agent:** `seo-specialist`"
+5. If a specialized agent would be better suited, **suggest switching** before starting work
+
+This ensures consistent patterns, domain expertise, and transparency about which knowledge sources guide the implementation.
+
+**📚 Context7 MCP for Documentation (MANDATORY)**
+When working with external libraries, frameworks, or APIs, **ALWAYS** use the Context7 MCP tools to fetch up-to-date documentation:
+1. Use `mcp_io_github_ups_resolve-library-id` to find the correct library ID
+2. Use `mcp_io_github_ups_get-library-docs` to fetch current documentation and code examples
+3. This ensures we use the latest API patterns and avoid deprecated methods
+4. Applies to: Next.js, Tailwind CSS, Framer Motion, and any other dependencies
+
 ## Branding & Naming Convention
 - **Formal branding:** Use `listo.family` (lowercase) in titles, metadata, CTAs, logos, and marketing copy
 - **Casual references:** `Listo` is acceptable in flowing body text where natural
