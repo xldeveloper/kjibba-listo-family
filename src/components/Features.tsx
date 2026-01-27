@@ -10,6 +10,7 @@ import {
   CheckSquare,
   MapPin,
   ArrowRight,
+  Smartphone,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -67,6 +68,14 @@ const features = [
       "Spør om middagstips, porsjonsjusteringer eller hva du kan lage med det du har i kjøleskapet.",
     color: "sky",
     link: "/ai-logistikk",
+  },
+  {
+    icon: Smartphone,
+    title: "Tilgjengelig overalt",
+    description:
+      "Bruk i nettleseren på PC/Mac, iPhone, Android eller nettbrett. Alt synkroniseres automatisk mellom enheter.",
+    color: "sky",
+    isNew: true,
   },
   {
     icon: MapPin,

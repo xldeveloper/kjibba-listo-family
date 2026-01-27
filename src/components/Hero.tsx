@@ -20,10 +20,10 @@ const firebaseConfig = {
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 const db = getFirestore(app);
 
-const BETA_SPOTS_TOTAL = 30;
+const EARLY_ADOPTER_SPOTS_TOTAL = 50;
 
 export default function Hero() {
-  const [betaClaimed, setBetaClaimed] = useState(0);
+  const [earlyAdoptersClaimed, setEarlyAdoptersClaimed] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function Hero() {
         const quotaDoc = await getDoc(quotaRef);
         if (quotaDoc.exists()) {
           const data = quotaDoc.data();
-          setBetaClaimed(data.betaSpots?.claimed || 0);
+          setEarlyAdoptersClaimed(data.earlyAdopters?.claimed || 0);
         }
       } catch (error) {
         console.error("Error fetching quota:", error);
@@ -44,8 +44,8 @@ export default function Hero() {
     fetchQuota();
   }, []);
 
-  const spotsRemaining = BETA_SPOTS_TOTAL - betaClaimed;
-  const hasFreeBetaSpots = spotsRemaining > 0;
+  const spotsRemaining = EARLY_ADOPTER_SPOTS_TOTAL - earlyAdoptersClaimed;
+  const hasEarlyAdopterSpots = spotsRemaining > 0;
 
   return (
 
@@ -59,12 +59,12 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 flex flex-col items-center text-center">
 
-        {/* Dynamic Badge - Beta or Trial */}
-        {!loading && hasFreeBetaSpots ? (
+        {/* Dynamic Badge - Early Adopter or Trial */}
+        {!loading && hasEarlyAdopterSpots ? (
           <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/80 backdrop-blur-sm rounded-squircle mb-8 border border-listo-200 shadow-sm animate-fade-up">
-            <Crown className="w-5 h-5 text-listo-600" />
+            <Crown className="w-5 h-5 text-magic-600" />
             <span className="text-base font-bold text-charcoal">
-              🎉 Kun <span className="text-listo-600">{spotsRemaining}</span> av {BETA_SPOTS_TOTAL} gratis plasser igjen!
+              🎉 Kun <span className="text-magic-600">{spotsRemaining}</span> av {EARLY_ADOPTER_SPOTS_TOTAL} Early Adopter-plasser igjen!
             </span>
           </div>
         ) : (
@@ -81,15 +81,10 @@ export default function Hero() {
 
         {/* Headline - Massive & Centered */}
         <h1 className="text-5xl sm:text-7xl lg:text-8xl font-display font-bold text-charcoal leading-[0.95] tracking-tight mb-8 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-          {hasFreeBetaSpots ? (
+          {hasEarlyAdopterSpots ? (
             <>
-              Sikre deg <span className="text-transparent bg-clip-text bg-gradient-to-r from-magic-600 to-magic-400">gratis tilgang</span><br />
-              <span className="relative inline-block">
-                ut 2026
-                <svg className="absolute -bottom-2 left-0 w-full h-3 text-magic-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
-                  <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
-                </svg>
-              </span>
+              Bli en av <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-magic-600 to-magic-400">grunnleggerne</span>
             </>
           ) : (
             <>
@@ -101,9 +96,9 @@ export default function Hero() {
 
         {/* Subheadline */}
         <p className="text-xl sm:text-2xl text-charcoal-light mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-up" style={{ animationDelay: "0.2s" }}>
-          {hasFreeBetaSpots ? (
+          {hasEarlyAdopterSpots ? (
             <>
-              Bli en av de <strong>{BETA_SPOTS_TOTAL} første familiene</strong> som får full tilgang til fremtidens familieassistent.
+              De første <strong>{EARLY_ADOPTER_SPOTS_TOTAL} familiene</strong> får 3 måneders Premium gratis + eksklusiv Early Adopter-status. Planlegg middager, del handlelister, organiser familielogistikk.
             </>
           ) : (
             <>
@@ -114,32 +109,41 @@ export default function Hero() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-16 animate-fade-up" style={{ animationDelay: "0.3s" }}>
-          <Link
-            href="#beta"
-            className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-charcoal text-white font-semibold rounded-squircle shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all text-lg overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-magic-500 to-magic-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="relative flex items-center gap-2">
-              {hasFreeBetaSpots ? (
-                <>
-                  <Crown className="w-5 h-5" />
-                  Sikre min gratis plass
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5" />
-                  Prøv gratis i 14 dager
-                </>
-              )}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </Link>
+        <div className="flex flex-col items-center gap-4 w-full sm:w-auto mb-16 animate-fade-up" style={{ animationDelay: "0.3s" }}>
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <Link
+              href="/signup"
+              className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-charcoal text-white font-semibold rounded-squircle shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all text-lg overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-magic-500 to-magic-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="relative flex items-center gap-2">
+                {hasEarlyAdopterSpots ? (
+                  <>
+                    <Crown className="w-5 h-5" />
+                    Sikre min Early Adopter-plass
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5" />
+                    Prøv gratis i 14 dager
+                  </>
+                )}
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Link>
 
-          <Link href="#how-it-works" className="inline-flex items-center justify-center gap-2 px-10 py-5 bg-white text-charcoal font-semibold rounded-squircle shadow-md hover:shadow-xl hover:-translate-y-1 transition-all text-lg border border-charcoal/5 group">
-            <Play className="w-5 h-5 fill-charcoal text-charcoal group-hover:text-magic-600 group-hover:fill-magic-600 transition-colors" />
-            Se hvordan det funker
-          </Link>
+            <Link href="#how-it-works" className="inline-flex items-center justify-center gap-2 px-10 py-5 bg-white text-charcoal font-semibold rounded-squircle shadow-md hover:shadow-xl hover:-translate-y-1 transition-all text-lg border border-charcoal/5 group">
+              <Play className="w-5 h-5 fill-charcoal text-charcoal group-hover:text-magic-600 group-hover:fill-magic-600 transition-colors" />
+              Se hvordan det fungerer
+            </Link>
+          </div>
+          
+          {/* Note under CTA */}
+          {hasEarlyAdopterSpots && (
+            <p className="text-sm text-charcoal-light">
+              3 måneders Premium gratis - ingen kredittkort nødvendig
+            </p>
+          )}
         </div>
 
         {/* Community / Invitation */}

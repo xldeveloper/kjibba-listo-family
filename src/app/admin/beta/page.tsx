@@ -11,7 +11,7 @@ interface BetaInterest {
     email: string;
     familySize?: string; // Deprecated in Phase 3
     source: string;
-    userType: "free_beta" | "trial";
+    userType: "early_adopter" | "free_beta" | "trial";
     position: number | null;
     createdAt: Timestamp;
     welcomeEmailSent?: boolean;
@@ -168,7 +168,7 @@ export default function BetaPage() {
         if (user.foundersPass && user.foundersPassExpiresAt && user.foundersPassExpiresAt.toDate() > new Date()) {
             return "founders_pass";
         }
-        return "free_beta";
+        return "early_adopter";
     };
 
     const filteredAppUsers = appUsers.filter(user =>
@@ -182,6 +182,7 @@ export default function BetaPage() {
     );
 
     // Calculate stats
+    const earlyAdopterCount = betaInterest.filter(i => i.userType === "early_adopter").length;
     const freeBetaCount = betaInterest.filter(i => i.userType === "free_beta").length;
     const trialCount = betaInterest.filter(i => i.userType === "trial").length;
 
@@ -214,10 +215,10 @@ export default function BetaPage() {
                     <div className="bg-listo-50 rounded-squircle-sm p-4 border border-listo-200">
                         <div className="flex items-center gap-2 mb-1">
                             <Sparkles className="w-5 h-5 text-listo-600" />
-                            <span className="text-sm font-medium text-charcoal-light">Free Beta</span>
+                            <span className="text-sm font-medium text-charcoal-light">Early Adopter</span>
                         </div>
-                        <p className="text-3xl font-bold text-listo-700">{freeBetaCount}</p>
-                        <p className="text-xs text-charcoal-light mt-1">av 30 plasser</p>
+                        <p className="text-3xl font-bold text-listo-700">{earlyAdopterCount}</p>
+                        <p className="text-xs text-charcoal-light mt-1">av 50 plasser</p>
                     </div>
                     <div className="bg-salmon-50 rounded-squircle-sm p-4 border border-salmon-200">
                         <div className="flex items-center gap-2 mb-1">
@@ -322,10 +323,15 @@ export default function BetaPage() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            {interest.userType === "free_beta" ? (
+                                            {interest.userType === "early_adopter" ? (
                                                 <span className="inline-flex items-center gap-1 px-3 py-1 bg-listo-100 text-listo-700 rounded-full text-xs font-semibold">
                                                     <Sparkles className="w-3 h-3" />
-                                                    Free Beta #{interest.position}
+                                                    Early Adopter #{interest.position}
+                                                </span>
+                                            ) : interest.userType === "free_beta" ? (
+                                                <span className="inline-flex items-center gap-1 px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-xs font-semibold">
+                                                    <CheckCircle className="w-3 h-3" />
+                                                    Free Beta (legacy)
                                                 </span>
                                             ) : (
                                                 <span className="inline-flex items-center gap-1 px-3 py-1 bg-salmon-100 text-salmon-700 rounded-full text-xs font-semibold">
@@ -462,7 +468,7 @@ export default function BetaPage() {
                                                 ) : (
                                                     <span className="inline-flex items-center gap-1 px-3 py-1 bg-listo-100 text-listo-700 rounded-full text-xs font-semibold">
                                                         <CheckCircle className="w-3 h-3" />
-                                                        Gratis Beta
+                                                        Early Adopter
                                                     </span>
                                                 )}
                                             </td>

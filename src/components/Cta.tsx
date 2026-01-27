@@ -28,20 +28,20 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0
 const db = getFirestore(app);
 
 // Quota configuration
-const BETA_SPOTS_TOTAL = 30;
+const EARLY_ADOPTER_SPOTS_TOTAL = 50;
 
 interface QuotaState {
-  betaClaimed: number;
+  earlyAdoptersClaimed: number;
   foundersPassSold: number;
   foundersPassTotal: number;
   loading: boolean;
 }
 
 const earlyAdopterPerks = [
-  { icon: Gift, text: "Gratis tilgang ut 2026" },
-  { icon: Users, text: "Direkte dialog med utviklerteamet" },
-  { icon: Heart, text: "Påvirk hvilke funksjoner vi bygger" },
-  { icon: Sparkles, text: "Eksklusiv \"Early Adopter\"-status" },
+  { icon: Gift, text: "3 måneders Premium gratis (verdi: 207 NOK)" },
+  { icon: Crown, text: "Eksklusiv Early Adopter-status" },
+  { icon: Users, text: "Påvirk hvilke funksjoner vi bygger" },
+  { icon: Heart, text: "Ingen kredittkort nødvendig" },
 ];
 
 const trialPerks = [
@@ -59,7 +59,7 @@ export default function Cta() {
   const [error, setError] = useState("");
 
   const [quota, setQuota] = useState<QuotaState>({
-    betaClaimed: 0,
+    earlyAdoptersClaimed: 0,
     foundersPassSold: 0,
     foundersPassTotal: 300,
     loading: true,
@@ -75,7 +75,7 @@ export default function Cta() {
         if (quotaDoc.exists()) {
           const data = quotaDoc.data();
           setQuota({
-            betaClaimed: data.betaSpots?.claimed || 0,
+            earlyAdoptersClaimed: data.earlyAdopters?.claimed || 0,
             foundersPassSold: data.foundersPass?.sold || 0,
             foundersPassTotal: data.foundersPass?.total || 300,
             loading: false,
@@ -93,9 +93,9 @@ export default function Cta() {
     fetchQuotas();
   }, []);
 
-  const spotsRemaining = BETA_SPOTS_TOTAL - quota.betaClaimed;
-  const hasFreeBetaSpots = spotsRemaining > 0;
-  const perks = hasFreeBetaSpots ? earlyAdopterPerks : trialPerks;
+  const spotsRemaining = EARLY_ADOPTER_SPOTS_TOTAL - quota.earlyAdoptersClaimed;
+  const hasEarlyAdopterSpots = spotsRemaining > 0;
+  const perks = hasEarlyAdopterSpots ? earlyAdopterPerks : trialPerks;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,12 +111,12 @@ export default function Cta() {
         let currentClaimed = 0;
 
         if (quotaDoc.exists()) {
-          currentClaimed = quotaDoc.data().betaSpots?.claimed || 0;
+          currentClaimed = quotaDoc.data().earlyAdopters?.claimed || 0;
         }
 
         // Double-check that spot is still available
-        const stillHasSpots = currentClaimed < BETA_SPOTS_TOTAL;
-        const finalUserType = stillHasSpots ? "free_beta" : "trial";
+        const stillHasSpots = currentClaimed < EARLY_ADOPTER_SPOTS_TOTAL;
+        const finalUserType = stillHasSpots ? "early_adopter" : "trial";
 
         // Calculate trial expiration (14 days from now) for trial users
         const now = new Date();
@@ -138,11 +138,11 @@ export default function Cta() {
           }),
         });
 
-        // Increment counter if this is a free beta user
+        // Increment counter if this is an early adopter user
         if (stillHasSpots) {
           transaction.set(quotaRef, {
-            betaSpots: {
-              total: BETA_SPOTS_TOTAL,
+            earlyAdopters: {
+              total: EARLY_ADOPTER_SPOTS_TOTAL,
               claimed: currentClaimed + 1,
             },
             foundersPass: quotaDoc.exists() ? quotaDoc.data().foundersPass : {
@@ -165,7 +165,7 @@ export default function Cta() {
   };
 
   // Calculate progress percentage for visual indicator
-  const progressPercent = Math.min((quota.betaClaimed / BETA_SPOTS_TOTAL) * 100, 100);
+  const progressPercent = Math.min((quota.earlyAdoptersClaimed / EARLY_ADOPTER_SPOTS_TOTAL) * 100, 100);
 
   return (
     <section
@@ -181,11 +181,11 @@ export default function Cta() {
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           {/* Dynamic badge based on availability */}
-          {hasFreeBetaSpots ? (
+          {hasEarlyAdopterSpots ? (
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-listo-500/20 to-magic-500/20 backdrop-blur rounded-full mb-6 border border-listo-400/30">
-              <Crown className="w-4 h-4 text-listo-400" />
+              <Crown className="w-4 h-4 text-magic-400" />
               <span className="text-sm font-medium text-white">
-                🎉 Kun <span className="font-bold text-listo-300">{spotsRemaining}</span> av {BETA_SPOTS_TOTAL} gratis plasser igjen!
+                🎉 Kun <span className="font-bold text-magic-300">{spotsRemaining}</span> av {EARLY_ADOPTER_SPOTS_TOTAL} Early Adopter-plasser igjen!
               </span>
             </div>
           ) : (
@@ -202,15 +202,15 @@ export default function Cta() {
 
           {/* Headline */}
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-            {hasFreeBetaSpots ? (
-              <>Bli en av de <span className="gradient-text-magic">{BETA_SPOTS_TOTAL} første</span></>
+            {hasEarlyAdopterSpots ? (
+              <>Bli en av <span className="gradient-text-magic">grunnleggerne</span></>
             ) : (
               <>Prøv Listo <span className="gradient-text-magic">helt gratis</span></>
             )}
           </h2>
           <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto">
-            {hasFreeBetaSpots ? (
-              <>De første {BETA_SPOTS_TOTAL} familiene får <strong className="text-white">gratis tilgang ut 2026</strong>. Meld deg på nå og bli en del av Listo-familien fra starten!</>
+            {hasEarlyAdopterSpots ? (
+              <>De første {EARLY_ADOPTER_SPOTS_TOTAL} familiene får <strong className="text-white">3 måneders Premium gratis</strong> + eksklusiv Early Adopter-status. Bli en del av Listo-familien fra starten!</>
             ) : (
               <>Start med 14 dagers full Premium-tilgang. Ingen kredittkort kreves – bare opprett en konto og kom i gang.</>
             )}
@@ -220,12 +220,12 @@ export default function Cta() {
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left: Progress and perks */}
           <div>
-            {/* Progress indicator for beta spots */}
-            {hasFreeBetaSpots && !quota.loading && (
+            {/* Progress indicator for early adopter spots */}
+            {hasEarlyAdopterSpots && !quota.loading && (
               <div className="mb-8 p-5 bg-gradient-to-br from-listo-500/10 to-magic-500/10 rounded-squircle border border-listo-400/20">
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-white/80">Gratis plasser tatt</span>
-                  <span className="text-listo-300 font-semibold">{quota.betaClaimed} av {BETA_SPOTS_TOTAL}</span>
+                  <span className="text-white/80">Early Adopter-plasser tatt</span>
+                  <span className="text-magic-300 font-semibold">{quota.earlyAdoptersClaimed} av {EARLY_ADOPTER_SPOTS_TOTAL}</span>
                 </div>
                 <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
                   <div
@@ -244,7 +244,7 @@ export default function Cta() {
             )}
 
             <h3 className="text-xl font-semibold text-white mb-6">
-              {hasFreeBetaSpots ? "Som Early Adopter får du:" : "Prøveperioden inkluderer:"}
+              {hasEarlyAdopterSpots ? "Som Early Adopter får du:" : "Prøveperioden inkluderer:"}
             </h3>
             <ul className="space-y-4">
               {perks.map((perk, index) => {
@@ -262,10 +262,10 @@ export default function Cta() {
 
             <div className="mt-8 p-4 bg-white/5 rounded-squircle-sm border border-white/10">
               <p className="text-white/60 text-sm">
-                {hasFreeBetaSpots ? (
+                {hasEarlyAdopterSpots ? (
                   <>
                     <strong className="text-white">Begrenset antall plasser.</strong>{" "}
-                    Når de {BETA_SPOTS_TOTAL} plassene er fylt, går vi over til 14 dagers prøveperiode for nye brukere.
+                    Når de {EARLY_ADOPTER_SPOTS_TOTAL} plassene er fylt, går vi over til 14 dagers prøveperiode for nye brukere.
                   </>
                 ) : (
                   <>
@@ -285,12 +285,12 @@ export default function Cta() {
                   <Check className="w-8 h-8 text-listo-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-charcoal mb-3">
-                  {hasFreeBetaSpots ? "Du er med! 🎉" : "Takk for interessen!"}
+                  {hasEarlyAdopterSpots ? "Du er med! 🎉" : "Takk for interessen!"}
                 </h3>
                 <div className="text-charcoal-light space-y-4">
                   <p>
-                    {hasFreeBetaSpots ? (
-                      <>Gratulerer! Du har sikret deg en av de {BETA_SPOTS_TOTAL} gratis plassene.</>
+                    {hasEarlyAdopterSpots ? (
+                      <>Gratulerer! Du har sikret deg en av de {EARLY_ADOPTER_SPOTS_TOTAL} Early Adopter-plassene.</>
                     ) : (
                       <>Vi har mottatt din påmelding.</>
                     )}
@@ -312,11 +312,11 @@ export default function Cta() {
             ) : (
               <>
                 <h3 className="text-xl font-bold text-charcoal mb-2">
-                  {hasFreeBetaSpots ? "Sikre din gratis plass" : "Start din gratis prøve"}
+                  {hasEarlyAdopterSpots ? "Sikre din Early Adopter-plass" : "Start din gratis prøve"}
                 </h3>
                 <p className="text-charcoal-light mb-6">
-                  {hasFreeBetaSpots ? (
-                    <>Fyll ut skjemaet for å bli en av de {BETA_SPOTS_TOTAL} første.</>
+                  {hasEarlyAdopterSpots ? (
+                    <>Fyll ut skjemaet for å bli en av de {EARLY_ADOPTER_SPOTS_TOTAL} første.</>
                   ) : (
                     <>Fyll ut skjemaet for å starte din 14-dagers prøveperiode.</>
                   )}
@@ -369,7 +369,7 @@ export default function Cta() {
                     ) : (
                       <>
                         <Sparkles className="w-5 h-5" />
-                        {hasFreeBetaSpots ? "Sikre min plass" : "Start gratis prøve"}
+                        {hasEarlyAdopterSpots ? "Sikre min plass" : "Start gratis prøve"}
                       </>
                     )}
                   </button>
