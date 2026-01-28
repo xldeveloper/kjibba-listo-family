@@ -266,39 +266,7 @@ export default function Cta() {
 
                   <button
                     type="submit"
-                    disabled={isLoading}
-                    className="w-full py-3.5 px-6 bg-gradient-to-r from-listo-500 to-listo-600 hover:from-listo-600 hover:to-listo-700 disabled:from-listo-300 disabled:to-listo-400 text-white font-semibold rounded-squircle shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
-                  >
-                    {isLoading ? (
-                      "Sender..."
-                    ) : (
-                      <>
-                        <Sparkles className="w-5 h-5" />
-                        {hasEarlyAdopterSpots ? "Sikre min plass" : "Start gratis prøve"}
-                      </>
-                    )}
-                  </button>
-
-                  {error && (
-                    <p className="text-red-500 text-sm text-center">{error}</p>
-                  )}
-                </form>
-
-                <p className="text-xs text-charcoal/50 mt-4 text-center">
-                  Vi deler aldri e-posten din med andre. Les vår{" "}
-                  <a href="/privacy" className="underline hover:text-charcoal">
-                    personvernerklæring
-                  </a>
-                  .
-                </p>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}className="w-full py-3.5 px-6 bg-gradient-to-r from-listo-500 to-listo-600 hover:from-listo-600 hover:to-listo-700 text-white font-semibold rounded-squircle shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+                    className="w-full py-3.5 px-6 bg-gradient-to-r from-listo-500 to-listo-600 hover:from-listo-600 hover:to-listo-700 text-white font-semibold rounded-squircle shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
                   >
                     <Sparkles className="w-5 h-5" />
                     {hasEarlyAdopterSpots ? "Sikre min plass" : "Start gratis prøve"}
@@ -306,4 +274,11 @@ export default function Cta() {
                 </form>
 
                 <p className="text-xs text-charcoal/50 mt-4 text-center">
-                  Du blir sendt til registreringssiden for å fullføre
+                  Du blir sendt til registreringssiden for å fullføre.
+                </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
