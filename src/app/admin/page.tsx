@@ -61,7 +61,7 @@ export default function AdminDashboard() {
 
     // Today's new items
     const newToday = betaInterests.filter(b => getDate(b.createdAt) >= today).length +
-      users.filter(u => getDate(u.registeredAt) >= today).length;
+      users.filter(u => getDate(u.journey.registeredAt) >= today).length;
 
     // This week's items
     const thisWeekBeta = betaInterests.filter(b => getDate(b.createdAt) >= weekAgo).length;
@@ -70,9 +70,9 @@ export default function AdminDashboard() {
       return d >= twoWeeksAgo && d < weekAgo;
     }).length;
 
-    const thisWeekUsers = users.filter(u => getDate(u.registeredAt) >= weekAgo).length;
+    const thisWeekUsers = users.filter(u => getDate(u.journey.registeredAt) >= weekAgo).length;
     const lastWeekUsers = users.filter(u => {
-      const d = getDate(u.registeredAt);
+      const d = getDate(u.journey.registeredAt);
       return d >= twoWeeksAgo && d < weekAgo;
     }).length;
 
