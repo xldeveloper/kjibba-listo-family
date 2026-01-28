@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft, CheckCircle, User, ShieldX } from "lucide-react";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { getFirestore, collection, query, where, getDocs, doc, updateDoc, setDoc, serverTimestamp, runTransaction, getDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 // Firebase config (same as listo-app)
 const firebaseConfig = {
@@ -22,16 +22,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-// Generate a random 6-character invite code
-const generateInviteCode = () => {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Removed ambiguous chars like I, 1, O, 0
-  let code = "";
-  for (let i = 0; i < 6; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return code;
-};
 
 // Loading fallback component
 function SignupLoading() {
@@ -98,66 +88,22 @@ function SignupContent() {
         await updateProfile(user, { displayName: name });
       }
 
-      // 3. Atomic transaction: Check quota + assign accessType
-      const quotasRef = doc(db, "onboarding_config", "quotas");
-      const userRef = doc(db, "users", user.uid);
-      const familyRef = doc(collection(db, "families"));
-      const familyId = familyRef.id;
-      const inviteCode = generateInviteCode();
+      // 3. Cloud Function (onUserCreated) will automatically:
+      //    - Create users/{uid} document
+      //    - Check quota and assign accessType (early_adopter or trial)
+      //    - Send welcome email
+      //    - Update quota if needed
+      
+      // Wait a moment for Cloud Function to complete
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
-      let finalAccessType: "early_adopter" | "trial" = "trial";
-      let premiumUntil: Date | null = null;
+      // 4. Check what access type was assigned
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setAccessType(userData.accessType || "trial");
+      }
 
-      await runTransaction(db, async (transaction) => {
-        const quotasSnap = await transaction.get(quotasRef);
-        const quotasData = quotasSnap.data();
-        const claimed = quotasData?.earlyAdopters?.claimed || 0;
-        const total = quotasData?.earlyAdopters?.total || 50;
-
-        // Check if spots available
-        if (claimed < total) {
-          finalAccessType = "early_adopter";
-          premiumUntil = new Date();
-          premiumUntil.setMonth(premiumUntil.getMonth() + 3);
-
-          // Increment claimed count
-          transaction.update(quotasRef, {
-            "earlyAdopters.claimed": claimed + 1,
-            updatedAt: serverTimestamp()
-          });
-        } else {
-          // Trial user (14 days)
-          const trialExpiry = new Date();
-          trialExpiry.setDate(trialExpiry.getDate() + 14);
-          premiumUntil = trialExpiry;
-        }
-
-        // Create user document
-        transaction.set(userRef, {
-          email: user.email,
-          displayName: name,
-          familyId: familyId,
-          familyName: `${name.split(' ')[0]}s Familie`,
-          accessType: finalAccessType,
-          premiumUntil: premiumUntil,
-          trialExpiresAt: finalAccessType === "trial" ? premiumUntil : null,
-          createdAt: serverTimestamp(),
-          "journey.accountCreatedAt": serverTimestamp(),
-          "journey.familyCreatedAt": serverTimestamp(),
-        });
-
-        // Create family document
-        transaction.set(familyRef, {
-          name: `${name.split(' ')[0]}s Familie`,
-          createdAt: serverTimestamp(),
-          createdBy: user.uid,
-          inviteCode: inviteCode,
-          adminIds: [user.uid],
-          memberIds: [user.uid],
-        });
-      });
-
-      setAccessType(finalAccessType);
       setSuccess(true);
     } catch (err: any) {
       console.error("Signup error:", err);
