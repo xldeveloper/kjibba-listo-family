@@ -117,7 +117,7 @@ export default function AdminDashboard() {
         const d = getDate(b.createdAt);
         return d >= date && d < nextDate;
       }).length + users.filter(u => {
-        const d = getDate(u.registeredAt);
+        const d = getDate(u.journey.registeredAt);
         return d >= date && d < nextDate;
       }).length;
 
