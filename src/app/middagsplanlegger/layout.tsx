@@ -82,7 +82,7 @@ const faqSchema = {
       name: "Fungerer middagsplanleggeren på både mobil og PC?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Ja! Listo fungerer på web (PC/Mac), og native apper for iOS og Android. Alt synkroniserer automatisk mellom enhetene.",
+        text: "Ja! Listo er en webapp som fungerer i alle moderne nettlesere – på PC, Mac, mobil og nettbrett. Alt synkroniserer automatisk mellom enhetene. Ingen nedlasting nødvendig.",
       },
     },
     {

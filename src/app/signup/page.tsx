@@ -190,7 +190,7 @@ function SignupContent() {
               )}
               <li className="flex items-start gap-2">
                 <span className="text-listo-500">✓</span>
-                <span>Android-appen kommer snart på Google Play</span>
+                <span>Webappen fungerer på alle enheter og nettlesere</span>
               </li>
             </ul>
           </div>

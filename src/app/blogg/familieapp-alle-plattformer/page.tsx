@@ -3,16 +3,16 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Familieapp på tvers av plattformer: Android, Web og iOS | listo.family",
+    title: "Familie-webapp på tvers av alle enheter: PC, Mac, mobil og nettbrett | listo.family",
     description:
-        "Listo.family synkroniserer familien på alle enheter. Tilgjengelig på Android og web – iOS kommer våren 2026. Én konto, hele familien, alle plattformer.",
+        "Listo.family synkroniserer familien på alle enheter. Fungerer som webapp i nettleseren på PC, Mac, mobil og nettbrett. Én konto, hele familien, alle plattformer.",
     keywords: [
-        "familieapp android",
-        "familieapp ios",
+        "familie webapp",
+        "webapp alle enheter",
         "synkroniser familie",
         "familie app alle plattformer",
         "handleliste synkronisering",
-        "familiekalender app",
+        "familiekalender webapp",
         "cross platform familie",
         "familieplanlegger",
     ],
@@ -39,7 +39,7 @@ export default function Article() {
                         <span>←</span> Tilbake til bloggen
                     </Link>
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
-                        Familieapp på tvers av plattformer: Slik synkroniserer dere hverdagen
+                        Familie-webapp på tvers av alle enheter: Slik synkroniserer dere hverdagen
                     </h1>
                     <div className="flex items-center gap-4 text-sm text-white/80">
                         <span className="bg-listo-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
@@ -55,53 +55,53 @@ export default function Article() {
             <article className="max-w-3xl mx-auto px-4 py-12">
                 <div className="prose prose-lg prose-gray max-w-none">
                     <p className="text-xl md:text-2xl text-gray-600 leading-relaxed first-letter:text-6xl first-letter:font-bold first-letter:text-listo-500 first-letter:float-left first-letter:mr-3 first-letter:mt-1">
-                        Mor bruker iPhone, far har Android, og barna sitter på iPad. Hvordan får man hele familien på samme side? Med en app som fungerer overalt.
+                        Mor bruker iPhone, far har Windows-PC, og barna sitter på iPad. Hvordan får man hele familien på samme side? Med en webapp som fungerer i alle nettlesere.
                     </p>
 
                     <h2>Utfordringen: Alle bruker forskjellige enheter</h2>
 
                     <p>
-                        Moderne familier har ofte en blanding av enheter. Noen foretrekker Apple, andre liker Android, og mange bruker også bærbar PC eller nettbrett. En familieapp som bare fungerer på én plattform ekskluderer nesten alltid noen.
+                        Moderne familier har ofte en blanding av enheter. Noen foretrekker Mac, andre liker Windows, og mange bruker også mobil eller nettbrett. En familieapp som krever nedlasting og bare fungerer på én plattform ekskluderer nesten alltid noen.
                     </p>
 
                     <div className="my-12 p-6 bg-listo-50 rounded-2xl border-l-4 border-listo-400">
-                        <h3 className="text-xl font-bold text-charcoal mt-0">📱 Listo på alle enheter</h3>
+                        <h3 className="text-xl font-bold text-charcoal mt-0">🌐 Listo som webapp</h3>
                         <p className="text-gray-700 mb-0">
-                            Listo.family er designet for å fungere på tvers av plattformer. Én konto gir hele familien tilgang, uansett hvilken enhet de bruker.
+                            Listo.family er en webapp som fungerer i alle moderne nettlesere. Ingen nedlasting nødvendig – bare åpne nettleseren og logg inn. Én konto gir hele familien tilgang, uansett hvilken enhet de bruker.
                         </p>
                     </div>
 
-                    <h2>Hvor er Listo tilgjengelig?</h2>
+                    <h2>Hvilke enheter støttes?</h2>
 
                     <div className="grid md:grid-cols-3 gap-6 my-10 not-prose">
-                        <div className="bg-green-50 rounded-xl p-6 text-center">
-                            <div className="text-4xl mb-3">🤖</div>
-                            <h3 className="text-lg font-bold text-charcoal mb-2">Android</h3>
-                            <p className="text-gray-600 m-0 text-sm">
-                                Tilgjengelig nå i beta. Last ned fra Google Play.
-                            </p>
-                            <span className="inline-block mt-3 px-3 py-1 bg-green-200 text-green-800 rounded-full text-xs font-semibold">
-                                Tilgjengelig
-                            </span>
-                        </div>
                         <div className="bg-blue-50 rounded-xl p-6 text-center">
-                            <div className="text-4xl mb-3">🌐</div>
-                            <h3 className="text-lg font-bold text-charcoal mb-2">Web</h3>
+                            <div className="text-4xl mb-3">💻</div>
+                            <h3 className="text-lg font-bold text-charcoal mb-2">PC & Mac</h3>
                             <p className="text-gray-600 m-0 text-sm">
-                                Bruk Listo i nettleseren på PC, Mac eller nettbrett.
+                                Fullt funksjonell i Chrome, Safari, Edge og Firefox.
                             </p>
                             <span className="inline-block mt-3 px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-xs font-semibold">
                                 Tilgjengelig
                             </span>
                         </div>
-                        <div className="bg-gray-50 rounded-xl p-6 text-center">
-                            <div className="text-4xl mb-3">🍎</div>
-                            <h3 className="text-lg font-bold text-charcoal mb-2">iOS</h3>
+                        <div className="bg-green-50 rounded-xl p-6 text-center">
+                            <div className="text-4xl mb-3">📱</div>
+                            <h3 className="text-lg font-bold text-charcoal mb-2">Mobil</h3>
                             <p className="text-gray-600 m-0 text-sm">
-                                iPhone og iPad-app kommer våren 2026.
+                                Optimalisert for mobil – fungerer i Safari, Chrome og andre mobilnettlesere.
                             </p>
-                            <span className="inline-block mt-3 px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-xs font-semibold">
-                                Kommer snart
+                            <span className="inline-block mt-3 px-3 py-1 bg-green-200 text-green-800 rounded-full text-xs font-semibold">
+                                Tilgjengelig
+                            </span>
+                        </div>
+                        <div className="bg-listo-50 rounded-xl p-6 text-center">
+                            <div className="text-4xl mb-3">📲</div>
+                            <h3 className="text-lg font-bold text-charcoal mb-2">Nettbrett</h3>
+                            <p className="text-gray-600 m-0 text-sm">
+                                Perfekt for iPad, Android-brett og andre nettbrett.
+                            </p>
+                            <span className="inline-block mt-3 px-3 py-1 bg-listo-200 text-listo-800 rounded-full text-xs font-semibold">
+                                Tilgjengelig
                             </span>
                         </div>
                     </div>
@@ -151,14 +151,14 @@ export default function Article() {
                         </Link>
                     </div>
 
-                    <h2>iOS kommer våren 2026</h2>
+                    <h2>Fungerer det på iPhone og Android?</h2>
 
                     <p>
-                        Vi jobber med å utvikle en native iOS-app for iPhone og iPad. Denne vil være klar våren 2026. I mellomtiden kan iPhone-brukere bruke web-versjonen av Listo.
+                        Ja! Listo er en webapp som fungerer i alle mobile nettlesere – Safari på iPhone/iPad, Chrome på Android, og alle andre moderne nettlesere. Du trenger ikke laste ned noe fra App Store eller Google Play.
                     </p>
 
                     <p>
-                        Meld deg på ventelisten for å få beskjed når iOS-appen er klar!
+                        Åpne bare app.listo.family i nettleseren din, så er du i gang. Du kan også legge til en snarvei på hjemmeskjermen for rask tilgang.
                     </p>
                 </div>
 

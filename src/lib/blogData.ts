@@ -30,9 +30,9 @@ export const articles: BlogArticle[] = [
     },
     {
         slug: "familieapp-alle-plattformer",
-        title: "Familieapp på tvers av plattformer: Slik synkroniserer dere hverdagen",
+        title: "Familie-webapp på tvers av alle enheter: Slik synkroniserer dere hverdagen",
         excerpt:
-            "Mor bruker iPhone, far har Android, og barna sitter på iPad. Med Listo synkroniserer hele familien på tvers av alle enheter.",
+            "Mor bruker iPhone, far har Windows-PC, og barna sitter på iPad. Med Listo-webappen synkroniserer hele familien på tvers av alle enheter og nettlesere.",
         date: "2025-12-27",
         readTime: "4 min",
         image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80",

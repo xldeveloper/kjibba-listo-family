@@ -1,116 +1,144 @@
-# Listo Landing Page - AI Coding Instructions
+# Workspace: listo.family (Multi-Project)
 
-## Project Overview
-Norwegian (nb) landing page for listo.family - a family assistant app for meal planning, shopping lists, and task management. Built with Next.js 14 (App Router), TypeScript, Tailwind CSS, and Framer Motion.
+> **Active projects:** React Native App + Landing Page (Next.js)
 
-**Live site:** https://listo.family
+---
 
-**🤖 Agents & Skills (MANDATORY)**
-Before starting ANY task, ALWAYS:
-1. **Check for relevant agents** in `.github/agents/` (e.g., `seo-specialist`, `frontend-developer`)
-2. **Check for relevant skills** in `.github/skills/` (e.g., `nextjs-best-practices`, `seo-fundamentals`, `tailwind-patterns`)
-3. **Read and apply** the skill file using `read_file` before proceeding
-4. **Announce to user** which agents/skills are being used at the start of work:
-   - Example: "📋 **Using skills:** `nextjs-best-practices`, `seo-fundamentals` | **Suggested agent:** `seo-specialist`"
-5. If a specialized agent would be better suited, **suggest switching** before starting work
-6. **STOP and wait** for user to activate the suggested agent before continuing - do not proceed with the task until confirmed
+## ⛔ BEFORE USING ANY TOOLS - MANDATORY WORKFLOW
 
-This ensures consistent patterns, domain expertise, and transparency about which knowledge sources guide the implementation.
+**TRIGGER WORDS requiring checklist:**
+`implement`, `add`, `fix`, `create`, `update`, `refactor`, `change`, `build`, `lag`, `fiks`, `endre`
 
-**📚 Context7 MCP for Documentation (MANDATORY)**
-When working with external libraries, frameworks, or APIs, **ALWAYS** use the Context7 MCP tools to fetch up-to-date documentation:
-1. Use `mcp_io_github_ups_resolve-library-id` to find the correct library ID
-2. Use `mcp_io_github_ups_get-library-docs` to fetch current documentation and code examples
-3. This ensures we use the latest API patterns and avoid deprecated methods
-4. Applies to: Next.js, Tailwind CSS, Framer Motion, and any other dependencies
+**When you see trigger word → STOP → Run this checklist:**
 
-**🔍 Listo Codebase MCP (MANDATORY for code changes and searches)**
-Before implementing features or modifying code, **ALWAYS** use the listo-codebase MCP to avoid duplication and breaking changes:
-1. `find_similar_code` - Check if similar functionality already exists
-2. `find_usages` - Find all files using a function/component before modifying it
-3. `get_service_methods` - Review existing service methods before adding new ones
-4. `get_project_patterns` - Understand established patterns before creating new code
-5. `check_translations` - Verify translation keys before adding UI text
-6. Read resources: `listo://coding-guidelines`, `listo://services-overview`
+### 📋 PRE-WORK CHECKLIST (3 STEPS - NON-NEGOTIABLE)
 
-## Branding & Naming Convention
-- **Formal branding:** Use `listo.family` (lowercase) in titles, metadata, CTAs, logos, and marketing copy
-- **Casual references:** `Listo` is acceptable in flowing body text where natural
-- **Author attribution:** Use `Listo-teamet` in blog author sections
-- **CSS/code identifiers:** Keep as-is (e.g., `listo-500`, `bg-listo-100` - these are internal class names)
-- **Firebase project IDs:** Keep as-is (e.g., `listo-6443c`)
-
-## Terminal Usage
-**IMPORTANT:** Do not write to or interact with terminals that have running processes (e.g., `npm run dev`, `npm run build`). Wait for the process to complete before sending new commands.
-
-**⚠️ CRITICAL: Git & Deployment Policy (NON-NEGOTIABLE)**
-- **ALWAYS ASK before committing/pushing to `main` branch**
-- `main` branch auto-deploys to production immediately via server monitoring
-- Production bugs affect real users - TEST thoroughly before pushing
-- Only push to `main` for:
-  - Critical hotfixes (security, crashes, data loss)
-  - Explicitly approved changes by user
-  - Minor documentation/content updates
-- When uncertain, commit to separate branch and wait for user review
-
-## Design System & Brand Colors
-Follow the "Friendly Softness" philosophy documented in the design philosophy file. Use warm, rounded visuals - no sharp corners.
-
-**Color Palette:**
-- `cream-50` (`#FFFAF5`) - Background
-- `charcoal` (`#34495E`) - Primary text, strokes
-- `salmon-500` (`#FF8C69`) - Food/meal features, CTAs
-- `listo-500` (`#2ECC71`) - Success, action states
-- `sky-400` (`#5DADE2`) - Logistics, links
-- `magic-500` (`#9B59B6`) - AI features (use ✨ sparkle icon)
-
-Use Tailwind classes defined in the config: `bg-cream-50`, `text-charcoal`, `text-salmon-500`, etc.
-
-## Component Patterns
-
-### Section Structure
-Each landing page section follows this pattern (see Features component):
-```tsx
-<section className="py-24 bg-white">  {/* or bg-cream-50 */}
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    {/* Header with badge, title, subtitle */}
-    <span className="inline-block px-4 py-1.5 bg-listo-100 text-listo-700 rounded-full text-sm font-medium mb-4">
-      Section Label
-    </span>
-    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal mb-6">...</h2>
-    {/* Content grid */}
-  </div>
-</section>
-```
-
-### Interactive Elements
-- Buttons: `rounded-full` with gradient backgrounds, hover shadow effects
-- Cards: `rounded-squircle` (custom 1.5rem radius), hover lift effect
-- Icons: Use Lucide React, colored by feature domain (salmon=food, magic=AI, listo=success)
-
-### Client vs Server Components
-- Default to server components (no directive)
-- Add `"use client"` only for: Framer Motion animations, interactive elements, event handlers
-- See Hero component for client component pattern
-
-## Blog Articles
-Blog posts live in the blogg directory with dynamic routes. Article metadata defined inline in the blog page. Each article page exports:
-- `metadata` object for SEO
-- `jsonLd` structured data for Google
-- Article content with consistent heading hierarchy
-
-## Key Commands
+#### Step 1: Read Relevant Skills
 ```bash
-npm run dev    # Start dev server at localhost:3000
-npm run build  # Build for production (standalone output)
-npm run lint   # Run ESLint
+read_file(".github/skills/[skill-name]/SKILL.md")
 ```
 
-## Deployment
-Deployed via Docker to Hetzner. From NyeListo repo: `.\update-server.ps1 -LandingOnly`
+#### Step 2: Check if Code Already Exists (MCP Listo Codebase)
+```typescript
+mcp_listo-codebas_find_similar_code("feature_keyword", "all")
+mcp_listo-codebas_check_feature_exists("description")
+```
+**If match found** → Reuse existing code, don't write new
 
-## Language & Content
-All user-facing content is in **Norwegian (Bokmål)**. Maintain this consistency:
-- Page lang: `<html lang="nb">`
-- Dates: `nb-NO` locale formatting
-- SEO metadata in Norwegian
+#### Step 3: Get Latest Library Docs (MCP Context7)
+```typescript
+// Only for external libraries
+mcp_io_github_ups_resolve-library-id("library-name")
+mcp_io_github_ups_get-library-docs(context7CompatibleLibraryID, topic, mode)
+```
+
+**✅ AFTER checklist complete** → Announce to user:
+```
+📋 Using skills: `skill1`, `skill2`
+🔍 MCP Results: [summary]
+📚 Context7: [if used]
+
+Ready to proceed?
+```
+
+**❌ DO NOT** code before completing checklist. This creates technical debt.
+
+---
+
+## 🎯 Project Detection (Auto-Router)
+
+Detect which project from file path, then follow specific rules:
+
+### 📱 React Native App (`NyeListo/listo-app/`)
+- **Framework:** Expo SDK 52, React Native, TypeScript, NativeWind v4
+- **Backend:** Firebase (Auth, Firestore), RevenueCat payments
+- **Platforms:** iOS, Android, **Web (PWA)** - must work on all three
+- **Details:** See `NyeListo/ARCHITECTURE.md`
+
+**Critical Rules:**
+- ALL user text uses `t()` translation (nb/en/da)
+- NO Firestore in components - use services only
+- Use `Pressable` with `cursor: 'pointer'` for web
+- Test on web before committing (Alert, Haptics don't work)
+
+### 🌐 Landing Page (`Listo.family landing page/`)
+- **Framework:** Next.js 14 App Router, TypeScript, Tailwind CSS
+- **Language:** Norwegian (nb) only
+- **Branding:** Use `listo.family` (lowercase) in formal contexts
+- **Details:** See project-specific copilot-instructions.md
+
+**Critical Rules:**
+- All content in Norwegian (Bokmål)
+- `lang="nb"` in HTML
+- SEO metadata required for all pages
+- Framer Motion for animations
+
+---
+
+## 🚫 Universal Non-Negotiable Rules
+
+### 1. Git & Deployment
+- **ALWAYS ASK before `git push` to `main`** (auto-deploys to production)
+- Use feature branches for new work
+- Only push to `main` for: hotfixes, approved changes, minor docs
+
+### 2. Documentation Updates
+- New feature → Update relevant FEATURES.md/CHANGELOG.md
+- Bug fix → Update BUGS.md/CHANGELOG.md
+- Update docs in SAME commit as code
+
+### 3. Code Quality
+- **Fix lint errors immediately** - never use `@ts-ignore`
+- Run `get_errors()` after every file edit
+- Remove debug `console.log()` before committing
+- Follow existing patterns (check MCP codebase first)
+
+---
+
+## 📚 Where to Find Information
+
+### By Project
+
+| Need | React Native App | Landing Page |
+|------|------------------|--------------|
+| Architecture | `NyeListo/ARCHITECTURE.md` | Next.js App Router docs |
+| Tech details | `NyeListo/listo-app/README.md` | `Listo.family landing page/README.md` |
+| Features | `NyeListo/listo-app/Docs/FEATURES.md` | Landing page sections |
+| Bugs | `NyeListo/listo-app/Docs/BUGS.md` | N/A |
+| Strategy | `NyeListo/WEB_FIRST_STRATEGY.md` | `Listo.family landing page/STRATEGY_*.md` |
+
+### Universal Resources
+
+| Task | Resource |
+|------|----------|
+| React patterns | `.github/skills/react-patterns/SKILL.md` |
+| Clean code | `.github/skills/clean-code/SKILL.md` |
+| Debugging | `.github/skills/systematic-debugging/SKILL.md` |
+| Similar code | `mcp_listo-codebas_find_similar_code()` |
+| Library docs | `mcp_io_github_ups_get-library-docs()` (Context7) |
+
+---
+
+## 🔄 Development Workflow
+
+1. **User request** → Run PRE-WORK CHECKLIST (3 steps)
+2. **Detect project** → Use appropriate patterns/rules
+3. **Implement** → Follow project-specific architecture
+4. **Test** → App: all platforms, Landing: responsive + SEO
+5. **Update docs** → FEATURES.md, CHANGELOG.md
+6. **Validate** → `get_errors()` must pass
+7. **Ask before push** to `main` branch
+
+---
+
+## 🆘 When Something Goes Wrong
+
+1. **Syntax/Type Errors:** Run `get_errors()`
+2. **Library Issues:** Check Context7 MCP
+3. **Pattern Questions:** Search MCP codebase
+4. **Breaking Changes:** Use `mcp_listo-codebas_find_usages()`
+5. **Stuck?** Ask user - don't guess
+
+---
+
+**Remember:** Quality > Speed. Following the checklist prevents technical debt that costs more time than it saves.

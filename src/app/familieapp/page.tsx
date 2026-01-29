@@ -72,7 +72,7 @@ export default function Familieapp() {
                                 </span>
                                 <span className="flex items-center gap-2">
                                     <Check className="w-5 h-5 text-listo-500" />
-                                    iOS, Android & Web
+                                    Alle enheter – PC, Mac, mobil, nettbrett
                                 </span>
                             </div>
                         </div>

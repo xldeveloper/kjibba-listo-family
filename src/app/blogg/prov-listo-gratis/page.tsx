@@ -130,9 +130,9 @@ export default function Article() {
                         <div className="flex gap-4 items-start">
                             <span className="w-10 h-10 bg-salmon-500 text-white rounded-full flex items-center justify-center font-bold shrink-0">2</span>
                             <div>
-                                <h3 className="font-bold text-charcoal text-lg mb-1">Last ned appen</h3>
+                                <h3 className="font-bold text-charcoal text-lg mb-1">Åpne webappen</h3>
                                 <p className="text-gray-600">
-                                    Tilgjengelig på Android og web. iOS kommer våren 2026.
+                                    Fungerer på alle enheter – PC, Mac, mobil og nettbrett. Ingen nedlasting nødvendig.
                                 </p>
                             </div>
                         </div>

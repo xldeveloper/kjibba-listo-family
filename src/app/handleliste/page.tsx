@@ -217,7 +217,7 @@ export default function Handleliste() {
                             {
                                 icon: Smartphone,
                                 title: "Alltid med deg",
-                                description: "Fungerer på mobil, nettbrett og PC. Handlelisten er alltid tilgjengelig - også offline.",
+                                description: "Fungerer som webapp i nettleseren på alle dine enheter – mobil, nettbrett, PC og Mac. Alltid tilgjengelig, også offline.",
                                 color: "sky",
                             },
                             {
