@@ -1,211 +1,130 @@
 # Workspace: listo.family (Multi-Project)
 
-> **Active projects:** React Native App + Landing Page (Next.js)
+> **Aktive prosjekter:** React Native App + API + Functions + Landing Page + MCP server
+>
+> **VIKTIG (global regel):** Hver eneste respons skal starte med å vurdere om (og hvilke) MCP-servere som trengs. Hvis ja: bruk dem. Hvis nei: forklar hvorfor.
+> **MCP er obligatorisk** for oppgaver som innebærer analyse eller endring i repoet.
 
 ---
 
-## ⛔ BEFORE USING ANY TOOLS - MANDATORY WORKFLOW
+## 🎯 Kilde for sannhet (Codebase Guide + Revision)
 
-**TRIGGER WORDS requiring checklist:**
+**Denne workspace’n styres av to “master” dokumentfamilier, og begge er splittet i /docs:**
+
+- **CODEBASE GUIDE (oppslagsverk):**
+   - Master: `NyeListo/CODEBASE_GUIDE.md`
+   - Split: `NyeListo/docs/guides/README.md` (og 01-09)
+- **CODEBASE REVISION (batch-plan):**
+   - Master: `NyeListo/CODEBASE_REVISION.md`
+   - Split: `NyeListo/docs/revision/README.md` (og batch-0…batch-8)
+
+**Regel:** Når du jobber på noe som inngår i revisjonen, skal du alltid:
+1) Identifisere *hvilken batch* (batch-fil i `NyeListo/docs/revision/`) og *hvilken guide* (guide-fil i `NyeListo/docs/guides/`) som er relevant.
+2) Implementere i kode.
+3) Oppdatere batch-/guide-dokumentasjon når det er en del av leveransen.
+
+---
+
+## ⛔ Før du bruker tools (obligatorisk workflow)
+
+**Triggerord (starter alltid denne sjekklista):**
 `implement`, `add`, `fix`, `create`, `update`, `refactor`, `change`, `build`, `lag`, `fiks`, `endre`
 
-**When you see trigger word → STOP → Run this checklist:**
+### 📋 PRE-WORK CHECKLIST (Revision-ready)
 
-### 📋 PRE-WORK CHECKLIST (4 STEPS - NON-NEGOTIABLE)
+#### Steg 1: Les relevante skills (minst 2)
+Les fra `.github/skills/*/SKILL.md` basert på oppgaven.
 
-#### Step 1: Read Relevant Skills
-```bash
-read_file(".github/skills/[skill-name]/SKILL.md")
-```
+Vanlige kombinasjoner:
+- Plan + orkestrering: `plan-writing`, `development-workflow`
+- Feilsøk: `systematic-debugging`, `lint-and-validate`
+- Kodeendringer: `clean-code`, `code-reviewer`
+- Arkitekturvalg: `architecture`
 
-#### Step 2: Check if Code Already Exists (MCP Listo Codebase)
-```typescript
-mcp_listo-codebas_find_similar_code("feature_keyword", "all")
-mcp_listo-codebas_check_feature_exists("description")
-```
-**If match found** → Reuse existing code, don't write new
+#### Steg 2: Forankre i docs (batch + guide)
+- Finn riktig batch i `NyeListo/docs/revision/`.
+- Finn riktig guide i `NyeListo/docs/guides/`.
+- Hvis det *ikke* passer i eksisterende batch: logg det som “out-of-scope” og spør om ny batch/avvik.
 
-#### Step 3: Get Latest Library Docs (MCP Context7)
-```typescript
-// Only for external libraries
-mcp_io_github_ups_resolve-library-id("library-name")
-mcp_io_github_ups_get-library-docs(context7CompatibleLibraryID, topic, mode)
-```
+#### Steg 3: Sjekk om mønster/implementasjon finnes (MCP Listo Codebase)
+Bruk alltid minst én av disse før du koder:
+- `mcp_listo-codebas_find_similar_code(searchTerm, type)`
+- `mcp_listo-codebas_find_usages(symbolName)`
 
-#### Step 4: Find ALL Affected Files (MCP Listo Codebase)
-```typescript
-// Before making changes - find all similar patterns/components
-mcp_listo-codebas_find_usages("ComponentOrFunction")
-mcp_listo-codebas_get_project_patterns("area") // services, components, hooks, etc
-mcp_listo-codebas_find_similar_code("specific_pattern", "all")
-```
-**Why:** Fix the same issue everywhere in ONE go. Prevents:
-- Inconsistent implementations
-- Missing edge cases in other files
-- Half-done solutions that need follow-up work
+#### Steg 4: Kartlegg påvirkede filer før refaktor
+Velg relevante:
+- `mcp_listo-codebas_get_file_dependencies(filePath)`
+- `mcp_listo-codebas_get_service_methods(serviceName)`
+- `mcp_listo-codebas_get_component_props(componentName)`
+- `mcp_listo-codebas_list_types(filter)`
 
-**✅ AFTER checklist complete** → Announce to user:
-```
-📋 Using skills: `skill1`, `skill2`
-🔍 MCP Results: [summary]
-📚 Context7: [if used]
-📂 Files to update: [list]
+#### Steg 5: Eksterne biblioteker? Bruk Context7
+Hvis du må slå opp API/beste praksis:
+- `mcp_io_github_ups_resolve-library-id(libraryName)`
+- `mcp_io_github_ups_get-library-docs(context7CompatibleLibraryID, topic, mode)`
 
-Ready to proceed?
-```
-
-**❌ DO NOT** code before completing checklist. This creates technical debt.
+#### Steg 6: Plan og synlighet
+- Bruk `manage_todo_list` for større arbeid.
+- Fortell tydelig: “Files to update” + “Hvordan verifiseres det”.
 
 ---
 
-## 🎯 Project Detection (Auto-Router)
-
-Detect which project from file path, then follow specific rules:
-
-### 📱 React Native App (`NyeListo/listo-app/`)
-- **Framework:** Expo SDK 52, React Native, TypeScript, NativeWind v4
-- **Backend:** Firebase (Auth, Firestore), RevenueCat payments
-- **Platforms:** iOS, Android, **Web (PWA)** - must work on all three
-- **Details:** See `NyeListo/ARCHITECTURE.md`
-
-**Critical Rules:**
-- ALL user text uses `t()` translation (nb/en/da)
-- NO Firestore in components - use services only
-- Use `Pressable` with `cursor: 'pointer'` for web
-- Test on web before committing (Alert, Haptics don't work)
+## 🧭 Prosjekt-router (hvilke regler gjelder hvor?)
 
 ### 🌐 Landing Page (`Listo.family landing page/`)
-- **Framework:** Next.js 14 App Router, TypeScript, Tailwind CSS
-- **Language:** Norwegian (nb) only
-- **Branding:** Use `listo.family` (lowercase) in formal contexts
-- **Details:** See project-specific copilot-instructions.md
+- **Framework:** Next.js 14 App Router, TypeScript, Tailwind
+- **Språk:** kun norsk (Bokmål)
+- **Kilde:** `NyeListo/docs/guides/05-landing-page.md` + `Listo.family landing page/docs/`
 
-**Critical Rules:**
-- All content in Norwegian (Bokmål)
-- `lang="nb"` in HTML
-- SEO metadata required for all pages
-- Framer Motion for animations
+**Ikke-forhandlebart:**
+- Alt innhold på norsk (Bokmål)
+- `lang="nb"` i HTML
+- SEO metadata per side
 
----
-
-## 🚫 Universal Non-Negotiable Rules
-
-### 1. Git & Deployment
-- **ALWAYS ASK before `git push` to `main`** (auto-deploys to production)
-- Use feature branches for new work
-- Only push to `main` for: hotfixes, approved changes, minor docs
-
-### 2. Documentation Updates
-- New feature → Update relevant FEATURES.md/CHANGELOG.md
-- Bug fix → Update BUGS.md/CHANGELOG.md
-- Update docs in SAME commit as code
-
-### 3. Code Quality
-- **Fix lint errors immediately** - never use `@ts-ignore`
-- Run `get_errors()` after every file edit
-- Remove debug `console.log()` before committing
-- Follow existing patterns (check MCP codebase first)
+### 📱 React Native App (`NyeListo/listo-app/`)
+(Relevant når landingssider peker inn i app-flows.)
+- **Kilde:** `NyeListo/docs/guides/02-react-native-app.md`
 
 ---
 
-## 📚 Where to Find Information
+## 🧱 Codebase Revision Mode (slik vi får maks ut av revisjonen)
 
-### By Project
+### 1) Batch-first levering
+- Alt større arbeid skal “bo” i én batch-fil i `NyeListo/docs/revision/`.
+- Ikke gjør side-quests. Hvis du oppdager relaterte forbedringer: samle dem og foreslå “følger opp i Batch X / ny batch”.
 
-| Need | React Native App | Landing Page |
-|------|------------------|--------------|
-| Architecture | `NyeListo/ARCHITECTURE.md` | Next.js App Router docs |
-| Tech details | `NyeListo/listo-app/README.md` | `Listo.family landing page/README.md` |
-| Features | `NyeListo/listo-app/Docs/FEATURES.md` | Landing page sections |
-| Bugs | `NyeListo/listo-app/Docs/BUGS.md` | N/A |
-| Strategy | `NyeListo/WEB_FIRST_STRATEGY.md` | `Listo.family landing page/STRATEGY_*.md` |
+### 2) Evidence over antakelser
+- Før refaktor: finn liknende kode + usages med MCP.
+- Når du endrer API/signaturer: finn og oppdater alle usages i én runde.
 
-### Universal Resources
-
-| Task | Resource |
-|------|----------|
-| React patterns | `.github/skills/react-patterns/SKILL.md` |
-| Clean code | `.github/skills/clean-code/SKILL.md` |
-| Debugging | `.github/skills/systematic-debugging/SKILL.md` |
-| Similar code | `mcp_listo-codebas_find_similar_code()` |
-| Library docs | `mcp_io_github_ups_get-library-docs()` (Context7) |
-
-### 🎯 MCP Smart Search Strategy
-
-**Instead of many grep/read operations, use MCP strategically:**
-
-| You need to... | Use this MCP tool | Example |
-|----------------|-------------------|---------|
-| Find all places with similar bug | `find_similar_code()` | `find_similar_code("backgroundColor SafeAreaView", "all")` |
-| Find all usages before changing | `find_usages()` | `find_usages("ScreenWrapper")` |
-| Check if feature exists | `check_feature_exists()` | `check_feature_exists("user onboarding flow")` |
-| Understand project patterns | `get_project_patterns()` | `get_project_patterns("components")` |
-| See service methods | `get_service_methods()` | `get_service_methods("FamilyService")` |
-| Check translation keys | `check_translations()` | `check_translations("common")` |
-| Get component props | `get_component_props()` | `get_component_props("Button")` |
-
-### 🛡️ Developer Assistant Tools (before committing)
-
-| Check for... | Use this MCP tool | When |
-|--------------|-------------------|------|
-| Web compatibility issues | `check_web_compatibility()` | Alert, Haptics, etc that break on web |
-| Layout/SafeAreaView bugs | `find_layout_issues("backgroundColor")` | Visual bugs, black areas |
-| Missing translations | `find_hardcoded_text()` | UI text without t() |
-| Firestore anti-patterns | `check_firestore_patterns()` | DB calls in components |
-
-### 📂 Git & GitHub MCP (version control)
-
-| Task | Tool | Example |
-|------|------|---------|
-| Who changed this code? | `mcp_git_blame()` | Find who introduced a bug |
-| What changed recently? | `mcp_git_log()` | See recent commits |
-| Compare versions | `mcp_git_diff()` | See what changed |
-| Search issues/PRs | `mcp_github_search_issues()` | Find related discussions |
-
-**When to re-run MCP during implementation:**
-- 🐛 You discover a bug → Find all similar bugs immediately
-- 🔄 You change a function → Find all usages to update them
-- 🆕 You create a pattern → Check if it already exists differently
-- 🚨 You fix an issue → Search for the same pattern elsewhere
-
-**MCP > grep_search/read_file when:**
-- You need semantic understanding (not just exact text match)
-- You want to find similar patterns (not just duplicates)
-- You need context about project structure/patterns
-- You're debugging and don't know exact keywords
+### 3) Definisjon av ferdig (DoD)
+Minimum per leveranse:
+- Kodeendring(er) + relevant docs oppdatert (batch/guide/changelog/bugs) når det er del av oppgaven
+- `get_errors()` etter hver filendring
 
 ---
 
-## 🔄 Development Workflow
+## 🚫 Git & deploy
 
-1. **User request** → Run PRE-WORK CHECKLIST (4 steps)
-2. **Detect project** → Use appropriate patterns/rules
-3. **Plan changes** → List ALL files that need updates (from Step 4)
-4. **Implement** → Follow project-specific architecture
-   - **During implementation:** If you discover new patterns/issues:
-     - **STOP** → Run MCP Listo Codebase again to find all instances
-     - Update all affected files in ONE batch (use `multi_replace_string_in_file`)
-     - Don't fix issues one-by-one if they exist in multiple places
-5. **Test** → App: all platforms, Landing: responsive + SEO
-6. **Update docs** → FEATURES.md, CHANGELOG.md
-7. **Validate** → `get_errors()` must pass
-8. **Ask before push** to `main` branch
+- Spør alltid før `git push` til `main` (auto-deploy)
+- Bruk feature-branch for større arbeid
 
 ---
 
-## 🆘 When Something Goes Wrong
+## 📚 MCP-verktøy (hva er faktisk tilgjengelig)
 
-1. **Syntax/Type Errors:** Run `get_errors()`
-2. **Library Issues:** Check Context7 MCP
-3. **Pattern Questions:** Search MCP codebase
-4. **Breaking Changes:** Use `mcp_listo-codebas_find_usages()`
-5. **Found a bug/issue during debugging:**
-   - **Search for similar issues:** `mcp_listo-codebas_find_similar_code()`
-   - **Find all usages:** `mcp_listo-codebas_find_usages()`
-   - **Get best practices:** Context7 MCP
-   - Fix ALL instances, not just the one you found
-6. **Stuck?** Ask user - don't guess
+**Listo Codebase MCP (tilgjengelig her):**
+- `mcp_listo-codebas_find_similar_code`
+- `mcp_listo-codebas_find_usages`
+- `mcp_listo-codebas_get_service_methods`
+- `mcp_listo-codebas_get_component_props`
+- `mcp_listo-codebas_list_types`
+- `mcp_listo-codebas_get_file_dependencies`
+- `mcp_listo-codebas_find_hardcoded_text`
+- `mcp_listo-codebas_check_translations`
+- `mcp_listo-codebas_check_web_compatibility`
+- `mcp_listo-codebas_find_layout_issues`
+- `mcp_listo-codebas_get_changelog_status`
 
----
+**Merk:** Hvis et dokument refererer til MCP-funksjoner som ikke finnes, skal du bruke nærmeste tilgjengelige alternativ (typisk `find_similar_code` + `find_usages`).
 
-**Remember:** Quality > Speed. Following the checklist prevents technical debt that costs more time than it saves.
