@@ -125,6 +125,11 @@ Minimum per leveranse:
 - `mcp_listo-codebas_check_web_compatibility`
 - `mcp_listo-codebas_find_layout_issues`
 - `mcp_listo-codebas_get_changelog_status`
+- `mcp_listo-codebas_analyze_code_metrics`
+- `mcp_listo-codebas_analyze_large_files`
+- `mcp_listo-codebas_analyze_duplicate_code`
+- `mcp_listo-codebas_analyze_import_graph`
+- `mcp_listo-codebas_estimate_complexity`
 
 **Merk:** Hvis et dokument refererer til MCP-funksjoner som ikke finnes, skal du bruke nærmeste tilgjengelige alternativ (typisk `find_similar_code` + `find_usages`).
 
