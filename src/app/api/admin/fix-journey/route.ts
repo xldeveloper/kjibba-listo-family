@@ -146,7 +146,7 @@ async function fixJourneyConsistencyAdmin(
         
         // Issue 1: familyId without journey tracking
         if (data.familyId && !data.journey?.familyCreatedAt && !data.journey?.familyJoinedAt) {
-            const timestamp = data.joinedAt || data.createdAt;
+            const timestamp = data.joinedAt || data.createdAt || admin.firestore.FieldValue.serverTimestamp();
             updateData["journey.familyCreatedAt"] = timestamp;
             issues.push(`Family (${data.familyName})`);
             result.fixedFamily++;
@@ -154,7 +154,7 @@ async function fixJourneyConsistencyAdmin(
         
         // Issue 2: onboarding.isComplete without journey tracking
         if (data.onboarding?.isComplete && !data.journey?.onboardingCompletedAt) {
-            const timestamp = data.onboarding.completedAt || data.createdAt;
+            const timestamp = data.onboarding.completedAt || data.createdAt || admin.firestore.FieldValue.serverTimestamp();
             updateData["journey.onboardingCompletedAt"] = timestamp;
             updateData["journey.onboardingSkipped"] = false;
             issues.push('Onboarding');
@@ -167,7 +167,7 @@ async function fixJourneyConsistencyAdmin(
                 betaInterestId: null,
                 betaInterestAt: null,
                 source: "app_direct",
-                registeredAt: data.createdAt,
+                registeredAt: data.createdAt || admin.firestore.FieldValue.serverTimestamp(),
                 registrationSource: "web",
                 androidBetaInviteSent: false,
                 androidBetaInviteSentAt: null,
