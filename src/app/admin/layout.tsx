@@ -300,11 +300,21 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     // Subscribe to users collection (unified user documents)
     useEffect(() => {
         if (!isAdmin) return;
-        const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+        // Don't use orderBy in query - it excludes docs without createdAt
+        // Sort client-side instead to include all users
+        const q = query(collection(db, "users"));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const userList: UserDocument[] = [];
             snapshot.forEach((doc) => {
                 userList.push({ id: doc.id, ...doc.data() } as UserDocument);
+            });
+            // Sort client-side, nulls last
+            userList.sort((a, b) => {
+                if (!a.createdAt) return 1;
+                if (!b.createdAt) return -1;
+                const aTime = a.createdAt.toDate ? a.createdAt.toDate().getTime() : new Date(a.createdAt as any).getTime();
+                const bTime = b.createdAt.toDate ? b.createdAt.toDate().getTime() : new Date(b.createdAt as any).getTime();
+                return bTime - aTime; // desc
             });
             setUsers(userList);
             setLastRefresh(new Date());
