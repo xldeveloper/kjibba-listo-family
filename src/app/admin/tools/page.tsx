@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Wrench, Trash2, Database, AlertTriangle, AlertCircle, CheckCircle, Eye, Play, XCircle } from "lucide-react";
+import { Wrench, Trash2, Database, AlertTriangle, AlertCircle, CheckCircle, Eye, Play, XCircle, Users, RefreshCw, UserPlus } from "lucide-react";
 
 // ─── Delete User Section ──────────────────────────────────────
 function DeleteUserSection() {
@@ -237,6 +237,221 @@ function MigrationsSection() {
     );
 }
 
+// ─── Sync Auth Users Section ──────────────────────────────────
+function SyncAuthUsersSection() {
+    const [loading, setLoading] = useState(false);
+    const [syncing, setSyncing] = useState(false);
+    const [scanResult, setScanResult] = useState<any>(null);
+    const [syncResult, setSyncResult] = useState<any>(null);
+
+    const scanOrphans = async () => {
+        setLoading(true);
+        setScanResult(null);
+        setSyncResult(null);
+        try {
+            const res = await fetch("/api/admin/sync-auth-users?adminEmail=kjibba@gmail.com");
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error);
+            setScanResult(data);
+        } catch (err: any) {
+            setScanResult({ success: false, error: err.message });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const runSync = async (action: "dry-run" | "sync", uids?: string[]) => {
+        setSyncing(true);
+        setSyncResult(null);
+        try {
+            const res = await fetch("/api/admin/sync-auth-users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ adminEmail: "kjibba@gmail.com", action, uids }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error);
+            setSyncResult(data);
+            // Refresh scan after real sync
+            if (action === "sync") setTimeout(scanOrphans, 1000);
+        } catch (err: any) {
+            setSyncResult({ success: false, error: err.message });
+        } finally {
+            setSyncing(false);
+        }
+    };
+
+    return (
+        <div className="bg-white rounded-squircle shadow-lg border border-charcoal/5 p-6">
+            <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-listo-100 flex items-center justify-center shrink-0">
+                    <Users className="w-5 h-5 text-listo-600" />
+                </div>
+                <div className="flex-1">
+                    <h2 className="text-lg font-bold text-charcoal">Synk Auth → Firestore</h2>
+                    <p className="text-sm text-charcoal-light mb-3">
+                        Finner Firebase Auth-brukere som mangler <code className="bg-charcoal/5 px-1 rounded">users/&#123;uid&#125;</code>-dokument
+                        og oppretter dem med riktig struktur.
+                    </p>
+
+                    <button
+                        onClick={scanOrphans}
+                        disabled={loading}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-listo-500 text-white rounded-lg hover:bg-listo-600 transition-colors disabled:opacity-50 text-sm font-medium"
+                    >
+                        {loading ? (
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                        ) : (
+                            <Eye className="w-4 h-4" />
+                        )}
+                        {loading ? "Skanner..." : "Skann for manglende bruker-docs"}
+                    </button>
+                </div>
+            </div>
+
+            {/* Scan results */}
+            {scanResult && !scanResult.success && (
+                <div className="mt-4 p-3 rounded-squircle-sm bg-red-50 border border-red-200">
+                    <div className="flex items-center gap-2 text-sm text-red-900">
+                        <AlertCircle className="w-4 h-4 shrink-0" />
+                        <p>{scanResult.error}</p>
+                    </div>
+                </div>
+            )}
+
+            {scanResult?.success && (
+                <div className="mt-4 space-y-4">
+                    {/* Stats */}
+                    <div className="grid grid-cols-3 gap-3">
+                        <div className="bg-charcoal/5 rounded-lg p-3 text-center">
+                            <p className="text-2xl font-bold text-charcoal">{scanResult.totalAuthUsers}</p>
+                            <p className="text-xs text-charcoal-light">Auth-brukere</p>
+                        </div>
+                        <div className="bg-listo-50 rounded-lg p-3 text-center">
+                            <p className="text-2xl font-bold text-listo-600">{scanResult.synced}</p>
+                            <p className="text-xs text-charcoal-light">Har users-doc</p>
+                        </div>
+                        <div className={`rounded-lg p-3 text-center ${scanResult.orphans > 0 ? "bg-amber-50" : "bg-green-50"}`}>
+                            <p className={`text-2xl font-bold ${scanResult.orphans > 0 ? "text-amber-600" : "text-green-600"}`}>
+                                {scanResult.orphans}
+                            </p>
+                            <p className="text-xs text-charcoal-light">Mangler doc</p>
+                        </div>
+                    </div>
+
+                    {/* Orphan list */}
+                    {scanResult.orphans > 0 && (
+                        <div className="border border-amber-200 rounded-lg overflow-hidden">
+                            <div className="bg-amber-50 px-4 py-2 border-b border-amber-200 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <AlertTriangle className="w-4 h-4 text-amber-600" />
+                                    <span className="text-sm font-medium text-amber-900">
+                                        {scanResult.orphans} bruker{scanResult.orphans > 1 ? "e" : ""} uten Firestore-doc
+                                    </span>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => runSync("dry-run")}
+                                        disabled={syncing}
+                                        className="text-xs px-2.5 py-1 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors disabled:opacity-50"
+                                    >
+                                        {syncing ? "..." : "Dry Run"}
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (!confirm(`Oppretter ${scanResult.orphans} manglende user-docs. Fortsett?`)) return;
+                                            runSync("sync");
+                                        }}
+                                        disabled={syncing}
+                                        className="text-xs px-2.5 py-1 bg-listo-500 text-white rounded hover:bg-listo-600 transition-colors disabled:opacity-50 flex items-center gap-1"
+                                    >
+                                        <UserPlus className="w-3 h-3" />
+                                        {syncing ? "Synker..." : "Opprett alle"}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="divide-y divide-charcoal/5 max-h-64 overflow-y-auto">
+                                {scanResult.orphanList.map((orphan: any) => (
+                                    <div key={orphan.uid} className="px-4 py-2.5 flex items-center gap-3 text-sm">
+                                        <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-bold text-xs shrink-0">
+                                            {orphan.email?.[0]?.toUpperCase() || "?"}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-medium text-charcoal truncate">
+                                                {orphan.displayName || orphan.email || orphan.uid}
+                                            </p>
+                                            <div className="flex items-center gap-3 text-xs text-charcoal-light">
+                                                {orphan.email && <span>{orphan.email}</span>}
+                                                <span>Auth: {orphan.providers.join(", ")}</span>
+                                                <span>Opprettet: {new Date(orphan.createdAt).toLocaleDateString("nb-NO")}</span>
+                                            </div>
+                                        </div>
+                                        {orphan.hasBetaInterest && (
+                                            <span className="px-2 py-0.5 bg-magic-100 text-magic-700 text-xs rounded-full whitespace-nowrap">
+                                                Beta-interesse
+                                            </span>
+                                        )}
+                                        <button
+                                            onClick={() => {
+                                                if (!confirm(`Opprett doc for ${orphan.email || orphan.uid}?`)) return;
+                                                runSync("sync", [orphan.uid]);
+                                            }}
+                                            disabled={syncing}
+                                            className="text-xs px-2 py-1 bg-listo-100 text-listo-700 rounded hover:bg-listo-200 transition-colors disabled:opacity-50"
+                                        >
+                                            Synk
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {scanResult.orphans === 0 && (
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
+                            <CheckCircle className="w-5 h-5 text-green-600 shrink-0" />
+                            <p className="text-sm text-green-900">Alle Firebase Auth-brukere har tilhørende Firestore-docs.</p>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Sync result */}
+            {syncResult && (
+                <div className={`mt-4 p-3 rounded-squircle-sm border ${syncResult.success ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
+                    <div className="flex items-start gap-2">
+                        {syncResult.success ? (
+                            <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                        ) : (
+                            <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 shrink-0" />
+                        )}
+                        <div className="text-sm flex-1">
+                            <p className={syncResult.success ? "text-green-900 font-medium" : "text-red-900 font-medium"}>
+                                {syncResult.message || syncResult.error}
+                            </p>
+                            {syncResult.success && syncResult.details?.length > 0 && (
+                                <details className="mt-2">
+                                    <summary className="text-xs text-charcoal-light cursor-pointer">
+                                        Vis detaljer ({syncResult.details.length})
+                                    </summary>
+                                    <ul className="mt-1 space-y-0.5 text-xs text-charcoal-light">
+                                        {syncResult.details.map((d: any, i: number) => (
+                                            <li key={i}>
+                                                <strong>{d.email || d.uid}</strong>: {d.action}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </details>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
 // ─── Main Page ────────────────────────────────────────────────
 export default function ToolsPage() {
     return (
@@ -246,6 +461,7 @@ export default function ToolsPage() {
                 <h1 className="text-2xl font-bold text-charcoal">Verktøy</h1>
             </div>
 
+            <SyncAuthUsersSection />
             <DeleteUserSection />
             <MigrationsSection />
 
